@@ -1,0 +1,112 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:padding="20dp">
+
+    <ImageButton
+        android:layout_width="265dp"
+        android:layout_height="60dp"
+        android:layout_marginBottom="50dp"
+        android:onClick="renderGoogleSignIn"
+        android:src="@drawable/googleiconcrop" />
+
+    <EditText
+        android:id="@+id/emailid"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:background="@drawable/corner"
+        android:drawableLeft="@drawable/ic_person_black_24dp"
+        android:drawablePadding="10dp"
+        android:hint="Email"
+        android:text="vidhipatel702@gmail.com"
+        android:padding="15dp"
+        android:textColor="@color/textColor"
+        android:textColorHighlight="@color/textColor"
+        android:textColorHint="@color/textColor" />
+
+    <EditText
+        android:id="@+id/password"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:background="@drawable/corner"
+        android:drawableLeft="@drawable/ic_lock_black_24dp"
+        android:drawablePadding="10dp"
+        android:hint="Password"
+        android:text="pahalbuzzo26"
+        android:inputType="textPassword"
+        android:padding="15dp"
+        android:textColor="@color/textColor"
+        android:textColorHighlight="@color/textColor"
+        android:textColorHint="@color/textColor" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <CheckBox
+            android:id="@+id/rememberMe"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="0dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="10dp"
+            android:buttonTint="@color/textColor"
+            android:checked="true"
+            android:text="Remember Me"
+            android:textColor="@color/textColor" />
+
+        <TextView
+            android:id="@+id/forgotPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="50dp"
+            android:layout_marginTop="0dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="10dp"
+            android:drawableLeft="@drawable/ic_lock_open_black_24dp"
+            android:drawablePadding="6dp"
+            android:padding="4dp"
+            android:text="Forgot Password?"
+            android:textColor="@color/textColor" />
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/LoginIn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/button"
+        android:padding="15dp"
+        android:shadowColor="@android:color/transparent"
+        android:text="Log In"
+
+        android:textColor="#ffffff" />
+
+    <Button
+        android:id="@+id/SignUp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="0dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/button"
+        android:onClick="renderSignUpScreen"
+        android:padding="15dp"
+        android:shadowColor="@android:color/transparent"
+        android:text="@string/newUser"
+        android:textColor="#ffffff"
+        android:textSize="15dp"/>
+
+</LinearLayout>

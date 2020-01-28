@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center"
+    android:orientation="vertical"
+    tools:context=".ExplorerActivity"
+    android:padding="4dp">
+    <TextView
+        android:id="@+id/text_home"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="15dp"
+        android:text="Explore city"
+        android:textStyle="bold"
+        android:paddingTop="15dp"
+        android:textAlignment="center"
+        android:textColor="@android:color/black"
+        android:textSize="25sp" />
+
+    <GridLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+       android:paddingBottom="90dp"
+        android:columnCount="2"
+        >
+
+        <Button
+            android:layout_width="50dp"
+            android:layout_height="150dp"
+            android:layout_columnWeight="1"
+            android:gravity="center"
+            android:onClick="onClickBeaches"
+            android:background="@drawable/beach"
+            android:text="@string/beach"
+            android:textColor="@android:color/white"
+            android:layout_gravity="fill_horizontal"
+            />
+        <Button
+            android:layout_width="50dp"
+            android:layout_height="150dp"
+            android:layout_columnWeight="1"
+            android:gravity="center"
+            android:onClick="onClickHillStation"
+            android:textColor="@android:color/white"
+            android:background="@drawable/hillstation"
+            android:layout_gravity="fill_horizontal"
+            android:text="@string/hillstation"
+             />
+
+        <Button
+            android:layout_width="50dp"
+            android:layout_height="150dp"
+            android:layout_columnWeight="1"
+            android:gravity="center"
+            android:onClick="onClickRecreational"
+            android:layout_gravity="fill_horizontal"
+            android:background="@drawable/recreational"
+            android:text="@string/recreational"
+            android:textColor="@android:color/white"/>
+
+        <Button
+            android:layout_width="50dp"
+            android:layout_height="150dp"
+            android:layout_columnWeight="1"
+            android:gravity="center"
+            android:layout_gravity="fill_horizontal"
+            android:background="@drawable/religious1"
+            android:text="Religious Places"
+            android:onClick="onClickReligious"
+            android:textColor="@android:color/white"/>
+
+        <Button
+            android:layout_width="50dp"
+            android:layout_height="150dp"
+            android:layout_columnWeight="1"
+            android:gravity="center"
+            android:onClick="onClickHiking"
+            android:layout_gravity="fill_horizontal"
+            android:background="@drawable/hiking"
+            android:text="Hiking"
+            android:textColor="@android:color/white"/>
+
+        <Button
+            android:layout_width="50dp"
+            android:layout_height="150dp"
+            android:layout_columnWeight="1"
+            android:gravity="center"
+            android:onClick="onClickCultural"
+            android:background="@drawable/historical"
+            android:layout_gravity="fill_horizontal"
+            android:text="Historical Places"
+            android:textColor="@android:color/white"/>
+
+    </GridLayout>
+
+</LinearLayout>
