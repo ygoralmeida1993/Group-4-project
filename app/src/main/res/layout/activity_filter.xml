@@ -21,11 +21,11 @@ android:layout_gravity="center"
         android:layout_marginStart="15dp"
         android:layout_marginLeft="0dp"
         android:layout_marginTop="20dp"
-        android:layout_marginBottom="20dp"
-android:textAlignment="center"
         android:layout_marginEnd="15dp"
+        android:layout_marginBottom="20dp"
         android:paddingTop="15dp"
         android:text="Filters"
+        android:textAlignment="center"
         android:textColor="@color/textColor"
         android:textSize="18sp"
         android:textStyle="bold" />
@@ -127,12 +127,12 @@ android:textAlignment="center"
             android:id="@+id/spinner1"
             android:layout_width="373dp"
             android:layout_height="50dp"
+            android:background="@drawable/corner"
             android:entries="@array/modeOftransportation"
             android:prompt="@string/mode"
             android:textColor="@color/textColor"
-            android:textStyle="bold"
             android:textSize="18sp"
-            android:background="@drawable/corner"/>
+            android:textStyle="bold" />
 
     </LinearLayout>
 

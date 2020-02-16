@@ -36,11 +36,33 @@
     <string name="recreational">Recreational Places</string>
     <string name="title_activity_google_maps">Map</string>
     <string name="mode">Mode Of Transportation</string>
+
     <string-array name="modeOftransportation">
         <item>Select Mode of Transportation</item>
         <item>Car</item>
         <item>Flight</item>
-
     </string-array>
+
+    <string name="personal_transportation">Personal Transportation</string>
+    <string name="vehicle">Select type of vehicle</string>
+    <string name="fuel">Select type of fuel</string>
+    <string name="buttonSelect">Select</string>
+
+    <string-array name="typeOfVehicle">
+        <item>Select type of vehicle</item>
+        <item>Motorcycle</item>
+        <item>Car</item>
+        <item>Van</item>
+        <item>Motor home</item>
+    </string-array>
+
+    <string-array name="typeOfFuel">
+        <item>Select type of fuel</item>
+        <item>Gasoline</item>
+        <item>Ethanol</item>
+        <item>Diesel</item>
+    </string-array>
+
+
 
 </resources>
