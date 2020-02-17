@@ -2,5 +2,6 @@
     <string name="app_name">Trip_Plan_Budget</string>
     <string name="title_activity_login">LoginActivity</string>
     <string name="newUser">Not a Member yet? Sign Up here.</string>
+    <string name="loginfailed">Login failed</string>
 
 </resources>

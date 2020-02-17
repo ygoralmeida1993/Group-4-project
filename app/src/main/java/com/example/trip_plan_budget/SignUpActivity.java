@@ -53,8 +53,21 @@ public class SignUpActivity extends AppCompatActivity {
     {
         String email=emailId.getText().toString().trim();
         String Password= password.getText().toString().trim();
-        String CPassword= cpassword.getText().toString().trim();
+        String cPassword= cpassword.getText().toString().trim();
 
+        if (TextUtils.isEmpty(email)) {
+        emailId.setError("Email id is required");
+        return;
+    }
+        if (TextUtils.isEmpty(Password)) {
+            password.setError("Password is required");
+            return;
+        }
+        if (TextUtils.isEmpty(cPassword)) {
+            cpassword.setError("confirm Password is required");
+            return;
+        }
+        if(cPassword.equals(password.getText().toString())){
         if(!TextUtils.isEmpty(email)&&!TextUtils.isEmpty(Password))
         {
             firebaseAuth.createUserWithEmailAndPassword(email, Password)
@@ -63,11 +76,9 @@ public class SignUpActivity extends AppCompatActivity {
                         public void onComplete(@NonNull Task<AuthResult> task) {
 
                             progressBar.setVisibility(View.GONE);
-                            // If sign in fails, display a message to the user. If sign in succeeds
-                            // the auth state listener will be notified and logic to handle the
-                            // signed in user can be handled in the listener.
+
                             if (!task.isSuccessful()) {
-                                //Toast.makeText(this, "This is my Toast message!",Toast.LENGTH_LONG).show();
+
                                 Log.d("failed","error");
                             } else {
                                 startActivity(new Intent(getApplicationContext(), HomeActivity.class));
@@ -75,11 +86,11 @@ public class SignUpActivity extends AppCompatActivity {
                             }
                         }
                     });
-            //String id=databaseUsers.push().getKey();
-            //User user=new User(id,name,Password,CPassword,PhoneNumber);
-          //  databaseUsers.child(id).setValue(user);
-          //  Toast.makeText(this,"UserAdded",Toast.LENGTH_LONG).show();
 
+
+        }}
+        else{
+            cpassword.setError("password does not match");
         }
 
     }
