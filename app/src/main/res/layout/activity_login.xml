@@ -102,7 +102,7 @@
         android:layout_marginRight="10dp"
         android:layout_marginBottom="10dp"
         android:background="@drawable/button"
-        android:onClick="renderSignUpScreen"
+        android:onClick="renderSignUp"
         android:padding="15dp"
         android:shadowColor="@android:color/transparent"
         android:text="@string/newUser"

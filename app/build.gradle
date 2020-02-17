@@ -1,43 +1,33 @@
 apply plugin: 'com.android.application'
+apply plugin: 'com.google.gms.google-services'
 
 android {
-    compileSdkVersion 26
-
+    compileSdkVersion 29
+    buildToolsVersion "29.0.3"
     defaultConfig {
-        applicationId "parallelcodes.mysqlapp"
-        minSdkVersion 15
-        targetSdkVersion 26
+        applicationId "com.example.trip_plan_budget"
+        minSdkVersion 23
+        targetSdkVersion 29
         versionCode 1
         versionName "1.0"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
         release {
             minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-    }
-}
-configurations.all {
-    resolutionStrategy.eachDependency { DependencyResolveDetails details ->
-        def requested = details.requested
-        if (requested.group == 'com.android.support') {
-            if (!requested.name.startsWith("multidex")) {
-                details.useVersion '25.3.0'
-            }
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
 }
 
 dependencies {
-    implementation 'com.android.support.constraint:constraint-layout:1.1.3'
-    compile fileTree(include: ['*.jar'], dir: 'libs')
-    testCompile 'junit:junit:4.12'
-    implementation 'com.android.support:appcompat-v7:26.0.0-alpha1'
-    implementation 'com.android.support:design:26.0.0-alpha1'
-    compile files('libs/mysql-connector.jar')
-    implementation 'com.squareup.picasso:picasso:2.71828'
-    implementation 'com.android.support:cardview-v7:21.0.+'
-    implementation 'com.github.delight-im:Android-SimpleLocation:v1.0.1'
-    implementation 'com.android.support:recyclerview-v7:26.1.0'
-    implementation 'com.google.android.gms:play-services-maps:9.4.0'
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'androidx.appcompat:appcompat:1.1.0'
+    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+    implementation 'com.google.firebase:firebase-database:16.0.4'
+    implementation 'com.google.android.material:material:1.0.0'
+    implementation 'com.google.firebase:firebase-auth:16.0.5'
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 }
