@@ -47,7 +47,7 @@ public class FilterActivity extends AppCompatActivity implements LocationListene
     private NumberPicker picker1;
     double approximateBudget=0;
     EditText  modeOfTransportation;
-    TextView destination;
+    EditText  destination;
     EditText days, passangers;
     int passanger,day;
     Button calculate;
@@ -150,7 +150,7 @@ public class FilterActivity extends AppCompatActivity implements LocationListene
     }
     public void CalculateBudget(View view) {
         cityName=destination.getText().toString().toLowerCase();
-
+//new code with firebase
         ConnectMySql connectMySql = new ConnectMySql();
         connectMySql.execute("");
     }
