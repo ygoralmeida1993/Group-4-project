@@ -23,6 +23,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+
 import androidx.appcompat.widget.AppCompatAutoCompleteTextView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -46,7 +47,7 @@ public class FilterActivity extends AppCompatActivity implements LocationListene
     private NumberPicker picker1;
     double approximateBudget=0;
     EditText  modeOfTransportation;
-    AppCompatAutoCompleteTextView destination;
+    TextView destination;
     EditText days, passangers;
     int passanger,day;
     Button calculate;
@@ -65,11 +66,11 @@ public class FilterActivity extends AppCompatActivity implements LocationListene
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_filter);
-        destination = (AppCompatAutoCompleteTextView) this.findViewById(R.id.destination);
+        destination = this.findViewById(R.id.destination);
         ArrayAdapter<String> adapter = new ArrayAdapter<String>
                 (this, android.R.layout.select_dialog_item, places);
-        destination.setThreshold(1); //will start working from first character
-        destination.setAdapter(adapter);
+        //destination.setThreshold(1); //will start working from first character
+        //destination.setAdapter(adapter);
         // modeOfTransportation = (EditText) this.findViewById(R.id.modeTansport);
         days = (EditText) this.findViewById(R.id.noOfDays);
         picker1 = (NumberPicker) findViewById(R.id.numberpicker_main_picker);

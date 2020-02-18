@@ -34,7 +34,7 @@
 
 
 
-    <android.support.v7.widget.AppCompatAutoCompleteTextView
+    <TextView
         android:id="@+id/destination"
         android:layout_width="match_parent"
 
