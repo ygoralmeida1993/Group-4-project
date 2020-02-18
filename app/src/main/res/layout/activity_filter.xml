@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:layout_gravity="center"
+    android:background="@color/background"
+    android:padding="16dp"
+    tools:context=".FilterActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/text_trip"
+            android:layout_width="373dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginLeft="0dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"
+            android:textAlignment="center"
+            android:layout_marginEnd="15dp"
+            android:paddingTop="15dp"
+            android:text="Filters"
+            android:textColor="@color/textColor"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+
+
+
+    <android.support.v7.widget.AppCompatAutoCompleteTextView
+        android:id="@+id/destination"
+        android:layout_width="match_parent"
+
+        android:layout_height="50dp"
+
+        android:background="@drawable/corner"
+        android:drawableLeft="@drawable/ic_place_black_24dp"
+        android:drawablePadding="10dp"
+        android:hint="Enter your destination"
+        android:inputType="text"
+        android:textStyle="bold"
+        android:textColor="@color/textColor"
+        android:textSize="18sp"
+
+        android:textColorHighlight="@color/textColor"
+        android:textColorHint="@color/textColor" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/text_passangers"
+            android:layout_width="125dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginLeft="0dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="15dp"
+            android:paddingTop="15dp"
+            android:text="Passangers"
+            android:textColor="@color/textColor"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <NumberPicker
+            android:id="@+id/numberpicker_main_picker"
+            android:layout_width="200dp"
+            android:layout_height="50dp"
+            android:layout_centerHorizontal="true"
+            android:layout_margin="15dp"
+            android:background="@drawable/corner"
+            android:textColor="@color/textColor" />
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/text_days"
+            android:layout_width="125dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginEnd="15dp"
+            android:text="Total Days"
+            android:textColor="@color/textColor"
+            android:textSize="18sp"
+            android:textStyle="bold"/>
+
+        <EditText
+            android:id="@+id/noOfDays"
+            android:layout_width="200dp"
+            android:layout_height="50dp"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_margin="15dp"
+            android:layout_marginTop="50dp"
+            android:background="@drawable/corner"
+            android:drawablePadding="10dp"
+            android:inputType="number"
+            android:padding="15dp"
+            android:textColor="@color/textColor"
+            android:textColorHighlight="@color/textColor"
+            android:textColorHint="@color/textColor" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+
+        <Spinner
+            android:id="@+id/spinner1"
+            android:layout_width="373dp"
+            android:layout_height="50dp"
+            android:entries="@array/modeOftransportation"
+            android:prompt="@string/mode"
+            android:textColor="@color/textColor"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:background="@drawable/corner"/>
+
+    </LinearLayout>
+
+
+    <Button
+        android:id="@+id/calculate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/button"
+        android:padding="15dp"
+        android:shadowColor="@android:color/transparent"
+        android:text="Calculate"
+        android:onClick="CalculateBudget"
+        android:textColor="#ffffff" />
+
+</LinearLayout>

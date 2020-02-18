@@ -3,5 +3,12 @@
     <string name="title_activity_login">LoginActivity</string>
     <string name="newUser">Not a Member yet? Sign Up here.</string>
     <string name="loginfailed">Login failed</string>
-
+    <string name="beach">Beaches</string>
+    <string name="day_trips">Day/Night Trips</string>
+    <string name="water_tours">Cruises &amp; Sailing</string>
+    <string name="shows">Shows &amp; Concerts</string>
+    <string name="hillstation">Hill Station</string>
+    <string name="food">Food &amp; Nightlife</string>
+    <string name="top">Must Visit</string>
+    <string name="recreational">Recreational Places</string>
 </resources>
