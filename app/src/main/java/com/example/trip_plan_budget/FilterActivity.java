@@ -218,6 +218,7 @@ public class FilterActivity extends AppCompatActivity implements LocationListene
         placeDetailsModelArrayList.removeAll(placeDetailsModelArrayList);
         Intent intent = new Intent(getApplicationContext(), WithBudget.class);
         Bundle bundle = new Bundle();
+        Log.d("places before intent", String.valueOf(l1));
         bundle.putParcelableArrayList("placeDetailsModelArrayList", l1);
         intent.putExtras(bundle);
         startActivity(intent);

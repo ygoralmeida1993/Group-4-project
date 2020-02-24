@@ -56,9 +56,13 @@ class PlaceAdapter extends RecyclerView.Adapter<PlaceAdapter.MyViewHolder> {
     @Override
     public void onBindViewHolder(final PlaceAdapter.MyViewHolder holder, final int position) {
 
-        String place=List.get(position).getPlacename();
+        String place="";
+        place= List.get(position).getPlacename();
         String price= String.valueOf(List.get(position).getBudget());
-        holder.title.setText(place.substring(0, 1).toUpperCase() + place.substring(1));
+        //if(place.isEmpty()){
+            holder.title.setText(" ");
+       // }else{
+       // holder.title.setText(place.substring(0, 1).toUpperCase() + place.substring(1));}
         Picasso.get().load(List.get(position).getImage()).into(holder.imageView);
         holder.price.setText("Budget: "+price);
         holder.map.setOnClickListener(new View.OnClickListener() {
