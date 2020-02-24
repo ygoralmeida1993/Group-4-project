@@ -20,9 +20,12 @@ public class PlaceDetailsModel implements Parcelable {
 
     String latitude;
     String place_type;
-    String image;
+    String image;String placeId;
 
-    public PlaceDetailsModel(String placename, String city, int budget, String longitude, String latitude, String place_type,String img) {
+    public PlaceDetailsModel() {
+    }
+
+    public PlaceDetailsModel(int budget, String city, String img, String latitude, String longitude, String placeId, String placename, String place_type) {
         this.placename = placename;
         this.city = city;
         this.budget = budget;
@@ -30,6 +33,7 @@ public class PlaceDetailsModel implements Parcelable {
         this.latitude = latitude;
         this.place_type = place_type;
         this.image=img;
+        this.placeId=placeId;
     }
 
 

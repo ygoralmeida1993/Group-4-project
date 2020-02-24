@@ -18,6 +18,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.NumberPicker;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -27,6 +28,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatAutoCompleteTextView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -56,6 +63,9 @@ public class FilterActivity extends AppCompatActivity implements LocationListene
     double currentLatitude;
     double currentLongitude;
     int budgetTotal=0;
+    DatabaseReference databasePlaces;
+
+    //List<PlaceDetailsModel> artistList;
     private String[] places = {"Scarborough","Toronto","Waterloo","Oshawa"};
     int budgetAverage=0;
     protected boolean gps_enabled, network_enabled;
@@ -66,6 +76,12 @@ public class FilterActivity extends AppCompatActivity implements LocationListene
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_filter);
+        if (ContextCompat.checkSelfPermission(getApplicationContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getApplicationContext(), android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+            ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION}, 101);
+
+        }
+        databasePlaces= FirebaseDatabase.getInstance().getReference("places");
         destination = this.findViewById(R.id.destination);
         ArrayAdapter<String> adapter = new ArrayAdapter<String>
                 (this, android.R.layout.select_dialog_item, places);
@@ -102,11 +118,7 @@ public class FilterActivity extends AppCompatActivity implements LocationListene
             calculate.setText("Get Places");
 
         }
-        if (ContextCompat.checkSelfPermission(getApplicationContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getApplicationContext(), android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 
-            ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION}, 101);
-
-        }
 
         LocationManager lm = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
         Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
@@ -151,8 +163,26 @@ public class FilterActivity extends AppCompatActivity implements LocationListene
     public void CalculateBudget(View view) {
         cityName=destination.getText().toString().toLowerCase();
 //new code with firebase
-        ConnectMySql connectMySql = new ConnectMySql();
-        connectMySql.execute("");
+        databasePlaces.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                placeDetailsModelArrayList.clear();
+                for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                    PlaceDetailsModel places = postSnapshot.getValue(PlaceDetailsModel.class);
+                    placeDetailsModelArrayList.add(places);
+                }
+                Log.d("places from database", String.valueOf(placeDetailsModelArrayList));
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+       // ConnectMySql connectMySql = new ConnectMySql();
+        //connectMySql.execute("");
+
     }
 
 
@@ -206,7 +236,7 @@ public class FilterActivity extends AppCompatActivity implements LocationListene
                 Statement st = con.createStatement();
                 System.out.println(cityName+placetype);
 
-                //ResultSet rs = st.executeQuery("select * from place_details where city='scarborough'and place_type='hiking'");
+
                 ResultSet rs = st.executeQuery("select * from place_details where city='" + cityName + "'and place_type='" + placetype + "'");
                 ResultSetMetaData rsmd = rs.getMetaData();
                 while (rs.next()) {
@@ -222,8 +252,8 @@ public class FilterActivity extends AppCompatActivity implements LocationListene
                     Log.d("test1",image);
                     Log.d("test2",type);
                     //Assuming you have a user object
-                    PlaceDetailsModel placeDetailsModel = new PlaceDetailsModel(place, city, budget, longitute, latitude, type,image);
-                    placeDetailsModelArrayList.add(placeDetailsModel);
+                    //PlaceDetailsModel placeDetailsModel = new PlaceDetailsModel(place, city, budget, longitute, latitude, type,image);
+                   //placeDetailsModelArrayList.add(placeDetailsModel);
 
                     //queery for getting places within budget
                 }
