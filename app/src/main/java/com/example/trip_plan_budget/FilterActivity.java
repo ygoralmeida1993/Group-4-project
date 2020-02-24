@@ -12,6 +12,8 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+
+import java.util.Collections;
 import java.util.function.Predicate;
 import android.util.Log;
 import android.view.View;
@@ -186,11 +188,15 @@ public class FilterActivity extends AppCompatActivity implements LocationListene
 //new code with firebase
         passanger = picker1.getValue();
         for (int i = 0; i < placeDetailsModelArrayList.size(); i++){
-            if(placeDetailsModelArrayList.get(i).getCity().equals(cityName)&&placeDetailsModelArrayList.get(i).getPlace_type().equals(placetype)){
+            if(placeDetailsModelArrayList.get(i).getCity().equals(cityName.substring(0, 1).toUpperCase()+ cityName.substring(1) )&&
+                    placeDetailsModelArrayList.get(i).getPlace_type().equals(placetype.substring(0, 1).toLowerCase()+ placetype.substring(1) )){
             placeDetailsList.add(placeDetailsModelArrayList.get(i
             ));
             }
         }
+        placeDetailsModelArrayList.removeAll(placeDetailsModelArrayList);
+        Collections.copy(placeDetailsModelArrayList, placeDetailsList);
+        Log.d("places after filtering", String.valueOf(placeDetailsList));
         // passanger = Integer.parseInt(passangers.getText().toString());
         day = Integer.parseInt(days.getText().toString());
         for (int i = 0; i < placeDetailsModelArrayList.size(); i++)
