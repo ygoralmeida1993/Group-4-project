@@ -3,22 +3,16 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.squareup.picasso.Picasso;
-
 import java.util.ArrayList;
 import java.util.List;
-
-
 class PlaceAdapter extends RecyclerView.Adapter<PlaceAdapter.MyViewHolder> {
     private List<PlaceDetailsModel> List= new ArrayList<>();
 
@@ -57,7 +51,7 @@ class PlaceAdapter extends RecyclerView.Adapter<PlaceAdapter.MyViewHolder> {
         //if(place.isEmpty()){
             //holder.title.setText(" ");
        // }else{
-       holder.title.setText(place.substring(0, 1).toUpperCase() + place.substring(1));
+        holder.title.setText(place.substring(0, 1).toUpperCase() + place.substring(1));
         Picasso.get().load(List.get(position).getImage()).into(holder.imageView);
         holder.price.setText("Budget: "+price);
         holder.map.setOnClickListener(new View.OnClickListener() {
@@ -75,8 +69,6 @@ class PlaceAdapter extends RecyclerView.Adapter<PlaceAdapter.MyViewHolder> {
             }
         });
     }
-
-
     @Override
     public int getItemCount()
     {
