@@ -134,6 +134,26 @@ public class FilterActivity extends AppCompatActivity implements LocationListene
 
 
 
+    }@Override
+    protected void onStart() {
+        super.onStart();
+        databasePlaces.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                placeDetailsModelArrayList.clear();
+                for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                    PlaceDetailsModel places = postSnapshot.getValue(PlaceDetailsModel.class);
+                    placeDetailsModelArrayList.add(places);
+                }
+                Log.d("places from database", String.valueOf(placeDetailsModelArrayList));
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
     private double distanceBetween(double lat1, double lon1, double lat2, double lon2) {
         double theta = lon1 - lon2;
@@ -163,23 +183,45 @@ public class FilterActivity extends AppCompatActivity implements LocationListene
     public void CalculateBudget(View view) {
         cityName=destination.getText().toString().toLowerCase();
 //new code with firebase
-        databasePlaces.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
+        passanger = picker1.getValue();
+        // passanger = Integer.parseInt(passangers.getText().toString());
+        day = Integer.parseInt(days.getText().toString());
+        for (int i = 0; i < placeDetailsModelArrayList.size(); i++) {
+            double finalBudget=0;
+            Log.d("placeDetailsModelList", String.valueOf(placeDetailsModelArrayList.get(i).getBudget()));
+            finalBudget=placeDetailsModelArrayList.get(i).getBudget();
+            finalBudget=finalBudget*day*passanger;
+            Log.d("finalBudget before", String.valueOf(finalBudget));
+            Location selected_location = new Location("locationA");
+            selected_location.setLatitude(currentLatitude);
+            selected_location.setLongitude(currentLongitude);
+            System.out.println("currentLatitude" + currentLatitude + currentLongitude);
+            Location near_locations = new Location("locationB");
+            near_locations.setLatitude(Double.parseDouble(placeDetailsModelArrayList.get(i).getLatitude()));
+            near_locations.setLongitude(Double.parseDouble(placeDetailsModelArrayList.get(i).getLongitude()));
+            double distance = (selected_location.distanceTo(near_locations)) * 0.00062137;
+            Log.d("distance", String.valueOf(distance));
+            System.out.println(distance + "distance");
+            finalBudget=finalBudget+(distance*0.30);
+            Log.d("finalBudget after", String.valueOf(finalBudget));
+            placeDetailsModelArrayList.get(i).setBudget((int) finalBudget);
+            Log.d("ModelList", String.valueOf(placeDetailsModelArrayList.get(i).getBudget()));
+        }
+        ArrayList<PlaceDetailsModel> l1 = new ArrayList<PlaceDetailsModel>();
+        for (int i = 0; i <placeDetailsModelArrayList.size(); i++) {
+            Log.d("value", String.valueOf(placeDetailsModelArrayList.get(i).getBudget()));
+            Log.d("budget", String.valueOf(budget));
+            if((placeDetailsModelArrayList.get(i).getBudget())<budget){
 
-                placeDetailsModelArrayList.clear();
-                for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
-                    PlaceDetailsModel places = postSnapshot.getValue(PlaceDetailsModel.class);
-                    placeDetailsModelArrayList.add(places);
-                }
-                Log.d("places from database", String.valueOf(placeDetailsModelArrayList));
-            }
+                l1.add(placeDetailsModelArrayList.get(i));}
+        }
+        placeDetailsModelArrayList.removeAll(placeDetailsModelArrayList);
+        Intent intent = new Intent(getApplicationContext(), WithBudget.class);
+        Bundle bundle = new Bundle();
+        bundle.putParcelableArrayList("placeDetailsModelArrayList", l1);
+        intent.putExtras(bundle);
+        startActivity(intent);
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
        // ConnectMySql connectMySql = new ConnectMySql();
         //connectMySql.execute("");
 
