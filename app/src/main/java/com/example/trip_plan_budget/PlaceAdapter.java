@@ -15,15 +15,12 @@ import java.util.ArrayList;
 import java.util.List;
 class PlaceAdapter extends RecyclerView.Adapter<PlaceAdapter.MyViewHolder> {
     private List<PlaceDetailsModel> List= new ArrayList<>();
-
     Context context;
     private int addPosition;
 
     public PlaceAdapter(List<PlaceDetailsModel> List){
         this.List=List;
     }
-
-
     public class MyViewHolder extends RecyclerView.ViewHolder {
         TextView title,price;
         ImageView imageView,map;

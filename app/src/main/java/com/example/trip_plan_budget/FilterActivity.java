@@ -12,7 +12,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
-
+import java.util.function.Predicate;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -181,12 +181,20 @@ public class FilterActivity extends AppCompatActivity implements LocationListene
         }
     }
     public void CalculateBudget(View view) {
+        ArrayList<PlaceDetailsModel> placeDetailsList=new ArrayList<>();
         cityName=destination.getText().toString().toLowerCase();
 //new code with firebase
         passanger = picker1.getValue();
+        for (int i = 0; i < placeDetailsModelArrayList.size(); i++){
+            if(placeDetailsModelArrayList.get(i).getCity().equals(cityName)&&placeDetailsModelArrayList.get(i).getPlace_type().equals(placetype)){
+            placeDetailsList.add(placeDetailsModelArrayList.get(i
+            ));
+            }
+        }
         // passanger = Integer.parseInt(passangers.getText().toString());
         day = Integer.parseInt(days.getText().toString());
-        for (int i = 0; i < placeDetailsModelArrayList.size(); i++) {
+        for (int i = 0; i < placeDetailsModelArrayList.size(); i++)
+        {
             double finalBudget=0;
             Log.d("placeDetailsModelList", String.valueOf(placeDetailsModelArrayList.get(i).getBudget()));
             finalBudget=placeDetailsModelArrayList.get(i).getBudget();
