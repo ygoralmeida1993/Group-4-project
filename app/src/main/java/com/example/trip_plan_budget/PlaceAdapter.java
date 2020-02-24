@@ -41,16 +41,11 @@ class PlaceAdapter extends RecyclerView.Adapter<PlaceAdapter.MyViewHolder> {
             imageView = (ImageView) view.findViewById(R.id.iv);
         }
     }
-
-
     @Override
     public PlaceAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.customitem, parent, false);
-
-
-
         return new MyViewHolder(itemView);
     }
     @Override
@@ -60,9 +55,9 @@ class PlaceAdapter extends RecyclerView.Adapter<PlaceAdapter.MyViewHolder> {
         place= List.get(position).getPlacename();
         String price= String.valueOf(List.get(position).getBudget());
         //if(place.isEmpty()){
-            holder.title.setText(" ");
+            //holder.title.setText(" ");
        // }else{
-       // holder.title.setText(place.substring(0, 1).toUpperCase() + place.substring(1));}
+       holder.title.setText(place.substring(0, 1).toUpperCase() + place.substring(1));
         Picasso.get().load(List.get(position).getImage()).into(holder.imageView);
         holder.price.setText("Budget: "+price);
         holder.map.setOnClickListener(new View.OnClickListener() {
@@ -72,15 +67,11 @@ class PlaceAdapter extends RecyclerView.Adapter<PlaceAdapter.MyViewHolder> {
                 Intent intent = new Intent(holder.itemView.getContext(), GoogleMapsActivity.class);
                 Bundle b = new Bundle();
                 double longitude= Double.parseDouble(List.get(position).getLongitude());
-                double latitude= Double.parseDouble(List.get(position).getLatitude())
-                        ;                intent.putExtra("long",longitude );
+                double latitude= Double.parseDouble(List.get(position).getLatitude());
+                intent.putExtra("long",longitude );
                 intent.putExtra("lat",latitude);
                 intent.putExtras(b);
-
                 holder.itemView.getContext().startActivity(intent);
-
-
-
             }
         });
     }

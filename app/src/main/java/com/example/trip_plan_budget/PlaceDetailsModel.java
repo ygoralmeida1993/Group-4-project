@@ -5,7 +5,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 public class PlaceDetailsModel implements Parcelable {
-    String placename;
+    String placeName;
     String city;
     int budget;
     String longitude;
@@ -26,7 +26,7 @@ public class PlaceDetailsModel implements Parcelable {
     }
 
     public PlaceDetailsModel(int budget, String city, String img, String latitude, String longitude, String placeId, String placename, String place_type) {
-        this.placename = placename;
+        this.placeName = placename;
         this.city = city;
         this.budget = budget;
         this.longitude = longitude;
@@ -39,7 +39,7 @@ public class PlaceDetailsModel implements Parcelable {
 
 
     protected PlaceDetailsModel(Parcel in) {
-        placename = in.readString();
+        placeName = in.readString();
         city = in.readString();
         budget = in.readInt();
         longitude = in.readString();
@@ -50,7 +50,7 @@ public class PlaceDetailsModel implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(placename);
+        dest.writeString(placeName);
         dest.writeString(city);
         dest.writeInt(budget);
         dest.writeString(longitude);
@@ -77,11 +77,11 @@ public class PlaceDetailsModel implements Parcelable {
     };
 
     public String getPlacename() {
-        return placename;
+        return placeName;
     }
 
     public void setPlacename(String placename) {
-        this.placename = placename;
+        this.placeName = placename;
     }
 
     public String getCity() {
