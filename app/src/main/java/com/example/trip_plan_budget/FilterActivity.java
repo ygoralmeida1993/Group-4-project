@@ -187,16 +187,21 @@ public class FilterActivity extends AppCompatActivity implements LocationListene
         cityName=destination.getText().toString().toLowerCase();
 //new code with firebase
         passanger = picker1.getValue();
+        String city=cityName.substring(0, 1).toUpperCase()+ cityName.substring(1);
+        String placeType=placetype.substring(0, 1).toUpperCase()+ placetype.substring(1);
+        Log.d("data",city+placeType+"   "+placeDetailsModelArrayList.get(0).getCity());
         for (int i = 0; i < placeDetailsModelArrayList.size(); i++){
-            if(placeDetailsModelArrayList.get(i).getCity().equals(cityName.substring(0, 1).toUpperCase()+ cityName.substring(1) )&&
-                    placeDetailsModelArrayList.get(i).getPlace_type().equals(placetype.substring(0, 1).toLowerCase()+ placetype.substring(1) )){
-            placeDetailsList.add(placeDetailsModelArrayList.get(i
-            ));
+            if(placeDetailsModelArrayList.get(i).getCity().equals(city)&&
+                    placeDetailsModelArrayList.get(i).getPlace_type().equals( placeType)){
+                Log.d("inside","inside");
+            placeDetailsList.add(placeDetailsModelArrayList.get(i));
+                Log.d("inside", String.valueOf(placeDetailsList));
             }
         }
-        placeDetailsModelArrayList.removeAll(placeDetailsModelArrayList);
+       // placeDetailsModelArrayList.removeAll(placeDetailsModelArrayList);
+        placeDetailsModelArrayList.addAll(placeDetailsList);
         Collections.copy(placeDetailsModelArrayList, placeDetailsList);
-        Log.d("places after filtering", String.valueOf(placeDetailsList));
+        Log.d("places after filtering", String.valueOf(placeDetailsModelArrayList));
         // passanger = Integer.parseInt(passangers.getText().toString());
         day = Integer.parseInt(days.getText().toString());
         for (int i = 0; i < placeDetailsModelArrayList.size(); i++)
