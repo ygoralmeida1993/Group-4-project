@@ -55,7 +55,7 @@ class PlaceAdapter extends RecyclerView.Adapter<PlaceAdapter.MyViewHolder> {
             @Override
             public void onClick(View v) {
 
-                Intent intent = new Intent(holder.itemView.getContext(), GoogleMapsActivity.class);
+                Intent intent = new Intent(holder.itemView.getContext(), MapsActivity.class);
                 Bundle b = new Bundle();
                 double longitude= Double.parseDouble(List.get(position).getLongitude());
                 double latitude= Double.parseDouble(List.get(position).getLatitude());
