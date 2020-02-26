@@ -117,12 +117,19 @@ public class FilterActivity extends AppCompatActivity implements LocationListene
 
                         InputStream responseBody = myConnection.getInputStream();
                         String jsonString=convertStreamToString(responseBody);
-                        Log.d("value jsonString",jsonString+"");
+                        JSONObject json = null; // Parse the JSON
                         try {
-                            JSONArray jsonarray = new JSONArray(jsonString);
+                            json = new JSONObject(jsonString);
+                            JSONArray array = json.getJSONArray("result");              // Get the JSON array represented by the key "myKey"
+                            JSONObject home = array.getJSONObject(0);                  // Get the element at index 0 as a JSONObject
+                            String result = home.getString("name");
+                            Log.d("value jsonString",result+"");
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
+                                     // Get the string represented by the key "myHhome"
+                       // System.out.println(result);
+
                         InputStreamReader responseBodyReader =
                                 new InputStreamReader(responseBody, "UTF-8");
 
