@@ -44,6 +44,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -98,18 +102,17 @@ public class FilterActivity extends AppCompatActivity implements LocationListene
             public void run() {
                 URL githubEndpoint = null;
                 try {
-                    githubEndpoint = new URL("http://devapi.mygasfeed.com/stations/radius/43.788270/-79.137900/45/reg/price/rfej9napna.json?callback=?");
+                    githubEndpoint = new URL("https://api.collectapi.com/gasPrice/canada");
                 } catch (MalformedURLException e) {
                     e.printStackTrace();
                 }
                 try {
                     HttpsURLConnection myConnection =
                             (HttpsURLConnection) githubEndpoint.openConnection();
-                    myConnection.setRequestProperty("User-Agent", "my-rest-app-v0.1");
-                    myConnection.setRequestProperty("Accept",
-                            "application/vnd.github.v3+json");
-                    myConnection.setRequestProperty("Contact-Me",
-                            "hathibelagal@example.com");
+
+                    myConnection.setRequestProperty("Authorization",
+                            "apikey 5jpE9jkydP6DsPLJgVRuPf:4dRQkQrqaWwgIAq9M2FNhE");
+
                     if (myConnection.getResponseCode() == 200) {
 
                         InputStream responseBody = myConnection.getInputStream();
@@ -118,12 +121,24 @@ public class FilterActivity extends AppCompatActivity implements LocationListene
 
                         JsonReader jsonReader = new JsonReader(responseBodyReader);
                         jsonReader.beginObject();
+                        Log.d("values", String.valueOf(jsonReader));
                         while (jsonReader.hasNext()) {
                             String key = jsonReader.nextName();
-                            if (key.equals("organization_url")) {
+                            Log.d("key",key);
 
-                                String value = jsonReader.nextString();
-                                 Log.d("value",value);
+                            if (key.equals("result")) {
+                                try {
+                                    JSONObject obj = new JSONObject("result");
+
+                                    JSONArray arr = new JSONArray(obj.get("name"));
+                                    Log.d("value",arr+"");
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+
+
+                               // String value = jsonReader.nextString();
+                               //  Log.d("value",value);
                                 break;
                             } else {
                                 jsonReader.skipValue();
