@@ -13,8 +13,15 @@ import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Collections;
 import java.util.function.Predicate;
+
+import android.util.JsonReader;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -37,6 +44,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -45,6 +56,8 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+
+import javax.net.ssl.HttpsURLConnection;
 
 public class FilterActivity extends AppCompatActivity implements LocationListener {
     private static final String url = "jdbc:mysql://192.168.0.12:3306/trip_plan";
@@ -83,11 +96,75 @@ public class FilterActivity extends AppCompatActivity implements LocationListene
             ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION}, 101);
 
         }
+
+        AsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+                URL githubEndpoint = null;
+                try {
+                    githubEndpoint = new URL("https://api.collectapi.com/gasPrice/canada");
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    HttpsURLConnection myConnection =
+                            (HttpsURLConnection) githubEndpoint.openConnection();
+
+                    myConnection.setRequestProperty("Authorization",
+                            "apikey 5jpE9jkydP6DsPLJgVRuPf:4dRQkQrqaWwgIAq9M2FNhE");
+
+                    if (myConnection.getResponseCode() == 200) {
+
+                        InputStream responseBody = myConnection.getInputStream();
+                        InputStreamReader responseBodyReader =
+                                new InputStreamReader(responseBody, "UTF-8");
+
+                        JsonReader jsonReader = new JsonReader(responseBodyReader);
+                        jsonReader.beginObject();
+                        Log.d("values", String.valueOf(jsonReader));
+                        while (jsonReader.hasNext()) {
+                            String key = jsonReader.nextName();
+                            Log.d("key",key);
+
+                            if (key.equals("result")) {
+                                try {
+                                    JSONObject obj = new JSONObject("result");
+
+                                    JSONArray arr = new JSONArray(obj.get("name"));
+                                    Log.d("value",arr+"");
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+
+
+                               // String value = jsonReader.nextString();
+                               //  Log.d("value",value);
+                                break;
+                            } else {
+                                jsonReader.skipValue();
+                            }
+                        }
+
+                        jsonReader.close();
+                        myConnection.disconnect();
+                    } else {
+
+                        Log.d("value error","");
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+
+        });
+
+
         databasePlaces= FirebaseDatabase.getInstance().getReference("places");
         destination = this.findViewById(R.id.destination);
         ArrayAdapter<String> adapter = new ArrayAdapter<String>
                 (this, android.R.layout.select_dialog_item, places);
-        //destination.setThreshold(1); //will start working from first character
+      //  destination.setThreshold(1); //will start working from first character
         //destination.setAdapter(adapter);
         // modeOfTransportation = (EditText) this.findViewById(R.id.modeTansport);
         days = (EditText) this.findViewById(R.id.noOfDays);
@@ -136,7 +213,10 @@ public class FilterActivity extends AppCompatActivity implements LocationListene
 
 
 
-    }@Override
+    }
+
+
+    @Override
     protected void onStart() {
         super.onStart();
         databasePlaces.addValueEventListener(new ValueEventListener() {

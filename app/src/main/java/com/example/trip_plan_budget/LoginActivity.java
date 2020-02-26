@@ -34,7 +34,7 @@ public class LoginActivity extends AppCompatActivity {
         Login=(Button) this.findViewById(R.id.LoginIn) ;
         emailId = (EditText)this.findViewById(R.id.emailid);
         passwd=(EditText)this.findViewById((R.id.password));
-        firebaseAuth = FirebaseAuth.getInstance(); //need firebase authentication instance
+        firebaseAuth = FirebaseAuth.getInstance();
         Login.setOnClickListener(new View.OnClickListener() {
 
             @Override
