@@ -109,10 +109,8 @@ public class FilterActivity extends AppCompatActivity implements LocationListene
                 try {
                     HttpsURLConnection myConnection =
                             (HttpsURLConnection) githubEndpoint.openConnection();
-
                     myConnection.setRequestProperty("Authorization",
                             "apikey 5jpE9jkydP6DsPLJgVRuPf:4dRQkQrqaWwgIAq9M2FNhE");
-
                     if (myConnection.getResponseCode() == 200) {
 
                         InputStream responseBody = myConnection.getInputStream();
@@ -125,18 +123,14 @@ public class FilterActivity extends AppCompatActivity implements LocationListene
                         while (jsonReader.hasNext()) {
                             String key = jsonReader.nextName();
                             Log.d("key",key);
-
                             if (key.equals("result")) {
                                 try {
                                     JSONObject obj = new JSONObject("result");
-
                                     JSONArray arr = new JSONArray(obj.get("name"));
                                     Log.d("value",arr+"");
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
-
-
                                // String value = jsonReader.nextString();
                                //  Log.d("value",value);
                                 break;
