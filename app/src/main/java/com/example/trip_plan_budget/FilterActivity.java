@@ -13,6 +13,7 @@ import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -43,6 +44,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.gson.JsonObject;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -114,6 +116,13 @@ public class FilterActivity extends AppCompatActivity implements LocationListene
                     if (myConnection.getResponseCode() == 200) {
 
                         InputStream responseBody = myConnection.getInputStream();
+                        String jsonString=convertStreamToString(responseBody);
+                        Log.d("value jsonString",jsonString+"");
+                        try {
+                            JSONArray jsonarray = new JSONArray(jsonString);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                         InputStreamReader responseBodyReader =
                                 new InputStreamReader(responseBody, "UTF-8");
 
@@ -121,18 +130,13 @@ public class FilterActivity extends AppCompatActivity implements LocationListene
                         jsonReader.beginObject();
                         Log.d("values", String.valueOf(jsonReader));
                         while (jsonReader.hasNext()) {
+                          //  JsonObject empObj = jsonReader.readObject();
                             String key = jsonReader.nextName();
                             Log.d("key",key);
                             if (key.equals("result")) {
-                                try {
-                                    JSONObject obj = new JSONObject("result");
-                                    JSONArray arr = new JSONArray(obj.get("name"));
-                                    Log.d("value",arr+"");
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
-                               // String value = jsonReader.nextString();
-                               //  Log.d("value",value);
+
+                                String value = jsonReader.nextString();
+                                Log.d("value",value);
                                 break;
                             } else {
                                 jsonReader.skipValue();
@@ -209,6 +213,30 @@ public class FilterActivity extends AppCompatActivity implements LocationListene
 
     }
 
+
+
+    private String convertStreamToString(InputStream is) {
+
+        BufferedReader reader = new BufferedReader(
+                new InputStreamReader(is));
+        StringBuilder sb = new StringBuilder();
+
+        String line = null;
+        try {
+            while ((line = reader.readLine()) != null) {
+                sb.append(line + "\n");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                is.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return sb.toString();
+    }
 
     @Override
     protected void onStart() {
