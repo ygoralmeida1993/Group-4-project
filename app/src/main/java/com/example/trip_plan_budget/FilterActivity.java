@@ -98,7 +98,7 @@ public class FilterActivity extends AppCompatActivity implements LocationListene
             public void run() {
                 URL githubEndpoint = null;
                 try {
-                    githubEndpoint = new URL("https://api.github.com/");
+                    githubEndpoint = new URL("http://devapi.mygasfeed.com/stations/radius/43.788270/-79.137900/45/reg/price/rfej9napna.json?callback=?");
                 } catch (MalformedURLException e) {
                     e.printStackTrace();
                 }
@@ -124,8 +124,6 @@ public class FilterActivity extends AppCompatActivity implements LocationListene
 
                                 String value = jsonReader.nextString();
                                  Log.d("value",value);
-
-
                                 break;
                             } else {
                                 jsonReader.skipValue();
@@ -135,7 +133,7 @@ public class FilterActivity extends AppCompatActivity implements LocationListene
                         jsonReader.close();
                         myConnection.disconnect();
                     } else {
-                        
+
                         Log.d("value error","");
                     }
                 } catch (IOException e) {
@@ -151,7 +149,7 @@ public class FilterActivity extends AppCompatActivity implements LocationListene
         destination = this.findViewById(R.id.destination);
         ArrayAdapter<String> adapter = new ArrayAdapter<String>
                 (this, android.R.layout.select_dialog_item, places);
-        //destination.setThreshold(1); //will start working from first character
+      //  destination.setThreshold(1); //will start working from first character
         //destination.setAdapter(adapter);
         // modeOfTransportation = (EditText) this.findViewById(R.id.modeTansport);
         days = (EditText) this.findViewById(R.id.noOfDays);
