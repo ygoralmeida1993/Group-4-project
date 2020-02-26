@@ -81,12 +81,11 @@ public class FilterActivity extends AppCompatActivity implements LocationListene
     double currentLongitude;
     int budgetTotal=0;
     DatabaseReference databasePlaces;
-
-    //List<PlaceDetailsModel> artistList;
     private String[] places = {"Scarborough","Toronto","Waterloo","Oshawa"};
     int budgetAverage=0;
     protected boolean gps_enabled, network_enabled;
     ArrayList<PlaceDetailsModel> placeDetailsModelArrayList;
+    ArrayList<GasApiModel> gasApiModelArrayList;
     int people;
 
     @Override
@@ -98,59 +97,42 @@ public class FilterActivity extends AppCompatActivity implements LocationListene
             ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION}, 101);
 
         }
-
+        gasApiModelArrayList=new ArrayList<>();
+        //implementation for gas api
         AsyncTask.execute(new Runnable() {
             @Override
             public void run() {
-                URL githubEndpoint = null;
+                URL gasApi = null;
                 try {
-                    githubEndpoint = new URL("https://api.collectapi.com/gasPrice/canada");
+                    gasApi = new URL("https://api.collectapi.com/gasPrice/canada");
                 } catch (MalformedURLException e) {
                     e.printStackTrace();
                 }
                 try {
                     HttpsURLConnection myConnection =
-                            (HttpsURLConnection) githubEndpoint.openConnection();
+                            (HttpsURLConnection) gasApi.openConnection();
                     myConnection.setRequestProperty("Authorization",
                             "apikey 5jpE9jkydP6DsPLJgVRuPf:4dRQkQrqaWwgIAq9M2FNhE");
                     if (myConnection.getResponseCode() == 200) {
 
                         InputStream responseBody = myConnection.getInputStream();
                         String jsonString=convertStreamToString(responseBody);
-                        JSONObject json = null; // Parse the JSON
+                        JSONObject json = null;
                         try {
                             json = new JSONObject(jsonString);
-                            JSONArray array = json.getJSONArray("result");              // Get the JSON array represented by the key "myKey"
-                            JSONObject home = array.getJSONObject(0);                  // Get the element at index 0 as a JSONObject
-                            String result = home.getString("name");
-                            Log.d("value jsonString",result+"");
+                            JSONArray array = json.getJSONArray("result");
+                            for(int m=0;m<9;m++){
+                                JSONObject place = array.getJSONObject(m);
+                                String province = place.getString("name");
+                                String currency = place.getString("currency");
+                                String gasoline = place.getString("gasoline");
+                                GasApiModel response=new GasApiModel(province,gasoline,currency);
+                                gasApiModelArrayList.add(response);
+                            }
+                            Log.d("gasApiModelArrayList",gasApiModelArrayList+"");
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-                                     // Get the string represented by the key "myHhome"
-                       // System.out.println(result);
-
-                        InputStreamReader responseBodyReader =
-                                new InputStreamReader(responseBody, "UTF-8");
-
-                        JsonReader jsonReader = new JsonReader(responseBodyReader);
-                        jsonReader.beginObject();
-                        Log.d("values", String.valueOf(jsonReader));
-                        while (jsonReader.hasNext()) {
-                          //  JsonObject empObj = jsonReader.readObject();
-                            String key = jsonReader.nextName();
-                            Log.d("key",key);
-                            if (key.equals("result")) {
-
-                                String value = jsonReader.nextString();
-                                Log.d("value",value);
-                                break;
-                            } else {
-                                jsonReader.skipValue();
-                            }
-                        }
-
-                        jsonReader.close();
                         myConnection.disconnect();
                     } else {
 
