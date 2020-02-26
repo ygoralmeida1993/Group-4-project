@@ -13,8 +13,15 @@ import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Collections;
 import java.util.function.Predicate;
+
+import android.util.JsonReader;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -45,6 +52,8 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+
+import javax.net.ssl.HttpsURLConnection;
 
 public class FilterActivity extends AppCompatActivity implements LocationListener {
     private static final String url = "jdbc:mysql://192.168.0.12:3306/trip_plan";
@@ -83,6 +92,61 @@ public class FilterActivity extends AppCompatActivity implements LocationListene
             ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION}, 101);
 
         }
+
+        AsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+                URL githubEndpoint = null;
+                try {
+                    githubEndpoint = new URL("https://api.github.com/");
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    HttpsURLConnection myConnection =
+                            (HttpsURLConnection) githubEndpoint.openConnection();
+                    myConnection.setRequestProperty("User-Agent", "my-rest-app-v0.1");
+                    myConnection.setRequestProperty("Accept",
+                            "application/vnd.github.v3+json");
+                    myConnection.setRequestProperty("Contact-Me",
+                            "hathibelagal@example.com");
+                    if (myConnection.getResponseCode() == 200) {
+
+                        InputStream responseBody = myConnection.getInputStream();
+                        InputStreamReader responseBodyReader =
+                                new InputStreamReader(responseBody, "UTF-8");
+
+                        JsonReader jsonReader = new JsonReader(responseBodyReader);
+                        jsonReader.beginObject();
+                        while (jsonReader.hasNext()) {
+                            String key = jsonReader.nextName();
+                            if (key.equals("organization_url")) {
+
+                                String value = jsonReader.nextString();
+                                 Log.d("value",value);
+
+
+                                break;
+                            } else {
+                                jsonReader.skipValue();
+                            }
+                        }
+
+                        jsonReader.close();
+                        myConnection.disconnect();
+                    } else {
+                        
+                        Log.d("value error","");
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+
+        });
+
+
         databasePlaces= FirebaseDatabase.getInstance().getReference("places");
         destination = this.findViewById(R.id.destination);
         ArrayAdapter<String> adapter = new ArrayAdapter<String>
@@ -136,7 +200,10 @@ public class FilterActivity extends AppCompatActivity implements LocationListene
 
 
 
-    }@Override
+    }
+
+
+    @Override
     protected void onStart() {
         super.onStart();
         databasePlaces.addValueEventListener(new ValueEventListener() {
