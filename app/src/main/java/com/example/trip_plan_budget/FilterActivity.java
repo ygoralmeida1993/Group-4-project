@@ -21,7 +21,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Collections;
 import java.util.function.Predicate;
-
 import android.util.JsonReader;
 import android.util.Log;
 import android.view.View;
