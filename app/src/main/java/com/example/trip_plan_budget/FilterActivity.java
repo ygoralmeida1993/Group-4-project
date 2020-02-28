@@ -177,10 +177,11 @@ public class FilterActivity extends AppCompatActivity implements LocationListene
                             Log.d("daily array", String.valueOf(weatherArray));
                             for(int m=0;m<weatherArray.length();m++){
                                 JSONObject day = weatherArray.getJSONObject(m);
-                                String province = day.getString("name");
-                                String currency = day.getString("currency");
-                                String gasoline = day.getString("gasoline");
-                                GasApiModel response=new GasApiModel(province,gasoline,currency);
+                                String icon = day.getString("icon");
+                                String temperatureMax = day.getString("temperatureMax");
+                                String temperatureMin = day.getString("temperatureMin");
+                                String windSpeed = day.getString("windSpeed");
+                                WeatherApiModel response=new WeatherApiModel(,);
                                 gasApiModelArrayList.add(response);
                             }
 

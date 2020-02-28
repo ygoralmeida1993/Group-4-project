@@ -3,14 +3,14 @@ package com.example.trip_plan_budget;
 public class WeatherApiModel
 {
     String icon;
+    double tempMax;
+    double tempMin;
+    double WindSpeed;
 
-    public WeatherApiModel() {
-    }
-
-    public WeatherApiModel(String icon, String tempMax, String tempMin, String windSpeed) {
+    public WeatherApiModel(String icon, double tempMax, double tempMin, double windSpeed) {
         this.icon = icon;
-        this.tempMax = tempMax;
-        this.tempMin = tempMin;
+        this.tempMax = (tempMax-32)*1.8;//converting in to celcius
+        this.tempMin = (tempMin-32)*1.8;
         WindSpeed = windSpeed;
     }
 
@@ -22,31 +22,27 @@ public class WeatherApiModel
         this.icon = icon;
     }
 
-    public String getTempMax() {
+    public double getTempMax() {
         return tempMax;
     }
 
-    public void setTempMax(String tempMax) {
+    public void setTempMax(double tempMax) {
         this.tempMax = tempMax;
     }
 
-    public String getTempMin() {
+    public double getTempMin() {
         return tempMin;
     }
 
-    public void setTempMin(String tempMin) {
+    public void setTempMin(double tempMin) {
         this.tempMin = tempMin;
     }
 
-    public String getWindSpeed() {
+    public double getWindSpeed() {
         return WindSpeed;
     }
 
-    public void setWindSpeed(String windSpeed) {
+    public void setWindSpeed(double windSpeed) {
         WindSpeed = windSpeed;
     }
-
-    String tempMax;
-    String tempMin;
-    String WindSpeed;
 }
