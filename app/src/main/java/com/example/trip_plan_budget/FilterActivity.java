@@ -145,7 +145,55 @@ public class FilterActivity extends AppCompatActivity implements LocationListene
 
 
         });
+//weather api
+        AsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+                URL weatherApi = null;
+                try {
+                    weatherApi = new URL("https://api.darksky.net/forecast/13e04b25432c5d707a0a3c080d15a5b7/43.642567,-79.387054");
+                } catch (MalformedURLException e) {
+                    Log.d("weatherApi", "error");
+                    e.printStackTrace();
+                }
+                try {
+                    Log.d("weatherApi", "try");
+                    HttpsURLConnection myConnection =
+                            (HttpsURLConnection) weatherApi.openConnection();
+                    myConnection.setRequestProperty("x-rapidapi-host",
+                            "weather2020-weather-v1.p.rapidapi.com");
+                    myConnection.setRequestProperty("x-rapidapi-key",
+                            "6d0b756940msh47651648d142f8fp126561jsn497d176a16e6");
+                    Log.d("weatherApi", String.valueOf(myConnection.getResponseCode()));
+                    if (myConnection.getResponseCode() == 200) {
+                        InputStream responseBody = myConnection.getInputStream();
+                        String jsonString=convertStreamToString(responseBody);
+                        Log.d("jsonstring", String.valueOf(jsonString));
+                        JSONObject json = null;
+                        try {
+                            json = new JSONObject(jsonString);
+                            Log.d("jsonobject", String.valueOf(json));
+                           // JSONArray dailyArray = json.getJSONArray("minutely");
+                            //JSONArray ja = new JSONObject(jsonString).getJSONArray("minutely");
+                            String result;
+                            result = json.getString("minutely");
+                            JSONArray ja = new JSONArray(result);
+                            Log.d("daily array", String.valueOf(ja));
 
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        myConnection.disconnect();
+                    } else {
+                        Log.d("value error","");
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+
+        });
 
         databasePlaces= FirebaseDatabase.getInstance().getReference("places");
         destination = this.findViewById(R.id.destination);
@@ -197,13 +245,17 @@ public class FilterActivity extends AppCompatActivity implements LocationListene
 
             }
         });
-
-
-
     }
+    public static String[] toStringArray(JSONArray array) {
+        if(array==null)
+            return null;
 
-
-
+        String[] arr=new String[array.length()];
+        for(int i=0; i<arr.length; i++) {
+            arr[i]=array.optString(i);
+        }
+        return arr;
+    }
     private String convertStreamToString(InputStream is) {
 
         BufferedReader reader = new BufferedReader(
