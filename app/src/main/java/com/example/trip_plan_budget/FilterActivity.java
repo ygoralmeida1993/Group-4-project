@@ -168,16 +168,21 @@ public class FilterActivity extends AppCompatActivity implements LocationListene
                         InputStream responseBody = myConnection.getInputStream();
                         String jsonString=convertStreamToString(responseBody);
                         Log.d("jsonstring", String.valueOf(jsonString));
+
                         JSONObject json = null;
                         try {
-                            json = new JSONObject(jsonString);
-                            Log.d("jsonobject", String.valueOf(json));
-                           // JSONArray dailyArray = json.getJSONArray("minutely");
-                            //JSONArray ja = new JSONObject(jsonString).getJSONArray("minutely");
-                            String result;
-                            result = json.getString("minutely");
-                            JSONArray ja = new JSONArray(result);
-                            Log.d("daily array", String.valueOf(ja));
+                            JSONObject mainObject = new JSONObject(jsonString);
+                            JSONObject dailyObject = mainObject.getJSONObject("daily");
+                            JSONArray weatherArray = dailyObject.getJSONArray("data");
+                            Log.d("daily array", String.valueOf(weatherArray));
+                            for(int m=0;m<weatherArray.length();m++){
+                                JSONObject day = weatherArray.getJSONObject(m);
+                                String province = day.getString("name");
+                                String currency = day.getString("currency");
+                                String gasoline = day.getString("gasoline");
+                                GasApiModel response=new GasApiModel(province,gasoline,currency);
+                                gasApiModelArrayList.add(response);
+                            }
 
                         } catch (JSONException e) {
                             e.printStackTrace();
