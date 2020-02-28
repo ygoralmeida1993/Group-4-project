@@ -85,6 +85,7 @@ public class FilterActivity extends AppCompatActivity implements LocationListene
     protected boolean gps_enabled, network_enabled;
     ArrayList<PlaceDetailsModel> placeDetailsModelArrayList;
     ArrayList<GasApiModel> gasApiModelArrayList;
+    ArrayList<WeatherApiModel> weatherApiModelArrayList;
     int people;
 
     @Override
@@ -97,6 +98,7 @@ public class FilterActivity extends AppCompatActivity implements LocationListene
 
         }
         gasApiModelArrayList=new ArrayList<>();
+
         //implementation for gas api
         AsyncTask.execute(new Runnable() {
             @Override
@@ -120,7 +122,7 @@ public class FilterActivity extends AppCompatActivity implements LocationListene
                         try {
                             json = new JSONObject(jsonString);
                             JSONArray array = json.getJSONArray("result");
-                            for(int m=0;m<9;m++){
+                            for(int m=0;m<array.length();m++){
                                 JSONObject place = array.getJSONObject(m);
                                 String province = place.getString("name");
                                 String currency = place.getString("currency");
@@ -145,6 +147,7 @@ public class FilterActivity extends AppCompatActivity implements LocationListene
 
         });
 //weather api
+        weatherApiModelArrayList=new ArrayList<>();
         AsyncTask.execute(new Runnable() {
             @Override
             public void run() {
@@ -171,6 +174,7 @@ public class FilterActivity extends AppCompatActivity implements LocationListene
 
                         JSONObject json = null;
                         try {
+
                             JSONObject mainObject = new JSONObject(jsonString);
                             JSONObject dailyObject = mainObject.getJSONObject("daily");
                             JSONArray weatherArray = dailyObject.getJSONArray("data");
@@ -178,13 +182,13 @@ public class FilterActivity extends AppCompatActivity implements LocationListene
                             for(int m=0;m<weatherArray.length();m++){
                                 JSONObject day = weatherArray.getJSONObject(m);
                                 String icon = day.getString("icon");
-                                String temperatureMax = day.getString("temperatureMax");
-                                String temperatureMin = day.getString("temperatureMin");
-                                String windSpeed = day.getString("windSpeed");
-                                WeatherApiModel response=new WeatherApiModel(,);
-                                gasApiModelArrayList.add(response);
+                                Double temperatureMax = Double.valueOf(day.getString("temperatureMax"));
+                                Double temperatureMin = Double.valueOf(day.getString("temperatureMin"));
+                                Double windSpeed = Double.valueOf(day.getString("windSpeed"));
+                                WeatherApiModel response=new WeatherApiModel(icon,temperatureMax,temperatureMin,windSpeed);
+                                weatherApiModelArrayList.add(response);
                             }
-
+                            Log.d("weatherApiModelArray",weatherApiModelArrayList+"");
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
