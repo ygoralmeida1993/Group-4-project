@@ -27,7 +27,7 @@ public class FlightSearchActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_flight_search);
         t1=(EditText) findViewById(R.id.country);
         t2=(EditText) findViewById(R.id.currency);
         t3=(EditText) findViewById(R.id.locale);
