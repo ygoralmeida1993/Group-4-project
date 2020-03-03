@@ -27,7 +27,6 @@ public class CarDetailsActivity extends AppCompatActivity {
         TextView txtTitle = (TextView) findViewById(R.id.content_text);
         TextView carBrands = (TextView) findViewById(R.id.CarBrand);
         TextView CarMakes = (TextView) findViewById(R.id.CarMakes);
-
         carType.setVisibility(View.GONE);
         placeDetailsModelArrayList = new ArrayList<PlaceDetailsModel>();
         Bundle bundle = getIntent().getExtras();
@@ -56,15 +55,17 @@ public class CarDetailsActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 carBrand.setVisibility(View.GONE);
+                carBrand.startAnimation(animationUp);
                 carMake.setVisibility(View.GONE);
+                carMake.startAnimation(animationUp);
                 if(carType.isShown()){
                     carType.setVisibility(View.GONE);
                     carType.startAnimation(animationUp);
                 }
                 else{
-
+                    carBrand.setVisibility(View.GONE);
+                    carMake.setVisibility(View.GONE);
                     carType.setVisibility(View.VISIBLE);
-
                     carType.startAnimation(animationDown);
                 }
             }
@@ -72,16 +73,18 @@ public class CarDetailsActivity extends AppCompatActivity {
         carBrands.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                carMake.setVisibility(View.GONE);
                 carType.setVisibility(View.GONE);
+                carType.startAnimation(animationUp);
+                carMake.setVisibility(View.GONE);
+                carMake.startAnimation(animationUp);
                 if(carBrand.isShown()){
                     carBrand.setVisibility(View.GONE);
                     carBrand.startAnimation(animationUp);
                 }
                 else{
-
+                    carMake.setVisibility(View.GONE);
+                    carType.setVisibility(View.GONE);
                     carBrand.setVisibility(View.VISIBLE);
-
                     carBrand.startAnimation(animationDown);
                 }
             }
@@ -90,13 +93,16 @@ public class CarDetailsActivity extends AppCompatActivity {
         CarMakes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                carType.setVisibility(View.GONE);
                 carBrand.setVisibility(View.GONE);
+                carBrand.startAnimation(animationUp);
+                carType.setVisibility(View.GONE);
+                carType.startAnimation(animationUp);
                 if(carMake.isShown()){
                     carMake.setVisibility(View.GONE);
                     carMake.startAnimation(animationUp);
                 }
                 else{
+                    carType.setVisibility(View.GONE);
 
                     carMake.setVisibility(View.VISIBLE);
 

@@ -1,24 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
+    android:padding="15dp"
     android:layout_height="match_parent"
     android:background="@color/background"
     android:orientation="vertical">
+    <Button
+        android:id="@+id/calculate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="70dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginRight="50dp"
+
+        android:background="@drawable/button"
+        android:shadowColor="@android:color/transparent"
+        android:text="Calculate Budget"
+
+        android:textColor="#ffffff" />
 
     <TextView
-       android:layout_marginTop="160dp"
         android:id="@+id/content_text"
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:background="@color/colorPrimary"
+        android:layout_marginTop="50dp"
+
+        android:background="@drawable/button"
         android:clickable="true"
-        android:textSize="24dp"
         android:onClick="toggle_contents"
         android:padding="10dp"
         android:text="Car Type"
-        android:textColor="@android:color/white" />
+        android:textColor="@android:color/white"
+        android:textSize="20dp"
+        android:textStyle="bold" />
+
     <RadioGroup
         android:id="@+id/carType"
+        android:textSize="18sp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" >
 
@@ -56,18 +74,21 @@
     <TextView
         android:id="@+id/CarBrand"
         android:layout_width="match_parent"
-        android:background="@color/colorPrimary"
+        android:background="@drawable/button"
+
         android:clickable="true"
         android:onClick="toggle_contents"
         android:padding="10dp"
         android:text="Car Brand"
-        android:textSize="24dp"
+        android:textSize="20dp"
+        android:textStyle="bold"
         android:layout_height="60dp"
         android:textColor="@android:color/white" />
 
     <RadioGroup
         android:id="@+id/CarBrands"
         android:layout_width="wrap_content"
+        android:textSize="18sp"
         android:layout_height="wrap_content" >
 
         <RadioButton
@@ -115,17 +136,20 @@
         android:id="@+id/CarMakes"
         android:layout_width="match_parent"
 
-        android:background="@color/colorPrimary"
+
         android:clickable="true"
         android:onClick="toggle_contents"
+        android:background="@drawable/button"
         android:padding="10dp"
+        android:textStyle="bold"
         android:text="Car Make"
-        android:textSize="24dp"
+        android:textSize="20dp"
         android:layout_height="60dp"
         android:textColor="@android:color/white" />
     <Spinner
         android:id="@+id/CarMake"
         android:layout_width="match_parent"
+        android:textSize="18sp"
         android:layout_height="45dp" />
 
 </LinearLayout>
