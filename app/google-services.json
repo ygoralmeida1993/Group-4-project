@@ -1,0 +1,56 @@
+{
+  "project_info": {
+    "project_number": "592729828295",
+    "firebase_url": "https://tripplanbudget.firebaseio.com",
+    "project_id": "tripplanbudget",
+    "storage_bucket": "tripplanbudget.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:592729828295:android:e5d6b4fe9c67fb17a287e2",
+        "android_client_info": {
+          "package_name": "com.example.trip_plan_budget"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "592729828295-bdeq2g4geuorfbdtvb2of0r749c50oe1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.trip_plan_budget",
+            "certificate_hash": "f9427f5b002f2032095e7441d6b95df71fea214e"
+          }
+        },
+        {
+          "client_id": "592729828295-m4t0qlr3tj033i8avuisnkhgn2b9tsq4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.trip_plan_budget",
+            "certificate_hash": "c1a2e91d342b043d1330d86551657349d9a71ee5"
+          }
+        },
+        {
+          "client_id": "592729828295-5pnk0c6dgs3vh1dejrviq76f4vehtdgi.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyChKj6dmyGIapEBqEzJpCgAvMG_0Qu9FD8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "592729828295-5pnk0c6dgs3vh1dejrviq76f4vehtdgi.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

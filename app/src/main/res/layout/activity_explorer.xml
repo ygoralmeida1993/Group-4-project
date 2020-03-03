@@ -26,7 +26,7 @@
         android:layout_height="wrap_content"
         android:paddingLeft="20dp"
         android:paddingRight="20dp"
-       android:paddingBottom="90dp"
+        android:paddingBottom="90dp"
         android:columnCount="2"
         >
 
@@ -51,7 +51,7 @@
             android:background="@drawable/hillstation"
             android:layout_gravity="fill_horizontal"
             android:text="@string/hillstation"
-             />
+            />
 
         <Button
             android:layout_width="50dp"
@@ -95,8 +95,8 @@
             android:background="@drawable/historical"
             android:layout_gravity="fill_horizontal"
             android:text="Historical Places"
-            android:textColor="@android:color/white"/>
+    android:textColor="@android:color/white"/>
 
     </GridLayout>
 
-</LinearLayout>
+    </LinearLayout>
