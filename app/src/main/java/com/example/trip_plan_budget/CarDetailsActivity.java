@@ -12,6 +12,13 @@ import android.widget.ArrayAdapter;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 import java.util.ArrayList;
 import java.util.List;
 public class CarDetailsActivity extends AppCompatActivity {
@@ -21,11 +28,13 @@ public class CarDetailsActivity extends AppCompatActivity {
     private Animation animationUp;
     private Animation animationDown;
     ArrayList<PlaceDetailsModel> placeDetailsModelArrayList;
+    DatabaseReference databaseMileage;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_car_details);
         carType =  findViewById(R.id.carType);
+        databaseMileage= FirebaseDatabase.getInstance().getReference("mileage");
         carBrand=findViewById(R.id.CarBrands);
         TextView txtTitle = (TextView) findViewById(R.id.content_text);
         TextView carBrands = (TextView) findViewById(R.id.CarBrand);
@@ -121,6 +130,27 @@ public class CarDetailsActivity extends AppCompatActivity {
         bundle.putParcelableArrayList("placeDetailsModelArrayList", placeDetailsModelArrayList);
         intent.putExtras(bundle);
         startActivity(intent);
+    }
+    @Override
+    protected void onStart() {
+        super.onStart();
+        databaseMileage.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                placeDetailsModelArrayList.clear();
+                for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                    PlaceDetailsModel places = postSnapshot.getValue(PlaceDetailsModel.class);
+                    placeDetailsModelArrayList.add(places);
+                }
+                Log.d("places from database", String.valueOf(placeDetailsModelArrayList));
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 }
 
