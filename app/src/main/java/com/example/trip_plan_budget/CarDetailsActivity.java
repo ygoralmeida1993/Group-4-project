@@ -1,7 +1,10 @@
 package com.example.trip_plan_budget;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -110,6 +113,14 @@ public class CarDetailsActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+    public void CalculateBudget(View view) {
+        Intent intent = new Intent(getApplicationContext(), WithBudget.class);
+        Bundle bundle = new Bundle();
+
+        bundle.putParcelableArrayList("placeDetailsModelArrayList", placeDetailsModelArrayList);
+        intent.putExtras(bundle);
+        startActivity(intent);
     }
 }
 
