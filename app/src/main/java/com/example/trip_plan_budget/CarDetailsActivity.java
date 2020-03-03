@@ -28,6 +28,7 @@ public class CarDetailsActivity extends AppCompatActivity {
     private Animation animationUp;
     private Animation animationDown;
     ArrayList<PlaceDetailsModel> placeDetailsModelArrayList;
+    ArrayList<CarMileageModel> carMileageModelArrayList;
     DatabaseReference databaseMileage;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -134,16 +135,17 @@ public class CarDetailsActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+        carMileageModelArrayList=new ArrayList<>();
         databaseMileage.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
-                placeDetailsModelArrayList.clear();
+                carMileageModelArrayList.clear();
                 for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
-                    PlaceDetailsModel places = postSnapshot.getValue(PlaceDetailsModel.class);
-                    placeDetailsModelArrayList.add(places);
+                    CarMileageModel carMileageModel = postSnapshot.getValue(CarMileageModel.class);
+                    carMileageModelArrayList.add(carMileageModel);
                 }
-                Log.d("places from database", String.valueOf(placeDetailsModelArrayList));
+                Log.d("Mileage from database", String.valueOf(carMileageModelArrayList));
             }
 
             @Override
