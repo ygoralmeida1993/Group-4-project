@@ -16,19 +16,15 @@ import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Collections;
-import java.util.function.Predicate;
-import android.util.JsonReader;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.NumberPicker;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.AppCompatAutoCompleteTextView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import com.google.firebase.database.DataSnapshot;
@@ -36,12 +32,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.gson.JsonObject;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -50,7 +43,6 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-
 import javax.net.ssl.HttpsURLConnection;
 
 public class FilterActivity extends AppCompatActivity implements LocationListener {
@@ -62,7 +54,6 @@ public class FilterActivity extends AppCompatActivity implements LocationListene
     double budget;
     private NumberPicker picker1;
     double approximateBudget=0;
-    EditText  modeOfTransportation;
     EditText  destination;
     EditText days, passangers;
     int passanger,day;
@@ -201,7 +192,7 @@ public class FilterActivity extends AppCompatActivity implements LocationListene
         destination = this.findViewById(R.id.destination);
         ArrayAdapter<String> adapter = new ArrayAdapter<String>
                 (this, android.R.layout.select_dialog_item, places);
-      //  destination.setThreshold(1); //will start working from first character
+        //destination.setThreshold(1); //will start working from first character
         //destination.setAdapter(adapter);
         // modeOfTransportation = (EditText) this.findViewById(R.id.modeTansport);
         days = (EditText) this.findViewById(R.id.noOfDays);
@@ -380,7 +371,7 @@ public class FilterActivity extends AppCompatActivity implements LocationListene
                 l1.add(placeDetailsModelArrayList.get(i));}
         }
         placeDetailsModelArrayList.removeAll(placeDetailsModelArrayList);
-        Intent intent = new Intent(getApplicationContext(), WithBudget.class);
+        Intent intent = new Intent(getApplicationContext(), CarDetailsActivity.class);
         Bundle bundle = new Bundle();
         Log.d("places before intent", String.valueOf(l1));
         bundle.putParcelableArrayList("placeDetailsModelArrayList", l1);

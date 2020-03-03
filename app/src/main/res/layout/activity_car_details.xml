@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    android:orientation="vertical">
+
+    <TextView
+       android:layout_marginTop="160dp"
+        android:id="@+id/content_text"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="@color/colorPrimary"
+        android:clickable="true"
+        android:textSize="24dp"
+        android:onClick="toggle_contents"
+        android:padding="10dp"
+        android:text="Car Type"
+        android:textColor="@android:color/white" />
+    <RadioGroup
+        android:id="@+id/carType"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" >
+
+    <RadioButton
+        android:id="@+id/suv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="SUV"
+        android:checked="true" />
+        <RadioButton
+            android:id="@+id/sedan"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Sedan"
+            android:checked="true" />
+        <RadioButton
+            android:id="@+id/crossover"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Crossover"
+            android:checked="true" />
+        <RadioButton
+            android:id="@+id/coupe"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Coupe"
+            android:checked="true" />
+
+    <RadioButton
+        android:id="@+id/radioFemale"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Sedan" />
+    </RadioGroup>
+    <TextView
+        android:id="@+id/CarBrand"
+        android:layout_width="match_parent"
+        android:background="@color/colorPrimary"
+        android:clickable="true"
+        android:onClick="toggle_contents"
+        android:padding="10dp"
+        android:text="Car Brand"
+        android:textSize="24dp"
+        android:layout_height="60dp"
+        android:textColor="@android:color/white" />
+
+    <RadioGroup
+        android:id="@+id/CarBrands"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" >
+
+        <RadioButton
+            android:id="@+id/honda"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Honda"
+            android:checked="true" />
+        <RadioButton
+            android:id="@+id/hyundai"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Hyundai" />
+        <RadioButton
+            android:id="@+id/chevrolet"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Chevrolet" />
+        <RadioButton
+            android:id="@+id/ford"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Ford"
+            android:checked="true" />
+        <RadioButton
+            android:id="@+id/audi"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Audi"
+            android:checked="true" />
+        <RadioButton
+            android:id="@+id/bmw"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="BMW"
+            android:checked="true" />
+
+        <RadioButton
+            android:id="@+id/fiat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Fiat" />
+    </RadioGroup>
+    <TextView
+        android:id="@+id/CarMakes"
+        android:layout_width="match_parent"
+
+        android:background="@color/colorPrimary"
+        android:clickable="true"
+        android:onClick="toggle_contents"
+        android:padding="10dp"
+        android:text="Car Make"
+        android:textSize="24dp"
+        android:layout_height="60dp"
+        android:textColor="@android:color/white" />
+    <Spinner
+        android:id="@+id/CarMake"
+        android:layout_width="match_parent"
+        android:layout_height="45dp" />
+
+</LinearLayout>
