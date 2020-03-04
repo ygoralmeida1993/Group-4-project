@@ -181,8 +181,8 @@ public class FilterActivity extends AppCompatActivity implements LocationListene
                                 String temperatureMax = day.getString("temperatureMax");
                                 String temperatureMin = day.getString("temperatureMin");
                                 String windSpeed = day.getString("windSpeed");
-                                WeatherApiModel response=new WeatherApiModel(,);
-                                gasApiModelArrayList.add(response);
+                                //WeatherApiModel response=new WeatherApiModel(,);
+                                //gasApiModelArrayList.add(response);
                             }
 
                         } catch (JSONException e) {
