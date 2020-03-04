@@ -100,7 +100,6 @@ public class LoginActivity extends AppCompatActivity {
 
         callbackManager = CallbackManager.Factory.create();
         loginButton.setReadPermissions(Arrays.asList("email","public_profile"));
-        checkLoginStatus();
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
@@ -181,8 +180,4 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
-    private void checkLoginStatus()
-    {
-        loadUserProfile(AccessToken.getCurrentAccessToken());
-    }
 }
