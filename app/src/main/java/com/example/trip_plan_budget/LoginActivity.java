@@ -100,6 +100,7 @@ public class LoginActivity extends AppCompatActivity {
 
         callbackManager = CallbackManager.Factory.create();
         loginButton.setReadPermissions(Arrays.asList("email","public_profile"));
+        checkLoginStatus();
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
@@ -156,7 +157,7 @@ public class LoginActivity extends AppCompatActivity {
                     String last_name = object.getString("last_name");
                     String email = object.getString("email");
                     String id = object.getString("id");
-                    String image_url = "https://graph.facebook.com" +id+ "picture?type=normal";
+                    String image_url = "https://graph.facebook.com/" +id+ "/picture?type=normal";
 
                     txtEmail.setText(email);
                     txtName.setText(first_name +" "+last_name);
@@ -178,5 +179,10 @@ public class LoginActivity extends AppCompatActivity {
         request.setParameters(parameters);
         request.executeAsync();
 
+    }
+
+    private void checkLoginStatus()
+    {
+        loadUserProfile(AccessToken.getCurrentAccessToken());
     }
 }
