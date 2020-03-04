@@ -14,6 +14,16 @@ import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInApi;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.auth.api.signin.GoogleSignInResult;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.SignInButton;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -31,6 +41,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -39,12 +50,18 @@ import org.json.JSONObject;
 
 import java.util.Arrays;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity implements View.OnClickListener, GoogleApiClient.OnConnectionFailedListener {
 
     private LoginButton loginButton;
     private CircleImageView circleImageView;
     private TextView txtName, txtEmail;
     private CallbackManager callbackManager;
+
+    private LinearLayout profSection;
+    private Button signOutButton;
+    private SignInButton signInButton;
+    private GoogleApiClient googleApiClient;
+    private static final int reqCode = 9001;
 
     private FirebaseAuth firebaseAuth;
     private Button Login;
@@ -93,6 +110,8 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
+        // Facebook Login initialization
+
         loginButton = findViewById(R.id.login_button);
         txtName = findViewById(R.id.profile_name);
         txtEmail = findViewById(R.id.profile_email);
@@ -117,6 +136,25 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
+        // Google Login initialization
+
+        profSection = findViewById(R.id.profile_section);
+        signOutButton = findViewById(R.id.btn_logout);
+        signInButton = findViewById(R.id.btn_login);
+        txtName = findViewById(R.id.profile_name);
+        txtEmail = findViewById(R.id.profile_email);
+        circleImageView = findViewById(R.id.profile_pic);
+        signInButton.setOnClickListener(this);
+        signOutButton.setOnClickListener(this);
+        profSection.setVisibility(View.GONE);
+        GoogleSignInOptions signInOptions = new GoogleSignInOptions.Builder
+                (GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
+        googleApiClient = new GoogleApiClient.Builder(this).enableAutoManage
+                (this, this).addApi(Auth.GOOGLE_SIGN_IN_API, signInOptions).build();
+
+
+
+
     }
     public void renderSignUp(View view) {
         Intent intent = new Intent(this, SignUpActivity.class);
@@ -127,6 +165,11 @@ public class LoginActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         callbackManager.onActivityResult(requestCode,resultCode, data);
         super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode==reqCode)
+        {
+            GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
+            handleResult(result);
+        }
     }
 
     AccessTokenTracker tokenTracker = new AccessTokenTracker() {
@@ -179,5 +222,79 @@ public class LoginActivity extends AppCompatActivity {
         request.executeAsync();
 
     }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId())
+        {
+            case R.id.btn_login:
+                signIn();
+                break;
+
+            case R.id.btn_logout:
+                signOut();
+                break;
+        }
+
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
+    }
+
+    private void signIn ()
+    {
+        Intent intent = Auth.GoogleSignInApi.getSignInIntent(googleApiClient);
+        startActivityForResult(intent, reqCode);
+    }
+
+    private void signOut ()
+    {
+         Auth.GoogleSignInApi.signOut(googleApiClient).setResultCallback(new ResultCallback<Status>() {
+             @Override
+             public void onResult(@NonNull Status status) {
+                 updateUI(false);
+             }
+         });
+
+    }
+
+    private void handleResult (GoogleSignInResult result)
+    {
+        if (result.isSuccess())
+        {
+            GoogleSignInAccount account = result.getSignInAccount();
+            String name = account.getDisplayName();
+            String email = account.getEmail();
+            String img_url = account.getPhotoUrl().toString();
+            txtName.setText(name);
+            txtEmail.setText(email);
+            Glide.with(this).load(img_url).into(circleImageView);
+            updateUI(true);
+        }
+        else
+        {
+            updateUI(false);
+        }
+
+    }
+
+    private void updateUI (boolean isLogin)
+    {
+        if (isLogin)
+        {
+            profSection.setVisibility(View.VISIBLE);
+            signInButton.setVisibility(View.GONE);
+        }
+
+        else
+        {
+            profSection.setVisibility(View.GONE);
+            signInButton.setVisibility(View.VISIBLE);
+        }
+    }
+
+
 
 }

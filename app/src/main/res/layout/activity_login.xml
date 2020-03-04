@@ -6,6 +6,13 @@
     android:orientation="vertical"
     android:padding="20dp">
 
+
+    <LinearLayout
+        android:id="@+id/profile_section"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/profile_pic"
         android:layout_width="175dp"
@@ -33,20 +40,36 @@
         android:layout_marginTop="10dp"
         />
 
+    <Button
+        android:id="@+id/btn_logout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Logout Google Account"
+        />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
     <com.facebook.login.widget.LoginButton
         android:id="@+id/login_button"
-        android:layout_width="274dp"
-        android:layout_height="54dp"
+        android:layout_width="200dp"
+        android:layout_height="50dp"
         android:layout_gravity="center"
-        android:layout_marginTop="25dp" />
+        android:layout_marginTop="20dp" />
 
+    <com.google.android.gms.common.SignInButton
+        android:layout_width="200dp"
+        android:layout_height="40dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="20dp"
+        android:id="@+id/btn_login"
+        />
 
-    <ImageButton
-        android:layout_width="265dp"
-        android:layout_height="60dp"
-        android:layout_marginBottom="50dp"
-        android:onClick="renderGoogleSignIn"
-        android:src="@drawable/googleiconcrop" />
+    </LinearLayout>
 
     <EditText
         android:id="@+id/emailid"
