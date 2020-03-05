@@ -272,6 +272,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             txtEmail.setText(email);
             Glide.with(this).load(img_url).into(circleImageView);
             updateUI(true);
+            Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+            startActivity(intent);
+            finish();
         }
         else
         {
