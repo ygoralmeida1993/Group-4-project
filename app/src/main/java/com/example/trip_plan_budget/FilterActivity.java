@@ -213,6 +213,7 @@ no_passanger.setText("1");
                             e.printStackTrace();
                         }
                         myConnection.disconnect();
+                        responseBody.close();
                     } else {
 
                         Log.d("value error","");
