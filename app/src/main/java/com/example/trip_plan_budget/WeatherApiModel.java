@@ -1,6 +1,9 @@
 package com.example.trip_plan_budget;
 
-public class WeatherApiModel
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class WeatherApiModel implements Parcelable
 {
     String icon;
     double tempMax;
@@ -13,6 +16,25 @@ public class WeatherApiModel
         this.tempMin = (tempMin-32)*1.8;
         WindSpeed = windSpeed;
     }
+
+    protected WeatherApiModel(Parcel in) {
+        icon = in.readString();
+        tempMax = in.readDouble();
+        tempMin = in.readDouble();
+        WindSpeed = in.readDouble();
+    }
+
+    public static final Creator<WeatherApiModel> CREATOR = new Creator<WeatherApiModel>() {
+        @Override
+        public WeatherApiModel createFromParcel(Parcel in) {
+            return new WeatherApiModel(in);
+        }
+
+        @Override
+        public WeatherApiModel[] newArray(int size) {
+            return new WeatherApiModel[size];
+        }
+    };
 
     public String getIcon() {
         return icon;
@@ -44,5 +66,18 @@ public class WeatherApiModel
 
     public void setWindSpeed(double windSpeed) {
         WindSpeed = windSpeed;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(icon);
+        dest.writeDouble(tempMax);
+        dest.writeDouble(tempMin);
+        dest.writeDouble(WindSpeed);
     }
 }

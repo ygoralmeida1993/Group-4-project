@@ -20,6 +20,7 @@ import java.net.URL;
 import java.util.Calendar;
 import java.util.Collections;
 
+import android.os.Parcelable;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.text.format.Time;
@@ -71,7 +72,8 @@ public class FilterActivity extends AppCompatActivity implements LocationListene
     private NumberPicker picker1;
     double approximateBudget=0;
     EditText days;
-    int passanger,day;
+    int day;
+    String passanger;
     TextView no_passanger;
     Button calculate;
     TextView lat;
@@ -90,6 +92,7 @@ public class FilterActivity extends AppCompatActivity implements LocationListene
     ArrayList<GasApiModel> gasApiModelArrayList;
     ArrayList<WeatherApiModel> weatherApiModelArrayList;
     int people;
+    String weatherApiLat="43.642567",weatherApiLong="-79.387054";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -188,7 +191,7 @@ no_passanger.setText("1");
                     HttpsURLConnection myConnection =
                             (HttpsURLConnection) gasApi.openConnection();
                     myConnection.setRequestProperty("Authorization",
-                            "apikey 5jpE9jkydP6DsPLJgVRuPf:4dRQkQrqaWwgIAq9M2FNhE");
+                            "apikey 6KEEm4JRyC8FxSpJmsaMsI:0kwdnw8HH3NhKlsVOodm4w");
                     if (myConnection.getResponseCode() == 200) {
 
                         InputStream responseBody = myConnection.getInputStream();
@@ -228,7 +231,7 @@ no_passanger.setText("1");
             public void run() {
                 URL weatherApi = null;
                 try {
-                    weatherApi = new URL("https://api.darksky.net/forecast/13e04b25432c5d707a0a3c080d15a5b7/43.642567,-79.387054");
+                    weatherApi = new URL("https://api.darksky.net/forecast/13e04b25432c5d707a0a3c080d15a5b7/"+weatherApiLat+","+weatherApiLong+"");
                 } catch (MalformedURLException e) {
                     Log.d("weatherApi", "error");
                     e.printStackTrace();
@@ -364,11 +367,15 @@ no_passanger.setText("1");
             public void onDataChange(DataSnapshot dataSnapshot) {
 
                 placeDetailsModelArrayList.clear();
+
                 for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+
                     PlaceDetailsModel places = postSnapshot.getValue(PlaceDetailsModel.class);
                     placeDetailsModelArrayList.add(places);
                 }
                 Log.d("places from database", String.valueOf(placeDetailsModelArrayList));
+               weatherApiLat=placeDetailsModelArrayList.get(0).getLatitude();
+               weatherApiLong=placeDetailsModelArrayList.get(0).getLongitude();
             }
 
             @Override
@@ -419,10 +426,9 @@ no_passanger.setText("1");
             return;
         }
         cityName=destination.getText().toString().toLowerCase();
-//new code with firebase
+        //new code with firebase
        // passanger = picker1.getValue();//for passanger
-        passanger=2;
-
+        passanger= (String) no_passanger.getText();
         String city=cityName.substring(0, 1).toUpperCase()+ cityName.substring(1);
         String placeType=placetype.substring(0, 1).toUpperCase()+ placetype.substring(1);
         Log.d("data",city+placeType+"   "+placeDetailsModelArrayList.get(0).getCity());
@@ -434,6 +440,7 @@ no_passanger.setText("1");
                 Log.d("inside", String.valueOf(placeDetailsList));
             }
         }
+        placeDetailsModelArrayList.clear();
        // placeDetailsModelArrayList.removeAll(placeDetailsModelArrayList);
         placeDetailsModelArrayList.addAll(placeDetailsList);
         Collections.copy(placeDetailsModelArrayList, placeDetailsList);
@@ -446,7 +453,7 @@ no_passanger.setText("1");
             double finalBudget=0;
             Log.d("placeDetailsModelList", String.valueOf(placeDetailsModelArrayList.get(i).getBudget()));
             finalBudget=placeDetailsModelArrayList.get(i).getBudget();
-            finalBudget=finalBudget*day*passanger;
+         //   finalBudget=finalBudget*day*passanger;
             Log.d("finalBudget before", String.valueOf(finalBudget));
             Location selected_location = new Location("locationA");
             selected_location.setLatitude(currentLatitude);
@@ -476,12 +483,12 @@ no_passanger.setText("1");
         Bundle bundle = new Bundle();
         Log.d("places before intent", String.valueOf(l1));
         bundle.putParcelableArrayList("placeDetailsModelArrayList", l1);
+        bundle.putParcelableArrayList("weatherApiModelArrayList",weatherApiModelArrayList);
+        bundle.putString("passenger",passanger);
+        bundle.putString("toDate", String.valueOf(toDate.getText()));
+        bundle.putString("fromDate", String.valueOf(fromDate.getText()));
         intent.putExtras(bundle);
         startActivity(intent);
-
-       // ConnectMySql connectMySql = new ConnectMySql();
-        //connectMySql.execute("");
-
     }
     public void onClickIncDec(View v)
     {
@@ -594,7 +601,7 @@ no_passanger.setText("1");
                     budgetTotal += e.getBudget();
                 }
                 budgetAverage = budgetTotal / (placeDetailsModelArrayList.size());
-                passanger = picker1.getValue();
+            //    passanger = picker1.getValue();
                // day = Integer.parseInt(days.getText().toString());
                 Location selected_location = new Location("locationA");
                 selected_location.setLatitude(currentLatitude);
@@ -606,7 +613,7 @@ no_passanger.setText("1");
                 System.out.println("bluffers Latitude" + Double.parseDouble(placeDetailsModelArrayList.get(0).getLatitude()) + Double.parseDouble(placeDetailsModelArrayList.get(0).getLongitude()));
                 double distance = (selected_location.distanceTo(near_locations)) * 0.00062137;
                 System.out.println("distance" + distance);
-                approximateBudget = (distance * 0.30) + (budgetAverage * passanger * day);
+          //     approximateBudget = (distance * 0.30) + (budgetAverage * passanger * day);
                 System.out.println(approximateBudget + "approximateBudget");
                 placeDetailsModelArrayList.removeAll(placeDetailsModelArrayList);
                 budgetTotal = 0;
@@ -615,44 +622,7 @@ no_passanger.setText("1");
                 startActivity(intent);
             }
             else{
-                passanger = picker1.getValue();
-                // passanger = Integer.parseInt(passangers.getText().toString());
-                day = Integer.parseInt(days.getText().toString());
-                for (int i = 0; i < placeDetailsModelArrayList.size(); i++) {
-                    double finalBudget=0;
-                    Log.d("placeDetailsModelList", String.valueOf(placeDetailsModelArrayList.get(i).getBudget()));
-                    finalBudget=placeDetailsModelArrayList.get(i).getBudget();
-                    finalBudget=finalBudget*day*passanger;
-                    Log.d("finalBudget before", String.valueOf(finalBudget));
-                    Location selected_location = new Location("locationA");
-                    selected_location.setLatitude(currentLatitude);
-                    selected_location.setLongitude(currentLongitude);
-                    System.out.println("currentLatitude" + currentLatitude + currentLongitude);
-                    Location near_locations = new Location("locationB");
-                    near_locations.setLatitude(Double.parseDouble(placeDetailsModelArrayList.get(i).getLatitude()));
-                    near_locations.setLongitude(Double.parseDouble(placeDetailsModelArrayList.get(i).getLongitude()));
-                    double distance = (selected_location.distanceTo(near_locations)) * 0.00062137;
-                    Log.d("distance", String.valueOf(distance));
-                    System.out.println(distance + "distance");
-                    finalBudget=finalBudget+(distance*0.30);
-                    Log.d("finalBudget after", String.valueOf(finalBudget));
-                    placeDetailsModelArrayList.get(i).setBudget((int) finalBudget);
-                    Log.d("ModelList", String.valueOf(placeDetailsModelArrayList.get(i).getBudget()));
-                }
-                ArrayList<PlaceDetailsModel> l1 = new ArrayList<PlaceDetailsModel>();
-                for (int i = 0; i <placeDetailsModelArrayList.size(); i++) {
-                    Log.d("value", String.valueOf(placeDetailsModelArrayList.get(i).getBudget()));
-                    Log.d("budget", String.valueOf(budget));
-                    if((placeDetailsModelArrayList.get(i).getBudget())<budget){
 
-                        l1.add(placeDetailsModelArrayList.get(i));}
-                }
-                placeDetailsModelArrayList.removeAll(placeDetailsModelArrayList);
-                Intent intent = new Intent(getApplicationContext(), WithBudget.class);
-                Bundle bundle = new Bundle();
-                bundle.putParcelableArrayList("placeDetailsModelArrayList", l1);
-                intent.putExtras(bundle);
-                startActivity(intent);
             }
         }
     }

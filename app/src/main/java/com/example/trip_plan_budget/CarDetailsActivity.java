@@ -29,7 +29,10 @@ public class CarDetailsActivity extends AppCompatActivity {
     private Animation animationDown;
     ArrayList<PlaceDetailsModel> placeDetailsModelArrayList;
     ArrayList<CarMileageModel> carMileageModelArrayList;
+    ArrayList<WeatherApiModel> weatherApiModelArrayList;
     DatabaseReference databaseMileage;
+
+    String passanger,toDate,fromDate;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,9 +45,14 @@ public class CarDetailsActivity extends AppCompatActivity {
         TextView CarMakes = (TextView) findViewById(R.id.CarMakes);
         carType.setVisibility(View.GONE);
         placeDetailsModelArrayList = new ArrayList<PlaceDetailsModel>();
+        weatherApiModelArrayList=new ArrayList<>();
         Bundle bundle = getIntent().getExtras();
         //placeDetailsModelArrayList = (ArrayList<PlaceDetailsModel>) bundle.getSerializable("placeDetailsModelArrayList");
         placeDetailsModelArrayList=this.getIntent().getExtras().getParcelableArrayList("placeDetailsModelArrayList");
+        weatherApiModelArrayList=this.getIntent().getExtras().getParcelableArrayList("weatherApiModelArrayList");
+        passanger=getIntent().getExtras().getString("passenger");
+        toDate=getIntent().getExtras().getString("toDate");
+        fromDate=getIntent().getExtras().getString("fromDate");
         animationUp = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_up);
         animationDown = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_down);
         carMake=(Spinner) findViewById(R.id.CarMake);
@@ -116,9 +124,7 @@ public class CarDetailsActivity extends AppCompatActivity {
                 }
                 else{
                     carType.setVisibility(View.GONE);
-
                     carMake.setVisibility(View.VISIBLE);
-
                     carMake.startAnimation(animationDown);
                 }
             }
