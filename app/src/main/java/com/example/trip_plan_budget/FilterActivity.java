@@ -21,6 +21,7 @@ import java.util.Calendar;
 import java.util.Collections;
 
 import android.text.InputType;
+import android.text.TextUtils;
 import android.text.format.Time;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -401,8 +402,22 @@ no_passanger.setText("1");
             e.printStackTrace();
         }
     }
+
+    //main method for all calculations
     public void CalculateBudget(View view) {
         ArrayList<PlaceDetailsModel> placeDetailsList=new ArrayList<>();
+        if (destination.getText().toString().isEmpty()) {
+            destination.setError("Please enter destination");
+            return;
+        }
+        if (fromDate.getText().toString().isEmpty()) {
+            fromDate.setError("Select date");
+            return;
+        }
+        if (toDate.getText().toString().isEmpty()) {
+            toDate.setError("Select date");
+            return;
+        }
         cityName=destination.getText().toString().toLowerCase();
 //new code with firebase
        // passanger = picker1.getValue();//for passanger
