@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Trip_Plan_Budget</string>
+    <string name="app_name">TripBudgetCalculator</string>
     <string name="email">Email Id</string>
     <string name="passowrd">Password</string>
     <string name="forgot">Forgot password?</string>

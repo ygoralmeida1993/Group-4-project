@@ -1,20 +1,13 @@
 package com.example.trip_plan_budget;
-
-
-
 import android.content.Intent;
 import android.os.Bundle;
-
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.SearchView;
-
 import androidx.appcompat.app.AppCompatActivity;
 
 public class ExplorerActivity extends AppCompatActivity {
-
-
     private SearchView searchView;
     String budget;
     int approach;

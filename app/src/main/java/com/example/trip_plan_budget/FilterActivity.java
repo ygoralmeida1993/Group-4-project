@@ -1,7 +1,4 @@
 package com.example.trip_plan_budget;
-
-
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -12,42 +9,33 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
-
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Collections;
-import java.util.function.Predicate;
-
-import android.util.JsonReader;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.NumberPicker;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.appcompat.app.AppCompatActivity;
-
-import androidx.appcompat.widget.AppCompatAutoCompleteTextView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -56,7 +44,6 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-
 import javax.net.ssl.HttpsURLConnection;
 
 public class FilterActivity extends AppCompatActivity implements LocationListener {
@@ -68,8 +55,7 @@ public class FilterActivity extends AppCompatActivity implements LocationListene
     double budget;
     private NumberPicker picker1;
     double approximateBudget=0;
-    EditText  modeOfTransportation;
-    EditText  destination;
+  //  EditText  destination;
     EditText days, passangers;
     int passanger,day;
     Button calculate;
@@ -77,14 +63,15 @@ public class FilterActivity extends AppCompatActivity implements LocationListene
     LocationManager locationManager ;
     double currentLatitude;
     double currentLongitude;
+    AutoCompleteTextView destination;
     int budgetTotal=0;
     DatabaseReference databasePlaces;
-
-    //List<PlaceDetailsModel> artistList;
     private String[] places = {"Scarborough","Toronto","Waterloo","Oshawa"};
     int budgetAverage=0;
     protected boolean gps_enabled, network_enabled;
     ArrayList<PlaceDetailsModel> placeDetailsModelArrayList;
+    ArrayList<GasApiModel> gasApiModelArrayList;
+    ArrayList<WeatherApiModel> weatherApiModelArrayList;
     int people;
 
     @Override
@@ -92,60 +79,53 @@ public class FilterActivity extends AppCompatActivity implements LocationListene
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_filter);
         if (ContextCompat.checkSelfPermission(getApplicationContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getApplicationContext(), android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-
             ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION}, 101);
-
         }
+        gasApiModelArrayList=new ArrayList<>();
+        String[] places= { "Scarborough", "Toronto", "Brampton", "North York", "Ottawa", "Hamilton",
+                "London", "Windsor", "Mississauga", "Kitchner", "Markham", "Waterloo" };
+        destination = (AutoCompleteTextView) findViewById(R.id.destination);
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this,
+                android.R.layout.select_dialog_item, places);
 
+        destination.setThreshold(1);
+
+        destination.setAdapter(arrayAdapter);
+        //implementation for gas api
         AsyncTask.execute(new Runnable() {
             @Override
             public void run() {
-                URL githubEndpoint = null;
+                URL gasApi = null;
                 try {
-                    githubEndpoint = new URL("https://api.collectapi.com/gasPrice/canada");
+                    gasApi = new URL("https://api.collectapi.com/gasPrice/canada");
                 } catch (MalformedURLException e) {
                     e.printStackTrace();
                 }
                 try {
                     HttpsURLConnection myConnection =
-                            (HttpsURLConnection) githubEndpoint.openConnection();
-
+                            (HttpsURLConnection) gasApi.openConnection();
                     myConnection.setRequestProperty("Authorization",
                             "apikey 5jpE9jkydP6DsPLJgVRuPf:4dRQkQrqaWwgIAq9M2FNhE");
-
                     if (myConnection.getResponseCode() == 200) {
 
                         InputStream responseBody = myConnection.getInputStream();
-                        InputStreamReader responseBodyReader =
-                                new InputStreamReader(responseBody, "UTF-8");
-
-                        JsonReader jsonReader = new JsonReader(responseBodyReader);
-                        jsonReader.beginObject();
-                        Log.d("values", String.valueOf(jsonReader));
-                        while (jsonReader.hasNext()) {
-                            String key = jsonReader.nextName();
-                            Log.d("key",key);
-
-                            if (key.equals("result")) {
-                                try {
-                                    JSONObject obj = new JSONObject("result");
-
-                                    JSONArray arr = new JSONArray(obj.get("name"));
-                                    Log.d("value",arr+"");
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
-
-
-                               // String value = jsonReader.nextString();
-                               //  Log.d("value",value);
-                                break;
-                            } else {
-                                jsonReader.skipValue();
+                        String jsonString=convertStreamToString(responseBody);
+                        JSONObject json = null;
+                        try {
+                            json = new JSONObject(jsonString);
+                            JSONArray array = json.getJSONArray("result");
+                            for(int m=0;m<array.length();m++){
+                                JSONObject place = array.getJSONObject(m);
+                                String province = place.getString("name");
+                                String currency = place.getString("currency");
+                                String gasoline = place.getString("gasoline");
+                                GasApiModel response=new GasApiModel(province,gasoline,currency);
+                                gasApiModelArrayList.add(response);
                             }
+                            Log.d("gasApiModelArrayList",gasApiModelArrayList+"");
+                        } catch (JSONException e) {
+                            e.printStackTrace();
                         }
-
-                        jsonReader.close();
                         myConnection.disconnect();
                     } else {
 
@@ -158,23 +138,73 @@ public class FilterActivity extends AppCompatActivity implements LocationListene
 
 
         });
+//weather api
+        weatherApiModelArrayList=new ArrayList<>();
+        AsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+                URL weatherApi = null;
+                try {
+                    weatherApi = new URL("https://api.darksky.net/forecast/13e04b25432c5d707a0a3c080d15a5b7/43.642567,-79.387054");
+                } catch (MalformedURLException e) {
+                    Log.d("weatherApi", "error");
+                    e.printStackTrace();
+                }
+                try {
+                    Log.d("weatherApi", "try");
+                    HttpsURLConnection myConnection =
+                            (HttpsURLConnection) weatherApi.openConnection();
+                    myConnection.setRequestProperty("x-rapidapi-host",
+                            "weather2020-weather-v1.p.rapidapi.com");
+                    myConnection.setRequestProperty("x-rapidapi-key",
+                            "6d0b756940msh47651648d142f8fp126561jsn497d176a16e6");
+                    Log.d("weatherApi", String.valueOf(myConnection.getResponseCode()));
+                    if (myConnection.getResponseCode() == 200) {
+                        InputStream responseBody = myConnection.getInputStream();
+                        String jsonString=convertStreamToString(responseBody);
+                        Log.d("jsonstring", String.valueOf(jsonString));
 
+                        JSONObject json = null;
+                        try {
+                            JSONObject mainObject = new JSONObject(jsonString);
+                            JSONObject dailyObject = mainObject.getJSONObject("daily");
+                            JSONArray weatherArray = dailyObject.getJSONArray("data");
+                            Log.d("daily array", String.valueOf(weatherArray));
+                            for(int m=0;m<weatherArray.length();m++){
+                                JSONObject day = weatherArray.getJSONObject(m);
+                                String icon = day.getString("icon");
+                                Double temperatureMax = Double.valueOf(day.getString("temperatureMax"));
+                                Double temperatureMin = Double.valueOf(day.getString("temperatureMin"));
+                                Double windSpeed = Double.valueOf(day.getString("windSpeed"));
+                                WeatherApiModel response=new WeatherApiModel(icon,temperatureMax,temperatureMin,windSpeed);
+                                weatherApiModelArrayList.add(response);
+                            }
+                            Log.d("weatherApiModelArray",weatherApiModelArrayList+"");
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        myConnection.disconnect();
+                    } else {
+                        Log.d("value error","");
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+
+        });
 
         databasePlaces= FirebaseDatabase.getInstance().getReference("places");
-        destination = this.findViewById(R.id.destination);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>
-                (this, android.R.layout.select_dialog_item, places);
-      //  destination.setThreshold(1); //will start working from first character
-        //destination.setAdapter(adapter);
-        // modeOfTransportation = (EditText) this.findViewById(R.id.modeTansport);
-        days = (EditText) this.findViewById(R.id.noOfDays);
-        picker1 = (NumberPicker) findViewById(R.id.numberpicker_main_picker);
+
+      //  days = (EditText) this.findViewById(R.id.noOfDays);
+       // picker1 = (NumberPicker) findViewById(R.id.numberpicker_main_picker);
         //passangers = (EditText) this.findViewById(R.id.noOfPassangers);
         placeDetailsModelArrayList = new ArrayList<PlaceDetailsModel>();
         // lat=(TextView) this.findViewById(R.id.lat);
         calculate=(Button)findViewById(R.id.calculate);
-        picker1.setMaxValue(10);
-        picker1.setMinValue(1);
+     //   picker1.setMaxValue(10);
+      //  picker1.setMinValue(1);
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
         approach = bundle.getInt("approach");
@@ -197,25 +227,50 @@ public class FilterActivity extends AppCompatActivity implements LocationListene
             calculate.setText("Get Places");
 
         }
-
-
         LocationManager lm = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
         Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
         currentLongitude = location.getLongitude();
         currentLatitude = location.getLatitude();
-        picker1.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
-            @Override
-            public void onValueChange(NumberPicker numberPicker, int i, int i1) {
-                passanger = picker1.getValue();
-
-            }
-        });
-
-
-
+//        picker1.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
+//            @Override
+//            public void onValueChange(NumberPicker numberPicker, int i, int i1) {
+//                passanger = picker1.getValue();
+//
+//            }
+//        });
     }
+    public static String[] toStringArray(JSONArray array) {
+        if(array==null)
+            return null;
 
+        String[] arr=new String[array.length()];
+        for(int i=0; i<arr.length; i++) {
+            arr[i]=array.optString(i);
+        }
+        return arr;
+    }
+    private String convertStreamToString(InputStream is) {
 
+        BufferedReader reader = new BufferedReader(
+                new InputStreamReader(is));
+        StringBuilder sb = new StringBuilder();
+
+        String line = null;
+        try {
+            while ((line = reader.readLine()) != null) {
+                sb.append(line + "\n");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                is.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return sb.toString();
+    }
     @Override
     protected void onStart() {
         super.onStart();
@@ -266,7 +321,9 @@ public class FilterActivity extends AppCompatActivity implements LocationListene
         ArrayList<PlaceDetailsModel> placeDetailsList=new ArrayList<>();
         cityName=destination.getText().toString().toLowerCase();
 //new code with firebase
-        passanger = picker1.getValue();
+       // passanger = picker1.getValue();//for passanger
+        passanger=2;
+
         String city=cityName.substring(0, 1).toUpperCase()+ cityName.substring(1);
         String placeType=placetype.substring(0, 1).toUpperCase()+ placetype.substring(1);
         Log.d("data",city+placeType+"   "+placeDetailsModelArrayList.get(0).getCity());
@@ -283,7 +340,8 @@ public class FilterActivity extends AppCompatActivity implements LocationListene
         Collections.copy(placeDetailsModelArrayList, placeDetailsList);
         Log.d("places after filtering", String.valueOf(placeDetailsModelArrayList));
         // passanger = Integer.parseInt(passangers.getText().toString());
-        day = Integer.parseInt(days.getText().toString());
+      //  day = Integer.parseInt(days.getText().toString());//for days
+        day=2;
         for (int i = 0; i < placeDetailsModelArrayList.size(); i++)
         {
             double finalBudget=0;
@@ -315,7 +373,7 @@ public class FilterActivity extends AppCompatActivity implements LocationListene
                 l1.add(placeDetailsModelArrayList.get(i));}
         }
         placeDetailsModelArrayList.removeAll(placeDetailsModelArrayList);
-        Intent intent = new Intent(getApplicationContext(), WithBudget.class);
+        Intent intent = new Intent(getApplicationContext(), CarDetailsActivity.class);
         Bundle bundle = new Bundle();
         Log.d("places before intent", String.valueOf(l1));
         bundle.putParcelableArrayList("placeDetailsModelArrayList", l1);
@@ -419,7 +477,7 @@ public class FilterActivity extends AppCompatActivity implements LocationListene
                 }
                 budgetAverage = budgetTotal / (placeDetailsModelArrayList.size());
                 passanger = picker1.getValue();
-                day = Integer.parseInt(days.getText().toString());
+               // day = Integer.parseInt(days.getText().toString());
                 Location selected_location = new Location("locationA");
                 selected_location.setLatitude(currentLatitude);
                 selected_location.setLongitude(currentLongitude);
