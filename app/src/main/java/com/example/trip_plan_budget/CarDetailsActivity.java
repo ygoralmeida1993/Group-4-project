@@ -31,8 +31,8 @@ public class CarDetailsActivity extends AppCompatActivity {
     ArrayList<CarMileageModel> carMileageModelArrayList;
     ArrayList<WeatherApiModel> weatherApiModelArrayList;
     DatabaseReference databaseMileage;
-
     String passanger,toDate,fromDate,currentGasPrice;
+    int totalDays=0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,8 +53,13 @@ public class CarDetailsActivity extends AppCompatActivity {
         passanger=getIntent().getExtras().getString("passenger");
         toDate=getIntent().getExtras().getString("toDate");
         fromDate=getIntent().getExtras().getString("fromDate");
+        toDate=toDate.substring(0,2);
+        fromDate=fromDate.substring(0,2);
+        totalDays=(Integer.parseInt(toDate)-Integer.parseInt(fromDate));
+        totalDays+=1;
         currentGasPrice=getIntent().getExtras().getString("currentGasPrice");
         Log.d("All passed data",""+passanger+toDate+fromDate+currentGasPrice);
+        Log.d("totalDays",""+totalDays);
         animationUp = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_up);
         animationDown = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_down);
         carMake=(Spinner) findViewById(R.id.CarMake);
