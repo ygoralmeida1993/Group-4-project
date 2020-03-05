@@ -64,10 +64,8 @@ public class FilterActivity extends AppCompatActivity implements LocationListene
     int approach, placetypeInt;
     String  placetype, cityName;
     double budget;
-    WindowManager windowManager2;
     private NumberPicker picker1;
     double approximateBudget=0;
-  //  EditText  destination;
     EditText days, passangers;
     int passanger,day;
     Button calculate;
@@ -112,7 +110,7 @@ public class FilterActivity extends AppCompatActivity implements LocationListene
                             }
                         }, 0, 0, 0);
 
-                datePickerDialog = new DatePickerDialog(FilterActivity.this,
+                datePickerDialog = new DatePickerDialog(FilterActivity.this,R.style.DialogTheme,
                         new DatePickerDialog.OnDateSetListener() {
                             @Override
                             public void onDateSet(DatePicker datePicker, int year, int month, int day) {
@@ -141,7 +139,7 @@ public class FilterActivity extends AppCompatActivity implements LocationListene
                             }
                         }, 0, 0, 0);
 
-                datePickerDialog = new DatePickerDialog(FilterActivity.this,
+                datePickerDialog = new DatePickerDialog(FilterActivity.this,R.style.DialogTheme,
                         new DatePickerDialog.OnDateSetListener() {
                             @Override
                             public void onDateSet(DatePicker datePicker, int year, int month, int day) {
