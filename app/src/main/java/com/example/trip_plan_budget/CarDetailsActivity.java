@@ -121,9 +121,7 @@ public class CarDetailsActivity extends AppCompatActivity {
                 }
                 else{
                     carType.setVisibility(View.GONE);
-
                     carMake.setVisibility(View.VISIBLE);
-
                     carMake.startAnimation(animationDown);
                 }
             }
