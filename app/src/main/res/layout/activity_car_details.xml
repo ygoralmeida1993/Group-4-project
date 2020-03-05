@@ -5,7 +5,6 @@
     android:layout_height="match_parent"
     android:background="@color/background"
     android:orientation="vertical">
-
     <Button
         android:id="@+id/calculate"
         android:layout_width="match_parent"
@@ -17,15 +16,12 @@
         android:background="@drawable/button"
         android:shadowColor="@android:color/transparent"
         android:text="Calculate Budget"
-
         android:textColor="#ffffff" />
-
     <TextView
         android:id="@+id/content_text"
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:layout_marginTop="50dp"
-
         android:background="@drawable/button"
         android:clickable="true"
         android:onClick="toggle_contents"
@@ -34,13 +30,11 @@
         android:textColor="@android:color/white"
         android:textSize="20dp"
         android:textStyle="bold" />
-
     <RadioGroup
         android:id="@+id/carType"
         android:textSize="18sp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" >
-
     <RadioButton
         android:id="@+id/suv"
         android:layout_width="wrap_content"
@@ -54,18 +48,11 @@
             android:text="Sedan"
             android:checked="true" />
         <RadioButton
-            android:id="@+id/crossover"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Crossover"
-            android:checked="true" />
-        <RadioButton
             android:id="@+id/coupe"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Coupe"
             android:checked="true" />
-
     <RadioButton
         android:id="@+id/radioFemale"
         android:layout_width="wrap_content"
@@ -76,7 +63,6 @@
         android:id="@+id/CarBrand"
         android:layout_width="match_parent"
         android:background="@drawable/button"
-
         android:clickable="true"
         android:onClick="toggle_contents"
         android:padding="10dp"
@@ -85,7 +71,6 @@
         android:textStyle="bold"
         android:layout_height="60dp"
         android:textColor="@android:color/white" />
-
     <RadioGroup
         android:id="@+id/CarBrands"
         android:layout_width="wrap_content"
@@ -98,6 +83,7 @@
             android:layout_height="wrap_content"
             android:text="Honda"
             android:checked="true" />
+
         <RadioButton
             android:id="@+id/hyundai"
             android:layout_width="wrap_content"
@@ -120,18 +106,6 @@
             android:layout_height="wrap_content"
             android:text="Audi"
             android:checked="true" />
-        <RadioButton
-            android:id="@+id/bmw"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="BMW"
-            android:checked="true" />
-
-        <RadioButton
-            android:id="@+id/fiat"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Fiat" />
     </RadioGroup>
     <TextView
         android:id="@+id/CarMakes"

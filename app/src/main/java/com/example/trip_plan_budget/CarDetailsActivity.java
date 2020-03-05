@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ArrayAdapter;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -30,9 +31,10 @@ public class CarDetailsActivity extends AppCompatActivity {
     ArrayList<PlaceDetailsModel> placeDetailsModelArrayList;
     ArrayList<CarMileageModel> carMileageModelArrayList;
     ArrayList<WeatherApiModel> weatherApiModelArrayList;
+    RadioButton carTypeRadioButton,carBrandRadioButton;
     DatabaseReference databaseMileage;
-
-    String passanger,toDate,fromDate;
+    String passanger,toDate,fromDate,currentGasPrice;
+    int totalDays=0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,9 +55,17 @@ public class CarDetailsActivity extends AppCompatActivity {
         passanger=getIntent().getExtras().getString("passenger");
         toDate=getIntent().getExtras().getString("toDate");
         fromDate=getIntent().getExtras().getString("fromDate");
+        toDate=toDate.substring(0,2);
+        fromDate=fromDate.substring(0,2);
+        totalDays=(Integer.parseInt(toDate)-Integer.parseInt(fromDate));
+        totalDays+=1;
+        currentGasPrice=getIntent().getExtras().getString("currentGasPrice");
+        Log.d("All passed data",""+passanger+toDate+fromDate+currentGasPrice);
+        Log.d("totalDays",""+totalDays);
         animationUp = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_up);
         animationDown = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_down);
         carMake=(Spinner) findViewById(R.id.CarMake);
+
         List<String> list = new ArrayList<String>();
         list.add("2020");
         list.add("2019");
@@ -131,9 +141,16 @@ public class CarDetailsActivity extends AppCompatActivity {
         });
     }
     public void CalculateBudget(View view) {
+        int carTypeSelectedId = carType.getCheckedRadioButtonId();
+        carTypeRadioButton = (RadioButton) findViewById(carTypeSelectedId);
+         String selectedCarType= String.valueOf(carTypeRadioButton.getText());//car type
+        int carBrandSelectedId = carBrand.getCheckedRadioButtonId();
+        carBrandRadioButton = (RadioButton) findViewById(carBrandSelectedId);
+        String selectedCarBrand= String.valueOf(carBrandRadioButton.getText());//car brand
+        String carMakeSelectedId = carMake.getSelectedItem().toString();//car make
+        Log.d("car details",""+selectedCarType+selectedCarBrand+carMakeSelectedId);
         Intent intent = new Intent(getApplicationContext(), WithBudget.class);
         Bundle bundle = new Bundle();
-
         bundle.putParcelableArrayList("placeDetailsModelArrayList", placeDetailsModelArrayList);
         intent.putExtras(bundle);
         startActivity(intent);

@@ -92,6 +92,8 @@ public class FilterActivity extends AppCompatActivity implements LocationListene
     ArrayList<GasApiModel> gasApiModelArrayList;
     ArrayList<WeatherApiModel> weatherApiModelArrayList;
     int people;
+    String currentGasPrice="";
+    String province;
     String weatherApiLat="43.642567",weatherApiLong="-79.387054";
 
     @Override
@@ -192,13 +194,17 @@ no_passanger.setText("1");
                             (HttpsURLConnection) gasApi.openConnection();
                     myConnection.setRequestProperty("Authorization",
                             "apikey 6KEEm4JRyC8FxSpJmsaMsI:0kwdnw8HH3NhKlsVOodm4w");
+                    myConnection.setRequestProperty("content-type",
+                            "application/json");
+                    Log.d("getResponseCode",""+myConnection.getResponseCode());
                     if (myConnection.getResponseCode() == 200) {
-
+                        Log.d("getResponseCode","getResponseCode");
                         InputStream responseBody = myConnection.getInputStream();
                         String jsonString=convertStreamToString(responseBody);
                         JSONObject json = null;
                         try {
                             json = new JSONObject(jsonString);
+                            Log.d("gasApijsonString",jsonString+"");
                             JSONArray array = json.getJSONArray("result");
                             for(int m=0;m<array.length();m++){
                                 JSONObject place = array.getJSONObject(m);
@@ -213,9 +219,10 @@ no_passanger.setText("1");
                             e.printStackTrace();
                         }
                         myConnection.disconnect();
+                        responseBody.close();
                     } else {
 
-                        Log.d("value error","");
+                        Log.d("value error","error");
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -376,6 +383,7 @@ no_passanger.setText("1");
                 Log.d("places from database", String.valueOf(placeDetailsModelArrayList));
                weatherApiLat=placeDetailsModelArrayList.get(0).getLatitude();
                weatherApiLong=placeDetailsModelArrayList.get(0).getLongitude();
+               province=placeDetailsModelArrayList.get(0).getProvince();
             }
 
             @Override
@@ -424,6 +432,12 @@ no_passanger.setText("1");
         if (toDate.getText().toString().isEmpty()) {
             toDate.setError("Select date");
             return;
+        }
+        //fetching gas price
+        for(int j=0;j<gasApiModelArrayList.size();j++){
+            if(gasApiModelArrayList.get(j).getProvinceName().equals(province)){
+                currentGasPrice=gasApiModelArrayList.get(j).getGasolinePrice();
+            }
         }
         cityName=destination.getText().toString().toLowerCase();
         //new code with firebase
@@ -485,6 +499,7 @@ no_passanger.setText("1");
         bundle.putParcelableArrayList("placeDetailsModelArrayList", l1);
         bundle.putParcelableArrayList("weatherApiModelArrayList",weatherApiModelArrayList);
         bundle.putString("passenger",passanger);
+        bundle.putString("currentGasPrice",currentGasPrice);
         bundle.putString("toDate", String.valueOf(toDate.getText()));
         bundle.putString("fromDate", String.valueOf(fromDate.getText()));
         intent.putExtras(bundle);
