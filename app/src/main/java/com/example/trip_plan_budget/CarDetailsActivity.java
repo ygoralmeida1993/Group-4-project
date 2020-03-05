@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ArrayAdapter;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -30,6 +31,7 @@ public class CarDetailsActivity extends AppCompatActivity {
     ArrayList<PlaceDetailsModel> placeDetailsModelArrayList;
     ArrayList<CarMileageModel> carMileageModelArrayList;
     ArrayList<WeatherApiModel> weatherApiModelArrayList;
+    RadioButton carTypeRadioButton,carBrandRadioButton;
     DatabaseReference databaseMileage;
     String passanger,toDate,fromDate,currentGasPrice;
     int totalDays=0;
@@ -139,9 +141,16 @@ public class CarDetailsActivity extends AppCompatActivity {
         });
     }
     public void CalculateBudget(View view) {
+        int carTypeSelectedId = carType.getCheckedRadioButtonId();
+        carTypeRadioButton = (RadioButton) findViewById(carTypeSelectedId);
+         String selectedCarType= String.valueOf(carTypeRadioButton.getText());//car type
+        int carBrandSelectedId = carBrand.getCheckedRadioButtonId();
+        carBrandRadioButton = (RadioButton) findViewById(carBrandSelectedId);
+        String selectedCarBrand= String.valueOf(carBrandRadioButton.getText());//car brand
+        String carMakeSelectedId = carMake.getSelectedItem().toString();//car make
+        Log.d("car details",""+selectedCarType+selectedCarBrand+carMakeSelectedId);
         Intent intent = new Intent(getApplicationContext(), WithBudget.class);
         Bundle bundle = new Bundle();
-
         bundle.putParcelableArrayList("placeDetailsModelArrayList", placeDetailsModelArrayList);
         intent.putExtras(bundle);
         startActivity(intent);
