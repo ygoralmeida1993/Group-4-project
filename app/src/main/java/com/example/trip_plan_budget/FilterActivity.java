@@ -1,4 +1,6 @@
 package com.example.trip_plan_budget;
+import android.app.DatePickerDialog;
+import android.app.DialogFragment;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -15,12 +17,19 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Calendar;
 import java.util.Collections;
+
+import android.text.InputType;
+import android.text.format.Time;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.NumberPicker;
 import android.widget.TextView;
@@ -45,14 +54,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import javax.net.ssl.HttpsURLConnection;
+import android.widget.DatePicker;
 
 public class FilterActivity extends AppCompatActivity implements LocationListener {
     private static final String url = "jdbc:mysql://192.168.0.12:3306/trip_plan";
     private static final String user = "root";
     private static final String pass = "";
+
     int approach, placetypeInt;
     String  placetype, cityName;
     double budget;
+    WindowManager windowManager2;
     private NumberPicker picker1;
     double approximateBudget=0;
   //  EditText  destination;
@@ -65,11 +77,13 @@ public class FilterActivity extends AppCompatActivity implements LocationListene
     double currentLongitude;
     AutoCompleteTextView destination;
     int budgetTotal=0;
+    DatePickerDialog picker;
     DatabaseReference databasePlaces;
     private String[] places = {"Scarborough","Toronto","Waterloo","Oshawa"};
     int budgetAverage=0;
     protected boolean gps_enabled, network_enabled;
     ArrayList<PlaceDetailsModel> placeDetailsModelArrayList;
+    Button fromDate,toDate;
     ArrayList<GasApiModel> gasApiModelArrayList;
     ArrayList<WeatherApiModel> weatherApiModelArrayList;
     int people;
@@ -78,6 +92,69 @@ public class FilterActivity extends AppCompatActivity implements LocationListene
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_filter);
+        fromDate = findViewById(R.id.btnDate);
+
+        toDate = findViewById(R.id.btnDateTo);
+        TextView date = findViewById(R.id.tvSelectedDate);
+        toDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Calendar calendar = Calendar.getInstance();
+                int year = calendar.get(Calendar.YEAR);
+                int month = calendar.get(Calendar.MONTH);
+                int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
+                DatePickerDialog datePickerDialog = new DatePickerDialog(FilterActivity.this,
+                        new DatePickerDialog.OnDateSetListener() {
+                            @Override
+                            public void onDateSet(DatePicker datePicker, int year, int month, int day) {
+
+                            }
+                        }, 0, 0, 0);
+
+                datePickerDialog = new DatePickerDialog(FilterActivity.this,
+                        new DatePickerDialog.OnDateSetListener() {
+                            @Override
+                            public void onDateSet(DatePicker datePicker, int year, int month, int day) {
+                                toDate.setText(day + "/" + month + "/" + year);
+                            }
+                        }, year, month, dayOfMonth);
+                datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis());
+                datePickerDialog.show();
+
+
+            }
+        });
+        fromDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Calendar calendar = Calendar.getInstance();
+                int year = calendar.get(Calendar.YEAR);
+                int month = calendar.get(Calendar.MONTH);
+                int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
+                DatePickerDialog datePickerDialog = new DatePickerDialog(FilterActivity.this,
+                        new DatePickerDialog.OnDateSetListener() {
+                            @Override
+                            public void onDateSet(DatePicker datePicker, int year, int month, int day) {
+
+                            }
+                        }, 0, 0, 0);
+
+                datePickerDialog = new DatePickerDialog(FilterActivity.this,
+                        new DatePickerDialog.OnDateSetListener() {
+                            @Override
+                            public void onDateSet(DatePicker datePicker, int year, int month, int day) {
+                                fromDate.setText(day + "/" + month + "/" + year);
+                            }
+                        }, year, month, dayOfMonth);
+                datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis());
+                datePickerDialog.show();
+
+
+            }
+        });
+
         if (ContextCompat.checkSelfPermission(getApplicationContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getApplicationContext(), android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION}, 101);
         }
@@ -91,6 +168,7 @@ public class FilterActivity extends AppCompatActivity implements LocationListene
         destination.setThreshold(1);
 
         destination.setAdapter(arrayAdapter);
+
         //implementation for gas api
         AsyncTask.execute(new Runnable() {
             @Override
@@ -239,6 +317,7 @@ public class FilterActivity extends AppCompatActivity implements LocationListene
 //            }
 //        });
     }
+
     public static String[] toStringArray(JSONArray array) {
         if(array==null)
             return null;
@@ -249,6 +328,7 @@ public class FilterActivity extends AppCompatActivity implements LocationListene
         }
         return arr;
     }
+
     private String convertStreamToString(InputStream is) {
 
         BufferedReader reader = new BufferedReader(
