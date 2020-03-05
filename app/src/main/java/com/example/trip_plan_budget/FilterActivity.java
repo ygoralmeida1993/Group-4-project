@@ -31,6 +31,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.NumberPicker;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -60,14 +61,17 @@ public class FilterActivity extends AppCompatActivity implements LocationListene
     private static final String url = "jdbc:mysql://192.168.0.12:3306/trip_plan";
     private static final String user = "root";
     private static final String pass = "";
-
+    ImageButton inc;
+    ImageButton    dec;//for icrement decrement passangers
+    int counter=1;
     int approach, placetypeInt;
     String  placetype, cityName;
     double budget;
     private NumberPicker picker1;
     double approximateBudget=0;
-    EditText days, passangers;
+    EditText days;
     int passanger,day;
+    TextView no_passanger;
     Button calculate;
     TextView lat;
     LocationManager locationManager ;
@@ -91,6 +95,11 @@ public class FilterActivity extends AppCompatActivity implements LocationListene
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_filter);
         fromDate = findViewById(R.id.btnDate);
+        counter = 1;
+        no_passanger=findViewById(R.id.passanger);
+no_passanger.setText("1");
+        inc = (ImageButton) findViewById(R.id.add);
+        dec = (ImageButton) findViewById(R.id.minus);
 
         toDate = findViewById(R.id.btnDateTo);
         TextView date = findViewById(R.id.tvSelectedDate);
@@ -162,11 +171,8 @@ public class FilterActivity extends AppCompatActivity implements LocationListene
         destination = (AutoCompleteTextView) findViewById(R.id.destination);
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this,
                 android.R.layout.select_dialog_item, places);
-
         destination.setThreshold(1);
-
         destination.setAdapter(arrayAdapter);
-
         //implementation for gas api
         AsyncTask.execute(new Runnable() {
             @Override
@@ -462,8 +468,27 @@ public class FilterActivity extends AppCompatActivity implements LocationListene
         //connectMySql.execute("");
 
     }
+    public void onClickIncDec(View v)
+    {
+        boolean showText = false;
+
+    switch (v.getId()) {
+        case R.id.add:
+            if(counter<7){
+            counter++;}
+            showText = true;
+            break;
+        case R.id.minus:
+            if(counter>1){
+            counter--;}
+            showText = true;
+            break;
 
 
+}
+        if(showText)
+            no_passanger.setText(""+ counter);
+    }
 
     @Override
     public void onLocationChanged(Location location) {

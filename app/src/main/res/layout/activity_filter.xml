@@ -47,7 +47,7 @@
     </androidx.cardview.widget.CardView>
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="85dp"
+        android:layout_height="80dp"
         android:layout_marginTop="24dp"
         card_view:cardCornerRadius="15dp"
         card_view:cardElevation="3dp"
@@ -72,13 +72,16 @@
        android:layout_height="wrap_content"
        android:orientation="horizontal">
         <ImageButton
+            android:id="@+id/minus"
             android:layout_width="30dp"
             android:background="@color/background"
             android:layout_marginTop="15dp"
             android:layout_marginLeft="20dp"
             android:src="@drawable/minus_icon"
-            android:layout_height="30dp"/>
+            android:onClick="onClickIncDec"
+            android:layout_height="wrap_content"/>
         <TextView
+            android:id="@+id/passanger"
             android:layout_width="50dp"
             android:text="0"
             android:textSize="18dp"
@@ -87,13 +90,16 @@
             android:textAlignment="center"
             android:textColor="@color/background"
             android:layout_height="50dp"/>
-        <ImageButton
-            android:layout_width="30dp"
-            android:background="@color/background"
-            android:layout_height="30dp"
-            android:layout_marginTop="15dp"
-            android:layout_marginLeft="15dp"
-            android:src="@drawable/plus_icon"/>
+
+       <ImageButton
+           android:id="@+id/add"
+           android:layout_width="30dp"
+           android:layout_height="wrap_content"
+           android:onClick="onClickIncDec"
+           android:layout_marginLeft="15dp"
+           android:layout_marginTop="15dp"
+           android:background="@color/background"
+           android:src="@drawable/plus_icon" />
    </LinearLayout>
     </LinearLayout>
     </androidx.cardview.widget.CardView>
