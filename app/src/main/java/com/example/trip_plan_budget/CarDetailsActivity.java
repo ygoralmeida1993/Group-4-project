@@ -33,6 +33,8 @@ public class CarDetailsActivity extends AppCompatActivity {
     ArrayList<WeatherApiModel> weatherApiModelArrayList;
     RadioButton carTypeRadioButton,carBrandRadioButton;
     DatabaseReference databaseMileage;
+    double originalCarMileage;
+    double newCarMileage;
     String passanger,toDate,fromDate,currentGasPrice;
     int totalDays=0;
     @Override
@@ -60,8 +62,8 @@ public class CarDetailsActivity extends AppCompatActivity {
         totalDays=(Integer.parseInt(toDate)-Integer.parseInt(fromDate));
         totalDays+=1;
         currentGasPrice=getIntent().getExtras().getString("currentGasPrice");
-        Log.d("All passed data",""+passanger+toDate+fromDate+currentGasPrice);
-        Log.d("totalDays",""+totalDays);
+        Log.d("All passed data",""+passanger+""+toDate+""+fromDate+""+currentGasPrice);
+        Log.d("totalDays",""+currentGasPrice);
         animationUp = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_up);
         animationDown = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_down);
         carMake=(Spinner) findViewById(R.id.CarMake);
@@ -143,12 +145,68 @@ public class CarDetailsActivity extends AppCompatActivity {
     public void CalculateBudget(View view) {
         int carTypeSelectedId = carType.getCheckedRadioButtonId();
         carTypeRadioButton = (RadioButton) findViewById(carTypeSelectedId);
-         String selectedCarType= String.valueOf(carTypeRadioButton.getText());//car type
+         String selectedCarType= String.valueOf(carTypeRadioButton.getText()).toLowerCase();//car type
         int carBrandSelectedId = carBrand.getCheckedRadioButtonId();
         carBrandRadioButton = (RadioButton) findViewById(carBrandSelectedId);
-        String selectedCarBrand= String.valueOf(carBrandRadioButton.getText());//car brand
+        String selectedCarBrand= String.valueOf(carBrandRadioButton.getText()).toLowerCase();//car brand
         String carMakeSelectedId = carMake.getSelectedItem().toString();//car make
         Log.d("car details",""+selectedCarType+selectedCarBrand+carMakeSelectedId);
+        for(int i=0;i<carMileageModelArrayList.size();i++){
+            if(carMileageModelArrayList.get(i).getCarBrand().equals(selectedCarBrand)&&carMileageModelArrayList.get(i).getCarMake().equals(carMakeSelectedId)&&
+            carMileageModelArrayList.get(i).getCarType().equals(selectedCarType)){
+                originalCarMileage=carMileageModelArrayList.get(i).getMileage();
+            }
+        }
+        //implementing algorithm
+        //for from date
+        double currentTemp=weatherApiModelArrayList.get(0).getTempMax();
+
+        Log.d("currentTemp", String.valueOf(weatherApiModelArrayList.get(0).getTempMax()));
+        double differenceTemp=30-currentTemp;
+
+        if(currentTemp<=30&&currentTemp>=20){
+            newCarMileage=originalCarMileage;
+        }
+        else if(differenceTemp<=7){
+            if(weatherApiModelArrayList.get(0).getIcon().equals("snow")){
+                newCarMileage=originalCarMileage*0.93;
+            }
+            else{
+                newCarMileage=originalCarMileage*0.95;
+            }
+        }
+        else if(8<=differenceTemp||differenceTemp<15){
+            if(weatherApiModelArrayList.get(0).getIcon().equals("snow")){
+                newCarMileage=originalCarMileage*0.73;
+            }
+            else{
+                newCarMileage=originalCarMileage*0.75;
+            }
+        }
+
+        else if(16<=differenceTemp||differenceTemp<30){
+            if(weatherApiModelArrayList.get(0).getIcon().equals("snow")){
+                newCarMileage=originalCarMileage*0.53;
+            }
+            else{
+                newCarMileage=originalCarMileage*0.55;
+            }
+        }
+
+        else if(31<=differenceTemp||differenceTemp<37){
+            if(weatherApiModelArrayList.get(0).getIcon().equals("snow")){
+                newCarMileage=originalCarMileage*0.33;
+            }
+            else{
+                newCarMileage=originalCarMileage*0.35;
+            }
+        }
+
+
+
+        Log.d("carMileage", String.valueOf(newCarMileage));
+
+        Log.d("carMileage", String.valueOf(originalCarMileage));
         Intent intent = new Intent(getApplicationContext(), WithBudget.class);
         Bundle bundle = new Bundle();
         bundle.putParcelableArrayList("placeDetailsModelArrayList", placeDetailsModelArrayList);
