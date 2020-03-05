@@ -1,6 +1,4 @@
 package com.example.trip_plan_budget;
-
-
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -9,6 +7,7 @@ public class PlaceDetailsModel implements Parcelable {
     String city;
     int budget;
     String longitude;
+    String province;
 
     public String getImage() {
         return image;
@@ -25,7 +24,7 @@ public class PlaceDetailsModel implements Parcelable {
     public PlaceDetailsModel() {
     }
 
-    public PlaceDetailsModel(int budget, String city, String img, String latitude, String longitude, String placeId, String placename, String place_type) {
+    public PlaceDetailsModel(int budget, String city, String img, String latitude, String longitude, String placeId, String placename, String place_type,String province) {
         this.placeName = placename;
         this.city = city;
         this.budget = budget;
@@ -34,9 +33,16 @@ public class PlaceDetailsModel implements Parcelable {
         this.place_type = place_type;
         this.image=img;
         this.placeId=placeId;
+        this.province=province;
     }
 
+    public String getProvince() {
+        return province;
+    }
 
+    public void setProvince(String province) {
+        this.province = province;
+    }
 
     protected PlaceDetailsModel(Parcel in) {
         placeName = in.readString();

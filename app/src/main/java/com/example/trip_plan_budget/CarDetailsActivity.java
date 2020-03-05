@@ -32,7 +32,7 @@ public class CarDetailsActivity extends AppCompatActivity {
     ArrayList<WeatherApiModel> weatherApiModelArrayList;
     DatabaseReference databaseMileage;
 
-    String passanger,toDate,fromDate;
+    String passanger,toDate,fromDate,currentGasPrice;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,9 +53,12 @@ public class CarDetailsActivity extends AppCompatActivity {
         passanger=getIntent().getExtras().getString("passenger");
         toDate=getIntent().getExtras().getString("toDate");
         fromDate=getIntent().getExtras().getString("fromDate");
+        currentGasPrice=getIntent().getExtras().getString("currentGasPrice");
+        Log.d("All passed data",""+passanger+toDate+fromDate+currentGasPrice);
         animationUp = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_up);
         animationDown = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_down);
         carMake=(Spinner) findViewById(R.id.CarMake);
+
         List<String> list = new ArrayList<String>();
         list.add("2020");
         list.add("2019");
