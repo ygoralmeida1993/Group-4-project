@@ -191,7 +191,7 @@ no_passanger.setText("1");
                     HttpsURLConnection myConnection =
                             (HttpsURLConnection) gasApi.openConnection();
                     myConnection.setRequestProperty("Authorization",
-                            "apikey 5jpE9jkydP6DsPLJgVRuPf:4dRQkQrqaWwgIAq9M2FNhE");
+                            "apikey 6KEEm4JRyC8FxSpJmsaMsI:0kwdnw8HH3NhKlsVOodm4w");
                     if (myConnection.getResponseCode() == 200) {
 
                         InputStream responseBody = myConnection.getInputStream();
@@ -485,6 +485,8 @@ no_passanger.setText("1");
         bundle.putParcelableArrayList("placeDetailsModelArrayList", l1);
         bundle.putParcelableArrayList("weatherApiModelArrayList",weatherApiModelArrayList);
         bundle.putString("passenger",passanger);
+        bundle.putString("toDate", String.valueOf(toDate.getText()));
+        bundle.putString("fromDate", String.valueOf(fromDate.getText()));
         intent.putExtras(bundle);
         startActivity(intent);
     }

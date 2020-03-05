@@ -31,7 +31,8 @@ public class CarDetailsActivity extends AppCompatActivity {
     ArrayList<CarMileageModel> carMileageModelArrayList;
     ArrayList<WeatherApiModel> weatherApiModelArrayList;
     DatabaseReference databaseMileage;
-    String passanger;
+
+    String passanger,toDate,fromDate;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,6 +51,8 @@ public class CarDetailsActivity extends AppCompatActivity {
         placeDetailsModelArrayList=this.getIntent().getExtras().getParcelableArrayList("placeDetailsModelArrayList");
         weatherApiModelArrayList=this.getIntent().getExtras().getParcelableArrayList("weatherApiModelArrayList");
         passanger=getIntent().getExtras().getString("passenger");
+        toDate=getIntent().getExtras().getString("toDate");
+        fromDate=getIntent().getExtras().getString("fromDate");
         animationUp = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_up);
         animationDown = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_down);
         carMake=(Spinner) findViewById(R.id.CarMake);
