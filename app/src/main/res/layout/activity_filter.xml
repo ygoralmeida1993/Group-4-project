@@ -1,30 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_gravity="center"
     android:background="@color/background"
     android:padding="16dp"
     tools:context=".FilterActivity">
-    <EditText
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"/>
+      <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="90dp"
+        card_view:cardCornerRadius="15dp"
+        card_view:cardElevation="3dp"
+        android:id="@+id/cv"
+        card_view:cardBackgroundColor="@color/buttonColor"
+        >
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="14dp"
+            android:layout_marginTop="10dp"
+            android:text="Destination"
+            android:textSize="18sp"
+            android:textColor="@color/background"
+            android:textStyle="bold" />
+
+        <AutoCompleteTextView
         android:id="@+id/destination"
         android:layout_width="match_parent"
-android:layout_marginTop="150dp"
+        android:layout_marginTop="30dp"
         android:layout_height="50dp"
-
         android:background="@drawable/corner"
         android:drawableLeft="@drawable/ic_place_black_24dp"
         android:drawablePadding="10dp"
-        android:hint="Enter your destination"
+        android:hint="Toronto, Ontario"
         android:inputType="text"
         android:textStyle="bold"
         android:textColor="@color/textColor"
         android:textSize="18sp"
-
         android:textColorHighlight="@color/textColor"
         android:textColorHint="@color/textColor" />
+    </androidx.cardview.widget.CardView>
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="90dp"
+        android:layout_marginTop="24dp"
+        card_view:cardCornerRadius="15dp"
+        card_view:cardElevation="3dp"
+        android:id="@+id/cvv"
+        card_view:cardBackgroundColor="@color/buttonColor"
+        >
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -34,63 +64,61 @@ android:layout_marginTop="150dp"
             android:id="@+id/text_passangers"
             android:layout_width="125dp"
             android:layout_height="50dp"
-            android:layout_marginStart="15dp"
-            android:layout_marginLeft="0dp"
+
+            android:layout_marginStart="50dp"
+            android:layout_marginLeft="30dp"
             android:layout_marginTop="20dp"
             android:layout_marginEnd="15dp"
             android:paddingTop="15dp"
             android:text="Passangers"
-            android:textColor="@color/textColor"
+            android:textColor="@color/background"
             android:textSize="18sp"
             android:textStyle="bold" />
 
-        <NumberPicker
-            android:id="@+id/numberpicker_main_picker"
-            android:layout_width="200dp"
-            android:layout_height="50dp"
-            android:layout_centerHorizontal="true"
-            android:layout_margin="15dp"
-            android:background="@drawable/corner"
-            android:textColor="@color/textColor" />
-
-    </LinearLayout>
-
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        <ImageButton
+            android:layout_width="30dp"
+            android:background="@color/background"
+            android:layout_marginTop="35dp"
+            android:layout_marginLeft="20dp"
+            android:src="@drawable/minus_icon"
+            android:layout_height="30dp"/>
 
         <TextView
-            android:id="@+id/text_days"
-            android:layout_width="125dp"
-            android:layout_height="50dp"
-            android:layout_marginStart="15dp"
-            android:layout_marginTop="15dp"
-            android:layout_marginEnd="15dp"
-            android:text="Total Days"
-            android:textColor="@color/textColor"
-            android:textSize="18sp"
-            android:textStyle="bold"/>
+            android:layout_width="50dp"
+            android:text="0"
+            android:textSize="18dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="20dp"
+            android:textAlignment="center"
+            android:textColor="@color/background"
+            android:layout_height="50dp"/>
+        <ImageButton
+            android:layout_width="30dp"
+            android:background="@color/background"
+            android:layout_height="30dp"
+            android:layout_marginTop="35dp"
+            android:layout_marginLeft="15dp"
+            android:src="@drawable/plus_icon"/>
 
-        <EditText
-            android:id="@+id/noOfDays"
-            android:layout_width="200dp"
-            android:layout_height="50dp"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
-            android:layout_margin="15dp"
-            android:layout_marginTop="50dp"
-            android:background="@drawable/corner"
-            android:drawablePadding="10dp"
-            android:inputType="number"
-            android:padding="15dp"
-            android:textColor="@color/textColor"
-            android:textColorHighlight="@color/textColor"
-            android:textColorHint="@color/textColor" />
 
     </LinearLayout>
+    </androidx.cardview.widget.CardView>
 
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="90dp"
+        card_view:cardCornerRadius="15dp"
+        card_view:cardElevation="3dp"
+        android:id="@+id/c"
+        android:layout_marginTop="29dp"
+        card_view:cardBackgroundColor="@color/buttonColor"
+        >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
 
     <Button
         android:id="@+id/calculate"

@@ -19,6 +19,7 @@ import java.util.Collections;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.NumberPicker;
@@ -54,7 +55,7 @@ public class FilterActivity extends AppCompatActivity implements LocationListene
     double budget;
     private NumberPicker picker1;
     double approximateBudget=0;
-    EditText  destination;
+  //  EditText  destination;
     EditText days, passangers;
     int passanger,day;
     Button calculate;
@@ -62,6 +63,7 @@ public class FilterActivity extends AppCompatActivity implements LocationListene
     LocationManager locationManager ;
     double currentLatitude;
     double currentLongitude;
+    AutoCompleteTextView destination;
     int budgetTotal=0;
     DatabaseReference databasePlaces;
     private String[] places = {"Scarborough","Toronto","Waterloo","Oshawa"};
@@ -77,12 +79,18 @@ public class FilterActivity extends AppCompatActivity implements LocationListene
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_filter);
         if (ContextCompat.checkSelfPermission(getApplicationContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getApplicationContext(), android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-
             ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION}, 101);
-
         }
         gasApiModelArrayList=new ArrayList<>();
+        String[] places= { "Scarborough", "Toronto", "Brampton", "North York", "Ottawa", "Hamilton",
+                "London", "Windsor", "Mississauga", "Kitchner", "Markham", "Waterloo" };
+        destination = (AutoCompleteTextView) findViewById(R.id.destination);
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this,
+                android.R.layout.select_dialog_item, places);
 
+        destination.setThreshold(1);
+
+        destination.setAdapter(arrayAdapter);
         //implementation for gas api
         AsyncTask.execute(new Runnable() {
             @Override
@@ -158,7 +166,6 @@ public class FilterActivity extends AppCompatActivity implements LocationListene
 
                         JSONObject json = null;
                         try {
-
                             JSONObject mainObject = new JSONObject(jsonString);
                             JSONObject dailyObject = mainObject.getJSONObject("daily");
                             JSONArray weatherArray = dailyObject.getJSONArray("data");
@@ -189,20 +196,15 @@ public class FilterActivity extends AppCompatActivity implements LocationListene
         });
 
         databasePlaces= FirebaseDatabase.getInstance().getReference("places");
-        destination = this.findViewById(R.id.destination);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>
-                (this, android.R.layout.select_dialog_item, places);
-        //destination.setThreshold(1); //will start working from first character
-        //destination.setAdapter(adapter);
-        // modeOfTransportation = (EditText) this.findViewById(R.id.modeTansport);
-        days = (EditText) this.findViewById(R.id.noOfDays);
-        picker1 = (NumberPicker) findViewById(R.id.numberpicker_main_picker);
+
+      //  days = (EditText) this.findViewById(R.id.noOfDays);
+       // picker1 = (NumberPicker) findViewById(R.id.numberpicker_main_picker);
         //passangers = (EditText) this.findViewById(R.id.noOfPassangers);
         placeDetailsModelArrayList = new ArrayList<PlaceDetailsModel>();
         // lat=(TextView) this.findViewById(R.id.lat);
         calculate=(Button)findViewById(R.id.calculate);
-        picker1.setMaxValue(10);
-        picker1.setMinValue(1);
+     //   picker1.setMaxValue(10);
+      //  picker1.setMinValue(1);
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
         approach = bundle.getInt("approach");
@@ -225,19 +227,17 @@ public class FilterActivity extends AppCompatActivity implements LocationListene
             calculate.setText("Get Places");
 
         }
-
-
         LocationManager lm = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
         Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
         currentLongitude = location.getLongitude();
         currentLatitude = location.getLatitude();
-        picker1.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
-            @Override
-            public void onValueChange(NumberPicker numberPicker, int i, int i1) {
-                passanger = picker1.getValue();
-
-            }
-        });
+//        picker1.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
+//            @Override
+//            public void onValueChange(NumberPicker numberPicker, int i, int i1) {
+//                passanger = picker1.getValue();
+//
+//            }
+//        });
     }
     public static String[] toStringArray(JSONArray array) {
         if(array==null)
@@ -271,7 +271,6 @@ public class FilterActivity extends AppCompatActivity implements LocationListene
         }
         return sb.toString();
     }
-
     @Override
     protected void onStart() {
         super.onStart();
@@ -322,7 +321,9 @@ public class FilterActivity extends AppCompatActivity implements LocationListene
         ArrayList<PlaceDetailsModel> placeDetailsList=new ArrayList<>();
         cityName=destination.getText().toString().toLowerCase();
 //new code with firebase
-        passanger = picker1.getValue();
+       // passanger = picker1.getValue();//for passanger
+        passanger=2;
+
         String city=cityName.substring(0, 1).toUpperCase()+ cityName.substring(1);
         String placeType=placetype.substring(0, 1).toUpperCase()+ placetype.substring(1);
         Log.d("data",city+placeType+"   "+placeDetailsModelArrayList.get(0).getCity());
@@ -339,7 +340,8 @@ public class FilterActivity extends AppCompatActivity implements LocationListene
         Collections.copy(placeDetailsModelArrayList, placeDetailsList);
         Log.d("places after filtering", String.valueOf(placeDetailsModelArrayList));
         // passanger = Integer.parseInt(passangers.getText().toString());
-        day = Integer.parseInt(days.getText().toString());
+      //  day = Integer.parseInt(days.getText().toString());//for days
+        day=2;
         for (int i = 0; i < placeDetailsModelArrayList.size(); i++)
         {
             double finalBudget=0;
@@ -475,7 +477,7 @@ public class FilterActivity extends AppCompatActivity implements LocationListene
                 }
                 budgetAverage = budgetTotal / (placeDetailsModelArrayList.size());
                 passanger = picker1.getValue();
-                day = Integer.parseInt(days.getText().toString());
+               // day = Integer.parseInt(days.getText().toString());
                 Location selected_location = new Location("locationA");
                 selected_location.setLatitude(currentLatitude);
                 selected_location.setLongitude(currentLongitude);
