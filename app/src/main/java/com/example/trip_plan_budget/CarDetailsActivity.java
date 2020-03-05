@@ -34,6 +34,7 @@ public class CarDetailsActivity extends AppCompatActivity {
     RadioButton carTypeRadioButton,carBrandRadioButton;
     DatabaseReference databaseMileage;
     double originalCarMileage;
+    double newCarMileage;
     String passanger,toDate,fromDate,currentGasPrice;
     int totalDays=0;
     @Override
@@ -157,6 +158,54 @@ public class CarDetailsActivity extends AppCompatActivity {
             }
         }
         //implementing algorithm
+        //for from date
+        double currentTemp=weatherApiModelArrayList.get(0).getTempMax();
+
+        Log.d("currentTemp", String.valueOf(weatherApiModelArrayList.get(0).getTempMax()));
+        double differenceTemp=30-currentTemp;
+
+        if(currentTemp<=30&&currentTemp>=20){
+            newCarMileage=originalCarMileage;
+        }
+        else if(differenceTemp<=7){
+            if(weatherApiModelArrayList.get(0).getIcon().equals("snow")){
+                newCarMileage=originalCarMileage*0.93;
+            }
+            else{
+                newCarMileage=originalCarMileage*0.95;
+            }
+        }
+        else if(8<=differenceTemp||differenceTemp<15){
+            if(weatherApiModelArrayList.get(0).getIcon().equals("snow")){
+                newCarMileage=originalCarMileage*0.73;
+            }
+            else{
+                newCarMileage=originalCarMileage*0.75;
+            }
+        }
+
+        else if(16<=differenceTemp||differenceTemp<30){
+            if(weatherApiModelArrayList.get(0).getIcon().equals("snow")){
+                newCarMileage=originalCarMileage*0.53;
+            }
+            else{
+                newCarMileage=originalCarMileage*0.55;
+            }
+        }
+
+        else if(31<=differenceTemp||differenceTemp<37){
+            if(weatherApiModelArrayList.get(0).getIcon().equals("snow")){
+                newCarMileage=originalCarMileage*0.33;
+            }
+            else{
+                newCarMileage=originalCarMileage*0.35;
+            }
+        }
+
+
+
+        Log.d("carMileage", String.valueOf(newCarMileage));
+
         Log.d("carMileage", String.valueOf(originalCarMileage));
         Intent intent = new Intent(getApplicationContext(), WithBudget.class);
         Bundle bundle = new Bundle();
