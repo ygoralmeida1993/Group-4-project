@@ -78,8 +78,7 @@ public class FilterActivity extends AppCompatActivity implements LocationListene
     Button calculate;
     TextView lat;
     LocationManager locationManager ;
-    double currentLatitude;
-    double currentLongitude;
+
     AutoCompleteTextView destination;
     int budgetTotal=0;
     DatePickerDialog picker;
@@ -168,9 +167,7 @@ no_passanger.setText("1");
             }
         });
 
-        if (ContextCompat.checkSelfPermission(getApplicationContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getApplicationContext(), android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION}, 101);
-        }
+
         gasApiModelArrayList=new ArrayList<>();
         String[] places= { "Scarborough", "Toronto", "Brampton", "North York", "Ottawa", "Hamilton",
                 "London", "Windsor", "Mississauga", "Kitchner", "Markham", "Waterloo" };
@@ -320,10 +317,7 @@ no_passanger.setText("1");
             calculate.setText("Get Places");
 
         }
-        LocationManager lm = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
-        Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-        currentLongitude = location.getLongitude();
-        currentLatitude = location.getLatitude();
+
 //        picker1.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
 //            @Override
 //            public void onValueChange(NumberPicker numberPicker, int i, int i1) {
@@ -462,46 +456,19 @@ no_passanger.setText("1");
         // passanger = Integer.parseInt(passangers.getText().toString());
       //  day = Integer.parseInt(days.getText().toString());//for days
         day=2;
-        for (int i = 0; i < placeDetailsModelArrayList.size(); i++)
-        {
-            double finalBudget=0;
-            Log.d("placeDetailsModelList", String.valueOf(placeDetailsModelArrayList.get(i).getBudget()));
-            finalBudget=placeDetailsModelArrayList.get(i).getBudget();
-         //   finalBudget=finalBudget*day*passanger;
-            Log.d("finalBudget before", String.valueOf(finalBudget));
-            Location selected_location = new Location("locationA");
-            selected_location.setLatitude(currentLatitude);
-            selected_location.setLongitude(currentLongitude);
-            System.out.println("currentLatitude" + currentLatitude + currentLongitude);
-            Location near_locations = new Location("locationB");
-            near_locations.setLatitude(Double.parseDouble(placeDetailsModelArrayList.get(i).getLatitude()));
-            near_locations.setLongitude(Double.parseDouble(placeDetailsModelArrayList.get(i).getLongitude()));
-            double distance = (selected_location.distanceTo(near_locations)) * 0.00062137;
-            Log.d("distance", String.valueOf(distance));
-            System.out.println(distance + "distance");
-            finalBudget=finalBudget+(distance*0.30);
-            Log.d("finalBudget after", String.valueOf(finalBudget));
-            placeDetailsModelArrayList.get(i).setBudget((int) finalBudget);
-            Log.d("ModelList", String.valueOf(placeDetailsModelArrayList.get(i).getBudget()));
-        }
-        ArrayList<PlaceDetailsModel> l1 = new ArrayList<PlaceDetailsModel>();
-        for (int i = 0; i <placeDetailsModelArrayList.size(); i++) {
-            Log.d("value", String.valueOf(placeDetailsModelArrayList.get(i).getBudget()));
-            Log.d("budget", String.valueOf(budget));
-            if((placeDetailsModelArrayList.get(i).getBudget())<budget){
 
-                l1.add(placeDetailsModelArrayList.get(i));}
-        }
-        placeDetailsModelArrayList.removeAll(placeDetailsModelArrayList);
+
+       // placeDetailsModelArrayList.removeAll(placeDetailsModelArrayList);
         Intent intent = new Intent(getApplicationContext(), CarDetailsActivity.class);
         Bundle bundle = new Bundle();
-        Log.d("places before intent", String.valueOf(l1));
-        bundle.putParcelableArrayList("placeDetailsModelArrayList", l1);
+      //  Log.d("places before intent", String.valueOf(l1));
+        bundle.putParcelableArrayList("placeDetailsModelArrayList", placeDetailsModelArrayList);
         bundle.putParcelableArrayList("weatherApiModelArrayList",weatherApiModelArrayList);
         bundle.putString("passenger",passanger);
         bundle.putString("currentGasPrice",currentGasPrice);
         bundle.putString("toDate", String.valueOf(toDate.getText()));
         bundle.putString("fromDate", String.valueOf(fromDate.getText()));
+        bundle.putDouble("budget",budget);
         intent.putExtras(bundle);
         startActivity(intent);
     }
@@ -610,31 +577,31 @@ no_passanger.setText("1");
         @Override
         protected void onPostExecute(ArrayList<PlaceDetailsModel> placeDetailsModelArrayList) {
             if (approach == 0) {
-                Log.d("passanger", String.valueOf(passanger));
-                System.out.println(placeDetailsModelArrayList.size() + "size");
-                for (PlaceDetailsModel e : placeDetailsModelArrayList) {
-                    budgetTotal += e.getBudget();
-                }
-                budgetAverage = budgetTotal / (placeDetailsModelArrayList.size());
-            //    passanger = picker1.getValue();
-               // day = Integer.parseInt(days.getText().toString());
-                Location selected_location = new Location("locationA");
-                selected_location.setLatitude(currentLatitude);
-                selected_location.setLongitude(currentLongitude);
-                System.out.println("currentLatitude" + currentLatitude + currentLongitude);
-                Location near_locations = new Location("locationB");
-                near_locations.setLatitude(Double.parseDouble(placeDetailsModelArrayList.get(0).getLatitude()));
-                near_locations.setLongitude(Double.parseDouble(placeDetailsModelArrayList.get(0).getLongitude()));
-                System.out.println("bluffers Latitude" + Double.parseDouble(placeDetailsModelArrayList.get(0).getLatitude()) + Double.parseDouble(placeDetailsModelArrayList.get(0).getLongitude()));
-                double distance = (selected_location.distanceTo(near_locations)) * 0.00062137;
-                System.out.println("distance" + distance);
-          //     approximateBudget = (distance * 0.30) + (budgetAverage * passanger * day);
-                System.out.println(approximateBudget + "approximateBudget");
-                placeDetailsModelArrayList.removeAll(placeDetailsModelArrayList);
-                budgetTotal = 0;
-                Intent intent = new Intent(getApplicationContext(), WithoutBudget.class);
-                intent.putExtra("approximateBudget", approximateBudget);
-                startActivity(intent);
+//                Log.d("passanger", String.valueOf(passanger));
+//                System.out.println(placeDetailsModelArrayList.size() + "size");
+//                for (PlaceDetailsModel e : placeDetailsModelArrayList) {
+//                    budgetTotal += e.getBudget();
+//                }
+//                budgetAverage = budgetTotal / (placeDetailsModelArrayList.size());
+//            //    passanger = picker1.getValue();
+//               // day = Integer.parseInt(days.getText().toString());
+//                Location selected_location = new Location("locationA");
+//                selected_location.setLatitude(currentLatitude);
+//                selected_location.setLongitude(currentLongitude);
+//                System.out.println("currentLatitude" + currentLatitude + currentLongitude);
+//                Location near_locations = new Location("locationB");
+//                near_locations.setLatitude(Double.parseDouble(placeDetailsModelArrayList.get(0).getLatitude()));
+//                near_locations.setLongitude(Double.parseDouble(placeDetailsModelArrayList.get(0).getLongitude()));
+//                System.out.println("bluffers Latitude" + Double.parseDouble(placeDetailsModelArrayList.get(0).getLatitude()) + Double.parseDouble(placeDetailsModelArrayList.get(0).getLongitude()));
+//                double distance = (selected_location.distanceTo(near_locations)) * 0.00062137;
+//                System.out.println("distance" + distance);
+//          //     approximateBudget = (distance * 0.30) + (budgetAverage * passanger * day);
+//                System.out.println(approximateBudget + "approximateBudget");
+//                placeDetailsModelArrayList.removeAll(placeDetailsModelArrayList);
+//                budgetTotal = 0;
+//                Intent intent = new Intent(getApplicationContext(), WithoutBudget.class);
+//                intent.putExtra("approximateBudget", approximateBudget);
+//                startActivity(intent);
             }
             else{
 
