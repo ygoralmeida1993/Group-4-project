@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".TransportationActivity">
+
+    <Button
+        android:id="@+id/Flight"
+        android:layout_width="300dp"
+        android:layout_height="130dp"
+        android:layout_gravity="center"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="180dp"
+        android:layout_marginEnd="15dp"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/button"
+        android:onClick="withFlight"
+        android:text="Travel by Flight"
+        android:textColor="#ffffff"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <Button
+        android:id="@+id/Car"
+        android:layout_width="300dp"
+        android:layout_centerHorizontal="true"
+        android:textStyle="bold"
+        android:layout_height="130dp"
+        android:background="@drawable/button"
+        android:layout_marginTop="25dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="15dp"
+        android:layout_gravity="center"
+        android:onClick="withCar"
+        android:text="Travel by Car"
+        android:textColor="#ffffff"
+        android:textSize="18sp"/>
+</RelativeLayout>
