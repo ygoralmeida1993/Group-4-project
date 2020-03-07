@@ -31,7 +31,7 @@ public class TransportationActivity extends AppCompatActivity {
     }
 
     private void openCarActivity() {
-        Intent intent=new Intent(this,ExplorerActivity.class);
+        Intent intent=new Intent(this,FlightActivity.class);
         startActivity(intent);
     }
 
