@@ -1,46 +1,42 @@
-package com.example.trip_plan_budget;
+package com.example.trip_plan_budget.model;
+
 import android.os.Parcel;
 import android.os.Parcelable;
 
 public class PlaceDetailsModel implements Parcelable {
-    String placeName;
-    String city;
-    int budget;
-    String longitude;
-    String province;
+    public static final Creator<PlaceDetailsModel> CREATOR = new Creator<PlaceDetailsModel>() {
+        @Override
+        public PlaceDetailsModel createFromParcel(Parcel in) {
+            return new PlaceDetailsModel(in);
+        }
 
-    public String getImage() {
-        return image;
-    }
-
-    public void setImage(String image) {
-        this.image = image;
-    }
-
-    String latitude;
-    String place_type;
-    String image;String placeId;
+        @Override
+        public PlaceDetailsModel[] newArray(int size) {
+            return new PlaceDetailsModel[size];
+        }
+    };
+    private String placeName;
+    private String city;
+    private int budget;
+    private String longitude;
+    private String province;
+    private String latitude;
+    private String place_type;
+    private String image;
+    private String placeId;
 
     public PlaceDetailsModel() {
     }
 
-    public PlaceDetailsModel(int budget, String city, String img, String latitude, String longitude, String placeId, String placename, String place_type,String province) {
+    public PlaceDetailsModel(int budget, String city, String img, String latitude, String longitude, String placeId, String placename, String place_type, String province) {
         this.placeName = placename;
         this.city = city;
         this.budget = budget;
         this.longitude = longitude;
         this.latitude = latitude;
         this.place_type = place_type;
-        this.image=img;
-        this.placeId=placeId;
-        this.province=province;
-    }
-
-    public String getProvince() {
-        return province;
-    }
-
-    public void setProvince(String province) {
+        this.image = img;
+        this.placeId = placeId;
         this.province = province;
     }
 
@@ -51,7 +47,23 @@ public class PlaceDetailsModel implements Parcelable {
         longitude = in.readString();
         latitude = in.readString();
         place_type = in.readString();
-        image=in.readString();
+        image = in.readString();
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public String getProvince() {
+        return province;
+    }
+
+    public void setProvince(String province) {
+        this.province = province;
     }
 
     @Override
@@ -69,18 +81,6 @@ public class PlaceDetailsModel implements Parcelable {
     public int describeContents() {
         return 0;
     }
-
-    public static final Creator<PlaceDetailsModel> CREATOR = new Creator<PlaceDetailsModel>() {
-        @Override
-        public PlaceDetailsModel createFromParcel(Parcel in) {
-            return new PlaceDetailsModel(in);
-        }
-
-        @Override
-        public PlaceDetailsModel[] newArray(int size) {
-            return new PlaceDetailsModel[size];
-        }
-    };
 
     public String getPlacename() {
         return placeName;

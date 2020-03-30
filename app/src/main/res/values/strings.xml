@@ -1,5 +1,5 @@
-<resources>
-    <string name="app_name">TripBudgetCalculator</string>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="app_name">Trip Budget Calculator</string>
     <string name="email">Email Id</string>
     <string name="passowrd">Password</string>
     <string name="forgot">Forgot password?</string>
@@ -41,8 +41,26 @@
         <item>Car</item>
         <item>Flight</item>
         <item>Greyhound</item>
-
     </string-array>
+
     <string name="title_activity_maps">Map</string>
+    <string name="google_sign_in_button_label">Google Sign In Button</string>
+    <string name="email_label">Email</string>
+    <string name="password_label">Password</string>
+    <string name="forgot_password_label">Forgot Password?</string>
+    <string name="log_in_label">Log In</string>
+    <string name="log_out_label">Log Out</string>
+
+    <string name="web_client_id" tools:ignore="TypographyDashes">592729828295-5pnk0c6dgs3vh1dejrviq76f4vehtdgi.apps.googleusercontent.com</string>
+    <string name="places_as_your_budget_label">Places as your budget</string>
+    <string name="amusement_label">AMUSEMENT</string>
+    <string name="hill_station_label">HILL STATION</string>
+    <string name="beaches_label">BEACHES</string>
+    <string name="religious_label">RELIGIOUS</string>
+    <string name="hiking_label">HIKING</string>
+    <string name="historical_label">HISTORICAL</string>
+    <string name="plan_your_budget_label">Plan your Budget</string>
+    <string name="add_label">ADD</string>
+    <string name="cancel_label">Cancel</string>
 
 </resources>

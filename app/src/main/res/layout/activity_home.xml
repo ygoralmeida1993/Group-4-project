@@ -1,38 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".HomeActivity"
     android:layout_gravity="center"
-    android:background="#FFFFFF">
-    <Button
-        android:id="@+id/withoutBudget"
-        android:layout_width="300dp"
-        android:layout_height="130dp"
-        android:layout_marginTop="180dp"
-        android:layout_marginStart="15dp"
-        android:layout_marginEnd="15dp"
-        android:layout_gravity="center"
-        android:onClick="withOutBudget"
-        android:textStyle="bold"
-        android:background="@drawable/button"
-        android:text="Get your budget"
-        android:textColor="#ffffff"
-        android:textSize="18sp"/>
-    <Button
-        android:id="@+id/withBudget"
-        android:layout_width="300dp"
-        android:textStyle="bold"
-        android:layout_height="130dp"
-        android:background="@drawable/button"
-        android:layout_marginTop="25dp"
-        android:layout_marginStart="15dp"
-        android:layout_marginEnd="15dp"
-        android:layout_gravity="center"
-        android:onClick="showAddItemDialog"
-        android:text="Places as your budget"
-        android:textColor="#ffffff"
-        android:textSize="18sp"/>
-</LinearLayout>
+    android:background="#FFFFFF"
+    android:orientation="vertical"
+    tools:context=".activity.car.HomeActivity">
+
+
+    <androidx.cardview.widget.CardView
+        android:elevation="5dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true">
+
+        <RelativeLayout
+            android:layout_width="300dp"
+            android:layout_height="match_parent"
+            android:background="@drawable/card_border"
+            android:paddingHorizontal="28dp"
+            android:paddingTop="28dp"
+            android:paddingBottom="8dp">
+
+            <TextView
+                android:id="@+id/budget_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/plan_your_budget_label"
+                android:textSize="24sp" />
+
+            <EditText
+                android:id="@+id/val_budget"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/budget_label"
+                android:layout_marginTop="20dp"
+                android:inputType="numberDecimal"
+                android:paddingStart="3dp"
+                android:paddingEnd="3dp" />
+
+            <Button
+                android:id="@+id/add_budget"
+                style="?android:attr/borderlessButtonStyle"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/val_budget"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="8dp"
+                android:text="@string/add_label"
+                android:textColor="#F00"
+                android:textSize="20sp" />
+
+            <Button
+                android:id="@+id/cancel_budget"
+                style="?android:attr/borderlessButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@id/add_budget"
+                android:layout_alignParentStart="true"
+                android:layout_marginTop="8dp"
+                android:text="@string/cancel_label"
+                android:textColor="#F00"
+                android:textSize="20sp" />
+        </RelativeLayout>
+    </androidx.cardview.widget.CardView>
+</RelativeLayout>

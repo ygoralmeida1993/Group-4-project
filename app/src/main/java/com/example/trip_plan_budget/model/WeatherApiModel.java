@@ -1,29 +1,9 @@
-package com.example.trip_plan_budget;
+package com.example.trip_plan_budget.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class WeatherApiModel implements Parcelable
-{
-    String icon;
-    double tempMax;
-    double tempMin;
-    double WindSpeed;
-
-    public WeatherApiModel(String icon, double tempMax, double tempMin, double windSpeed) {
-        this.icon = icon;
-        this.tempMax = (tempMax-32)*1.8;//converting in to celcius
-        this.tempMin = (tempMin-32)*1.8;
-        WindSpeed = windSpeed;
-    }
-
-    protected WeatherApiModel(Parcel in) {
-        icon = in.readString();
-        tempMax = in.readDouble();
-        tempMin = in.readDouble();
-        WindSpeed = in.readDouble();
-    }
-
+public class WeatherApiModel implements Parcelable {
     public static final Creator<WeatherApiModel> CREATOR = new Creator<WeatherApiModel>() {
         @Override
         public WeatherApiModel createFromParcel(Parcel in) {
@@ -35,6 +15,24 @@ public class WeatherApiModel implements Parcelable
             return new WeatherApiModel[size];
         }
     };
+    private String icon;
+    private double tempMax;
+    private double tempMin;
+    private double WindSpeed;
+
+    public WeatherApiModel(String icon, double tempMax, double tempMin, double windSpeed) {
+        this.icon = icon;
+        this.tempMax = (tempMax - 32) * 1.8;//converting in to celcius
+        this.tempMin = (tempMin - 32) * 1.8;
+        WindSpeed = windSpeed;
+    }
+
+    protected WeatherApiModel(Parcel in) {
+        icon = in.readString();
+        tempMax = in.readDouble();
+        tempMin = in.readDouble();
+        WindSpeed = in.readDouble();
+    }
 
     public String getIcon() {
         return icon;

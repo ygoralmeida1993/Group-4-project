@@ -1,63 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:card_view="http://schemas.android.com/apk/res-auto"
-    android:padding="16dp"
-    >
+    android:padding="16dp">
+
     <androidx.cardview.widget.CardView
+        android:id="@+id/cv"
         android:layout_width="match_parent"
         android:layout_height="220dp"
         card_view:cardCornerRadius="15dp"
-        card_view:cardElevation="3dp"
-        android:id="@+id/cv"
-        >
+        card_view:cardElevation="3dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:padding="16dp"
             android:gravity="center"
             android:orientation="vertical"
-            >
+            android:padding="16dp">
 
-        <ImageView
-    android:id="@+id/iv"
-    android:layout_width="350dp"
-    android:layout_height="100dp"/>
-    <TextView
-        android:id="@+id/name"
-        android:textSize="18sp"
-        android:textColor="@color/textColor"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+            <ImageView
+                android:id="@+id/iv"
+                android:layout_width="350dp"
+                android:layout_height="100dp" />
 
-        />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:padding="16dp"
-            android:gravity="center"
-            android:orientation="horizontal"
-            >
             <TextView
-                android:id="@+id/price"
-                android:textSize="18sp"
-                android:textColor="@color/textColor"
+                android:id="@+id/name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@color/textColor"
+                android:textSize="18sp"
 
                 />
 
-            <ImageView
-                android:id="@+id/mapicon"
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:padding="16dp">
 
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_marginLeft="150dp"
-                android:background="@drawable/mapicon"/>
-        </LinearLayout>
+                <TextView
+                    android:id="@+id/price"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/textColor"
+                    android:textSize="18sp"
+
+                    />
+
+                <ImageView
+                    android:id="@+id/mapicon"
+
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_marginLeft="150dp"
+                    android:background="@drawable/mapicon" />
+            </LinearLayout>
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 

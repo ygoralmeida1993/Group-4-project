@@ -1,7 +1,17 @@
-package com.example.trip_plan_budget;
+package com.example.trip_plan_budget.model;
 
 public class GasApiModel {
+    private String provinceName;
+    private String gasolinePrice;
+    private String currency;
+
     public GasApiModel() {
+    }
+
+    public GasApiModel(String provinceName, String gasolinePrice, String currency) {
+        this.provinceName = provinceName;
+        this.gasolinePrice = gasolinePrice;
+        this.currency = currency;
     }
 
     public String getProvinceName() {
@@ -27,18 +37,6 @@ public class GasApiModel {
     public void setCurrency(String currency) {
         this.currency = currency;
     }
-
-    String provinceName;
-
-    public GasApiModel(String provinceName, String gasolinePrice, String currency) {
-        this.provinceName = provinceName;
-        this.gasolinePrice = gasolinePrice;
-        this.currency = currency;
-    }
-
-    String gasolinePrice;
-    String currency;
-
 
 
 }

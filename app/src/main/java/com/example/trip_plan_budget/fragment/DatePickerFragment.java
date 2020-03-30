@@ -1,4 +1,4 @@
-package com.example.trip_plan_budget;
+package com.example.trip_plan_budget.fragment;
 
 import android.app.DatePickerDialog;
 import android.app.DialogFragment;

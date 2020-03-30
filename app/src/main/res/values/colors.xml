@@ -5,6 +5,8 @@
     <color name="colorAccent">#F3E5F5</color>
     <color name="background">#FFFFFF</color>
     <color name="signupColor">#066e8a</color>
-    <color name="textColor">#fc4c4e </color>
-    <color name="buttonColor">#fc4c4e </color>
+    <color name="textColor">#fc4c4e</color>
+    <color name="buttonColor">#fc4c4e</color>
+
+    <color name="white">#ffffff</color>
 </resources>

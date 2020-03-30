@@ -1,8 +1,11 @@
-package com.example.trip_plan_budget;
+package com.example.trip_plan_budget.model;
 
 
 public class CarMileageModel {
-    String carType;
+    private String carType;
+    private String carBrand;
+    private String carMake;
+    private double mileage;
 
     public CarMileageModel(String carType, String carBrand, String carMake, double mileage) {
         this.carType = carType;
@@ -10,9 +13,11 @@ public class CarMileageModel {
         this.carMake = carMake;
         this.mileage = mileage;
     }
-public CarMileageModel(){
 
-}
+    public CarMileageModel() {
+
+    }
+
     public String getCarType() {
         return carType;
     }
@@ -44,8 +49,4 @@ public CarMileageModel(){
     public void setMileage(double mileage) {
         this.mileage = mileage;
     }
-
-    String carBrand;
-    String carMake;
-    double mileage;
 }

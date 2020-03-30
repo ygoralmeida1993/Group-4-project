@@ -1,9 +1,8 @@
-package com.example.trip_plan_budget;
+package com.example.trip_plan_budget.activity;
+
 import android.app.DatePickerDialog;
-import android.app.DialogFragment;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -11,23 +10,8 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.Calendar;
-import java.util.Collections;
-
-import android.os.Parcelable;
-import android.text.InputType;
-import android.text.TextUtils;
-import android.text.format.Time;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -37,63 +21,89 @@ import android.widget.ImageButton;
 import android.widget.NumberPicker;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
+
+import com.example.trip_plan_budget.R;
+import com.example.trip_plan_budget.activity.car.CarDetailsActivity;
+import com.example.trip_plan_budget.model.GasApiModel;
+import com.example.trip_plan_budget.model.PlaceDetailsModel;
+import com.example.trip_plan_budget.model.WeatherApiModel;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
+
 import javax.net.ssl.HttpsURLConnection;
-import android.widget.DatePicker;
 
 public class FilterActivity extends AppCompatActivity implements LocationListener {
     private static final String url = "jdbc:mysql://192.168.0.12:3306/trip_plan";
     private static final String user = "root";
     private static final String pass = "";
+    protected boolean gps_enabled, network_enabled;
     ImageButton inc;
-    ImageButton    dec;//for icrement decrement passangers
-    int counter=1;
+    ImageButton dec;//for icrement decrement passangers
+    int counter = 1;
     int approach, placetypeInt;
-    String  placetype, cityName;
+    String placetype, cityName;
     double budget;
-    private NumberPicker picker1;
-    double approximateBudget=0;
+    double approximateBudget = 0;
     EditText days;
     int day;
     String passanger;
     TextView no_passanger;
     Button calculate;
     TextView lat;
-    LocationManager locationManager ;
+    LocationManager locationManager;
 
     AutoCompleteTextView destination;
-    int budgetTotal=0;
+    int budgetTotal = 0;
     DatePickerDialog picker;
     DatabaseReference databasePlaces;
-    private String[] places = {"Scarborough","Toronto","Waterloo","Oshawa"};
-    int budgetAverage=0;
-    protected boolean gps_enabled, network_enabled;
+    int budgetAverage = 0;
     ArrayList<PlaceDetailsModel> placeDetailsModelArrayList;
-    Button fromDate,toDate;
+    Button fromDate, toDate;
     ArrayList<GasApiModel> gasApiModelArrayList;
     ArrayList<WeatherApiModel> weatherApiModelArrayList;
     int people;
-    String currentGasPrice="";
+    String currentGasPrice = "";
     String province;
-    String weatherApiLat="43.642567",weatherApiLong="-79.387054";
+    String weatherApiLat = "43.642567", weatherApiLong = "-79.387054";
+    private NumberPicker picker1;
+    private String[] places = {"Scarborough", "Toronto", "Waterloo", "Oshawa"};
+
+    public static String[] toStringArray(JSONArray array) {
+        if (array == null)
+            return null;
+
+        String[] arr = new String[array.length()];
+        for (int i = 0; i < arr.length; i++) {
+            arr[i] = array.optString(i);
+        }
+        return arr;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,10 +111,10 @@ public class FilterActivity extends AppCompatActivity implements LocationListene
         setContentView(R.layout.activity_filter);
         fromDate = findViewById(R.id.btnDate);
         counter = 1;
-        no_passanger=findViewById(R.id.passanger);
-no_passanger.setText("1");
-        inc = (ImageButton) findViewById(R.id.add);
-        dec = (ImageButton) findViewById(R.id.minus);
+        no_passanger = findViewById(R.id.passanger);
+        no_passanger.setText("1");
+        inc = findViewById(R.id.add);
+        dec = findViewById(R.id.minus);
 
         toDate = findViewById(R.id.btnDateTo);
         TextView date = findViewById(R.id.tvSelectedDate);
@@ -124,11 +134,11 @@ no_passanger.setText("1");
                             }
                         }, 0, 0, 0);
 
-                datePickerDialog = new DatePickerDialog(FilterActivity.this,R.style.DialogTheme,
+                datePickerDialog = new DatePickerDialog(FilterActivity.this, R.style.DialogTheme,
                         new DatePickerDialog.OnDateSetListener() {
                             @Override
                             public void onDateSet(DatePicker datePicker, int year, int month, int day) {
-                                toDate.setText(day + "/" + month + "/" + year);
+                                toDate.setText(String.format("%d/%d/%d", day, month, year));
                             }
                         }, year, month, dayOfMonth);
                 datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis());
@@ -153,7 +163,7 @@ no_passanger.setText("1");
                             }
                         }, 0, 0, 0);
 
-                datePickerDialog = new DatePickerDialog(FilterActivity.this,R.style.DialogTheme,
+                datePickerDialog = new DatePickerDialog(FilterActivity.this, R.style.DialogTheme,
                         new DatePickerDialog.OnDateSetListener() {
                             @Override
                             public void onDateSet(DatePicker datePicker, int year, int month, int day) {
@@ -168,10 +178,10 @@ no_passanger.setText("1");
         });
 
 
-        gasApiModelArrayList=new ArrayList<>();
-        String[] places= { "Scarborough", "Toronto", "Brampton", "North York", "Ottawa", "Hamilton",
-                "London", "Windsor", "Mississauga", "Kitchner", "Markham", "Waterloo" };
-        destination = (AutoCompleteTextView) findViewById(R.id.destination);
+        gasApiModelArrayList = new ArrayList<>();
+        String[] places = {"Scarborough", "Toronto", "Brampton", "North York", "Ottawa", "Hamilton",
+                "London", "Windsor", "Mississauga", "Kitchner", "Markham", "Waterloo"};
+        destination = findViewById(R.id.destination);
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this,
                 android.R.layout.select_dialog_item, places);
         destination.setThreshold(1);
@@ -190,28 +200,28 @@ no_passanger.setText("1");
                     HttpsURLConnection myConnection =
                             (HttpsURLConnection) gasApi.openConnection();
                     myConnection.setRequestProperty("Authorization",
-                            "apikey 6KEEm4JRyC8FxSpJmsaMsI:0kwdnw8HH3NhKlsVOodm4w");
+                            "apikey 2jCG5j0kx7WiwPcVxd9nxy:42NmZvSi4VirCZLImfXWsH");
                     myConnection.setRequestProperty("content-type",
                             "application/json");
-                    Log.d("getResponseCode",""+myConnection.getResponseCode());
+                    Log.d("getResponseCode", "" + myConnection.getResponseCode());
                     if (myConnection.getResponseCode() == 200) {
-                        Log.d("getResponseCode","getResponseCode");
+                        Log.d("getResponseCode", "getResponseCode");
                         InputStream responseBody = myConnection.getInputStream();
-                        String jsonString=convertStreamToString(responseBody);
+                        String jsonString = convertStreamToString(responseBody);
                         JSONObject json = null;
                         try {
                             json = new JSONObject(jsonString);
-                            Log.d("gasApijsonString",jsonString+"");
+                            Log.d("gasApijsonString", jsonString + "");
                             JSONArray array = json.getJSONArray("result");
-                            for(int m=0;m<array.length();m++){
+                            for (int m = 0; m < array.length(); m++) {
                                 JSONObject place = array.getJSONObject(m);
                                 String province = place.getString("name");
                                 String currency = place.getString("currency");
                                 String gasoline = place.getString("gasoline");
-                                GasApiModel response=new GasApiModel(province,gasoline,currency);
+                                GasApiModel response = new GasApiModel(province, gasoline, currency);
                                 gasApiModelArrayList.add(response);
                             }
-                            Log.d("gasApiModelArrayList",gasApiModelArrayList+"");
+                            Log.d("gasApiModelArrayList", gasApiModelArrayList + "");
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -219,7 +229,7 @@ no_passanger.setText("1");
                         responseBody.close();
                     } else {
 
-                        Log.d("value error","error");
+                        Log.d("value error", "error");
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -229,13 +239,13 @@ no_passanger.setText("1");
 
         });
 //weather api
-        weatherApiModelArrayList=new ArrayList<>();
+        weatherApiModelArrayList = new ArrayList<>();
         AsyncTask.execute(new Runnable() {
             @Override
             public void run() {
                 URL weatherApi = null;
                 try {
-                    weatherApi = new URL("https://api.darksky.net/forecast/13e04b25432c5d707a0a3c080d15a5b7/"+weatherApiLat+","+weatherApiLong+"");
+                    weatherApi = new URL("https://api.darksky.net/forecast/13e04b25432c5d707a0a3c080d15a5b7/" + weatherApiLat + "," + weatherApiLong + "");
                 } catch (MalformedURLException e) {
                     Log.d("weatherApi", "error");
                     e.printStackTrace();
@@ -251,8 +261,8 @@ no_passanger.setText("1");
                     Log.d("weatherApi", String.valueOf(myConnection.getResponseCode()));
                     if (myConnection.getResponseCode() == 200) {
                         InputStream responseBody = myConnection.getInputStream();
-                        String jsonString=convertStreamToString(responseBody);
-                        Log.d("jsonstring", String.valueOf(jsonString));
+                        String jsonString = convertStreamToString(responseBody);
+                        Log.d("jsonstring", jsonString);
 
                         JSONObject json = null;
                         try {
@@ -260,22 +270,22 @@ no_passanger.setText("1");
                             JSONObject dailyObject = mainObject.getJSONObject("daily");
                             JSONArray weatherArray = dailyObject.getJSONArray("data");
                             Log.d("daily array", String.valueOf(weatherArray));
-                            for(int m=0;m<weatherArray.length();m++){
+                            for (int m = 0; m < weatherArray.length(); m++) {
                                 JSONObject day = weatherArray.getJSONObject(m);
                                 String icon = day.getString("icon");
                                 Double temperatureMax = Double.valueOf(day.getString("temperatureMax"));
                                 Double temperatureMin = Double.valueOf(day.getString("temperatureMin"));
                                 Double windSpeed = Double.valueOf(day.getString("windSpeed"));
-                                WeatherApiModel response=new WeatherApiModel(icon,temperatureMax,temperatureMin,windSpeed);
+                                WeatherApiModel response = new WeatherApiModel(icon, temperatureMax, temperatureMin, windSpeed);
                                 weatherApiModelArrayList.add(response);
                             }
-                            Log.d("weatherApiModelArray",weatherApiModelArrayList+"");
+                            Log.d("weatherApiModelArray", weatherApiModelArrayList + "");
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
                         myConnection.disconnect();
                     } else {
-                        Log.d("value error","");
+                        Log.d("value error", "");
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -285,16 +295,16 @@ no_passanger.setText("1");
 
         });
 
-        databasePlaces= FirebaseDatabase.getInstance().getReference("places");
+        databasePlaces = FirebaseDatabase.getInstance().getReference("places");
 
-      //  days = (EditText) this.findViewById(R.id.noOfDays);
-       // picker1 = (NumberPicker) findViewById(R.id.numberpicker_main_picker);
+        //  days = (EditText) this.findViewById(R.id.noOfDays);
+        // picker1 = (NumberPicker) findViewById(R.id.numberpicker_main_picker);
         //passangers = (EditText) this.findViewById(R.id.noOfPassangers);
         placeDetailsModelArrayList = new ArrayList<PlaceDetailsModel>();
         // lat=(TextView) this.findViewById(R.id.lat);
-        calculate=(Button)findViewById(R.id.calculate);
-     //   picker1.setMaxValue(10);
-      //  picker1.setMinValue(1);
+        calculate = findViewById(R.id.calculate);
+        //   picker1.setMaxValue(10);
+        //  picker1.setMinValue(1);
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
         approach = bundle.getInt("approach");
@@ -327,17 +337,6 @@ no_passanger.setText("1");
 //        });
     }
 
-    public static String[] toStringArray(JSONArray array) {
-        if(array==null)
-            return null;
-
-        String[] arr=new String[array.length()];
-        for(int i=0; i<arr.length; i++) {
-            arr[i]=array.optString(i);
-        }
-        return arr;
-    }
-
     private String convertStreamToString(InputStream is) {
 
         BufferedReader reader = new BufferedReader(
@@ -360,6 +359,7 @@ no_passanger.setText("1");
         }
         return sb.toString();
     }
+
     @Override
     protected void onStart() {
         super.onStart();
@@ -375,9 +375,9 @@ no_passanger.setText("1");
                     placeDetailsModelArrayList.add(places);
                 }
                 Log.d("places from database", String.valueOf(placeDetailsModelArrayList));
-               weatherApiLat=placeDetailsModelArrayList.get(0).getLatitude();
-               weatherApiLong=placeDetailsModelArrayList.get(0).getLongitude();
-               province=placeDetailsModelArrayList.get(0).getProvince();
+                weatherApiLat = placeDetailsModelArrayList.get(0).getLatitude();
+                weatherApiLong = placeDetailsModelArrayList.get(0).getLongitude();
+                province = placeDetailsModelArrayList.get(0).getProvince();
             }
 
             @Override
@@ -386,6 +386,7 @@ no_passanger.setText("1");
             }
         });
     }
+
     private double distanceBetween(double lat1, double lon1, double lat2, double lon2) {
         double theta = lon1 - lon2;
         double dist = Math.sin(deg2rad(lat1))
@@ -395,26 +396,26 @@ no_passanger.setText("1");
                 * Math.cos(deg2rad(theta));
         dist = Math.acos(dist);
         dist = dist * 180.0 / Math.PI;
-        dist = dist * 60 * 1.1515*1000;
+        dist = dist * 60 * 1.1515 * 1000;
         return (dist);
     }
 
     private double deg2rad(double deg) {
         return (deg * Math.PI / 180.0);
     }
+
     void getLocation() {
         try {
             locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
             locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 5000, 5, this);
-        }
-        catch(SecurityException e) {
+        } catch (SecurityException e) {
             e.printStackTrace();
         }
     }
 
     //main method for all calculations
     public void CalculateBudget(View view) {
-        ArrayList<PlaceDetailsModel> placeDetailsList=new ArrayList<>();
+        ArrayList<PlaceDetailsModel> placeDetailsList = new ArrayList<>();
         if (destination.getText().toString().isEmpty()) {
             destination.setError("Please enter destination");
             return;
@@ -428,82 +429,83 @@ no_passanger.setText("1");
             return;
         }
         //fetching gas price
-        for(int j=0;j<gasApiModelArrayList.size();j++){
-            if(gasApiModelArrayList.get(j).getProvinceName().equals(province)){
-                currentGasPrice=gasApiModelArrayList.get(j).getGasolinePrice();
+        for (int j = 0; j < gasApiModelArrayList.size(); j++) {
+            if (gasApiModelArrayList.get(j).getProvinceName().equals(province)) {
+                currentGasPrice = gasApiModelArrayList.get(j).getGasolinePrice();
             }
         }
-        cityName=destination.getText().toString().toLowerCase();
+        cityName = destination.getText().toString().toLowerCase();
         //new code with firebase
-       // passanger = picker1.getValue();//for passanger
-        passanger= (String) no_passanger.getText();
-        String city=cityName.substring(0, 1).toUpperCase()+ cityName.substring(1);
-        String placeType=placetype.substring(0, 1).toUpperCase()+ placetype.substring(1);
-        Log.d("data",city+placeType+"   "+placeDetailsModelArrayList.get(0).getCity());
-        for (int i = 0; i < placeDetailsModelArrayList.size(); i++){
-            if(placeDetailsModelArrayList.get(i).getCity().equals(city)&&
-                    placeDetailsModelArrayList.get(i).getPlace_type().equals( placeType)){
-                Log.d("inside","inside");
-            placeDetailsList.add(placeDetailsModelArrayList.get(i));
+        // passanger = picker1.getValue();//for passanger
+        passanger = (String) no_passanger.getText();
+        String city = cityName.substring(0, 1).toUpperCase() + cityName.substring(1);
+        String placeType = placetype.substring(0, 1).toUpperCase() + placetype.substring(1);
+        Log.d("data", city + placeType + "   " + placeDetailsModelArrayList.get(0).getCity());
+        for (int i = 0; i < placeDetailsModelArrayList.size(); i++) {
+            if (placeDetailsModelArrayList.get(i).getCity().equals(city) &&
+                    placeDetailsModelArrayList.get(i).getPlace_type().equals(placeType)) {
+                Log.d("inside", "inside");
+                placeDetailsList.add(placeDetailsModelArrayList.get(i));
                 Log.d("inside", String.valueOf(placeDetailsList));
             }
         }
         placeDetailsModelArrayList.clear();
-       // placeDetailsModelArrayList.removeAll(placeDetailsModelArrayList);
+        // placeDetailsModelArrayList.removeAll(placeDetailsModelArrayList);
         placeDetailsModelArrayList.addAll(placeDetailsList);
         Collections.copy(placeDetailsModelArrayList, placeDetailsList);
         Log.d("places after filtering", String.valueOf(placeDetailsModelArrayList));
         // passanger = Integer.parseInt(passangers.getText().toString());
-      //  day = Integer.parseInt(days.getText().toString());//for days
-        day=2;
+        //  day = Integer.parseInt(days.getText().toString());//for days
+        day = 2;
 
 
-       // placeDetailsModelArrayList.removeAll(placeDetailsModelArrayList);
+        // placeDetailsModelArrayList.removeAll(placeDetailsModelArrayList);
         Intent intent = new Intent(getApplicationContext(), CarDetailsActivity.class);
         Bundle bundle = new Bundle();
-      //  Log.d("places before intent", String.valueOf(l1));
+        //  Log.d("places before intent", String.valueOf(l1));
         bundle.putParcelableArrayList("placeDetailsModelArrayList", placeDetailsModelArrayList);
-        bundle.putParcelableArrayList("weatherApiModelArrayList",weatherApiModelArrayList);
-        bundle.putString("passenger",passanger);
-        bundle.putString("currentGasPrice",currentGasPrice);
+        bundle.putParcelableArrayList("weatherApiModelArrayList", weatherApiModelArrayList);
+        bundle.putString("passenger", passanger);
+        bundle.putString("currentGasPrice", currentGasPrice);
         bundle.putString("toDate", String.valueOf(toDate.getText()));
         bundle.putString("fromDate", String.valueOf(fromDate.getText()));
-        bundle.putDouble("budget",budget);
+        bundle.putDouble("budget", budget);
         intent.putExtras(bundle);
         startActivity(intent);
     }
-    public void onClickIncDec(View v)
-    {
+
+    public void onClickIncDec(View v) {
         boolean showText = false;
 
-    switch (v.getId()) {
-        case R.id.add:
-            if(counter<7){
-            counter++;}
-            showText = true;
-            break;
-        case R.id.minus:
-            if(counter>1){
-            counter--;}
-            showText = true;
-            break;
+        switch (v.getId()) {
+            case R.id.add:
+                if (counter < 7) {
+                    counter++;
+                }
+                showText = true;
+                break;
+            case R.id.minus:
+                if (counter > 1) {
+                    counter--;
+                }
+                showText = true;
+                break;
 
 
-}
-        if(showText)
-            no_passanger.setText(""+ counter);
+        }
+        if (showText)
+            no_passanger.setText("" + counter);
     }
 
     @Override
     public void onLocationChanged(Location location) {
         lat.setText("Latitude: " + location.getLatitude() + "\n Longitude: " + location.getLongitude());
-        Toast.makeText(getApplicationContext(),"inn",Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(), "inn", Toast.LENGTH_SHORT).show();
 
         try {
             Geocoder geocoder = new Geocoder(this, Locale.getDefault());
             List<Address> addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
-        }catch(Exception e)
-        {
+        } catch (Exception e) {
 
         }
 
@@ -527,27 +529,29 @@ no_passanger.setText("1");
 
     private class ConnectMySql extends AsyncTask<String, Void, ArrayList<PlaceDetailsModel>> {
         String res = "";
-        boolean success=false;
+        boolean success = false;
+
         //String place="Toronto";
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
         }
+
         @Override
         protected ArrayList<PlaceDetailsModel> doInBackground(String... params) {
             try {
                 Class.forName("com.mysql.jdbc.Driver");
                 Connection con = DriverManager.getConnection(url, user, pass);
-                String longitute,latitude,city,place,type,image = "";
-                int budget=0;
+                String longitute, latitude, city, place, type, image = "";
+                int budget = 0;
                 Statement st = con.createStatement();
-                System.out.println(cityName+placetype);
+                System.out.println(cityName + placetype);
 
 
                 ResultSet rs = st.executeQuery("select * from place_details where city='" + cityName + "'and place_type='" + placetype + "'");
                 ResultSetMetaData rsmd = rs.getMetaData();
                 while (rs.next()) {
-                    longitute = rs.getString("longitude").toString() + "\n";
+                    longitute = rs.getString("longitude") + "\n";
                     // int i = rs.getInt("userid");
                     latitude = rs.getString("latitude");
                     place = rs.getString("placename");
@@ -555,25 +559,25 @@ no_passanger.setText("1");
                     budget = Integer.parseInt(rs.getString("budget"));
                     type = rs.getString("place_type");
                     city = rs.getString("city");
-                    image=rs.getString("images");
-                    Log.d("test1",image);
-                    Log.d("test2",type);
+                    image = rs.getString("images");
+                    Log.d("test1", image);
+                    Log.d("test2", type);
                     //Assuming you have a user object
                     //PlaceDetailsModel placeDetailsModel = new PlaceDetailsModel(place, city, budget, longitute, latitude, type,image);
-                   //placeDetailsModelArrayList.add(placeDetailsModel);
+                    //placeDetailsModelArrayList.add(placeDetailsModel);
 
                     //queery for getting places within budget
                 }
                 // System.out.println(longitute);
                 //  System.out.println("Result"+placeDetailsModelArrayList);
                 //res = result;
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 e.printStackTrace();
                 //res = e.toString();
             }
             return placeDetailsModelArrayList;
         }
+
         @Override
         protected void onPostExecute(ArrayList<PlaceDetailsModel> placeDetailsModelArrayList) {
             if (approach == 0) {
@@ -602,8 +606,7 @@ no_passanger.setText("1");
 //                Intent intent = new Intent(getApplicationContext(), WithoutBudget.class);
 //                intent.putExtra("approximateBudget", approximateBudget);
 //                startActivity(intent);
-            }
-            else{
+            } else {
 
             }
         }

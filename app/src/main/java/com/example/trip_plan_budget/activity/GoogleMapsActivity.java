@@ -1,4 +1,5 @@
-package com.example.trip_plan_budget;
+package com.example.trip_plan_budget.activity;
+
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -7,9 +8,12 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
+
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
+
+import com.example.trip_plan_budget.R;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -20,11 +24,12 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 public class GoogleMapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
-    private GoogleMap mMap;
     double currentLatitude;
     double currentLongitude;
-    double longitute,latitude;
+    double longitute, latitude;
     TextView distance;
+    private GoogleMap mMap;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,7 +41,7 @@ public class GoogleMapsActivity extends FragmentActivity implements OnMapReadyCa
         latitude = bundle.getDouble("lat");
         Log.d("latlong", String.valueOf(longitute));
         Log.d("latlong", String.valueOf(latitude));
-        distance = (TextView) this.findViewById(R.id.distance);
+        distance = this.findViewById(R.id.distance);
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
@@ -46,7 +51,7 @@ public class GoogleMapsActivity extends FragmentActivity implements OnMapReadyCa
 
         }
 
-        LocationManager lm = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+        LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
         currentLongitude = location.getLongitude();
         currentLatitude = location.getLatitude();
@@ -58,9 +63,10 @@ public class GoogleMapsActivity extends FragmentActivity implements OnMapReadyCa
         near_locations.setLongitude(longitute);
         double dis = (selected_location.distanceTo(near_locations)) * 0.00062137;
         double roundOff = Math.round(dis * 100.0) / 100.0;
-        String dist= String.valueOf(roundOff);
-        distance.setText("Distance: "+dist+" miles");
+        String dist = String.valueOf(roundOff);
+        distance.setText(String.format("Distance: %s miles", dist));
     }
+
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
