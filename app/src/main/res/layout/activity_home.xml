@@ -3,66 +3,51 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_gravity="center"
-    android:background="#FFFFFF"
-    android:orientation="vertical"
-    tools:context=".activity.car.HomeActivity">
+    tools:context=".activity.HomeActivity">
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/plans_recyclerview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
-    <androidx.cardview.widget.CardView
-        android:elevation="5dp"
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_add_plan"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true">
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="end|bottom"
+        android:layout_margin="20dp"
+        android:contentDescription="@string/create_new_plan_label"
+        android:elevation="5dp"
+        android:src="@drawable/ic_fab_add" />
 
-        <RelativeLayout
-            android:layout_width="300dp"
-            android:layout_height="match_parent"
-            android:background="@drawable/card_border"
-            android:paddingHorizontal="28dp"
-            android:paddingTop="28dp"
-            android:paddingBottom="8dp">
+    <LinearLayout
+        android:id="@+id/empty_plans_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:orientation="vertical"
+        android:visibility="gone"
+        tools:visibility="visible">
 
-            <TextView
-                android:id="@+id/budget_label"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/plan_your_budget_label"
-                android:textSize="24sp" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="@string/no_plans_found_label"
+            android:textColor="@color/buttonColor"
+            android:textSize="32sp" />
 
-            <EditText
-                android:id="@+id/val_budget"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/budget_label"
-                android:layout_marginTop="20dp"
-                android:inputType="numberDecimal"
-                android:paddingStart="3dp"
-                android:paddingEnd="3dp" />
-
-            <Button
-                android:id="@+id/add_budget"
-                style="?android:attr/borderlessButtonStyle"
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/val_budget"
-                android:layout_alignParentEnd="true"
-                android:layout_marginTop="8dp"
-                android:text="@string/add_label"
-                android:textColor="#F00"
-                android:textSize="20sp" />
-
-            <Button
-                android:id="@+id/cancel_budget"
-                style="?android:attr/borderlessButtonStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignBaseline="@id/add_budget"
-                android:layout_alignParentStart="true"
-                android:layout_marginTop="8dp"
-                android:text="@string/cancel_label"
-                android:textColor="#F00"
-                android:textSize="20sp" />
-        </RelativeLayout>
-    </androidx.cardview.widget.CardView>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="5dp"
+            android:gravity="center"
+            android:text="@string/add_new_plane_action"
+            android:textColor="#5d5d5d"
+            android:textSize="20sp" />
+    </LinearLayout>
 </RelativeLayout>

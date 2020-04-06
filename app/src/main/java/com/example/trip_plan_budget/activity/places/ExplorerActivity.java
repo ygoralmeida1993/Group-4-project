@@ -8,7 +8,7 @@ import android.widget.SearchView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.trip_plan_budget.R;
-import com.example.trip_plan_budget.activity.FilterActivity;
+import com.example.trip_plan_budget.activity.car.FilterActivity;
 
 public class ExplorerActivity extends AppCompatActivity {
     String budget;

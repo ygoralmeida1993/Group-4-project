@@ -13,13 +13,17 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.trip_plan_budget.R;
-import com.example.trip_plan_budget.activity.TransportationActivity;
+import com.example.trip_plan_budget.activity.HomeActivity;
+import com.example.trip_plan_budget.model.UserModel;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class SignUpActivity extends AppCompatActivity {
     EditText emailId;
@@ -67,9 +71,7 @@ public class SignUpActivity extends AppCompatActivity {
                                 if (!task.isSuccessful()) {
                                     Log.d("failed", "error");
                                 } else {
-                                    Intent intent = new Intent(getApplicationContext(), TransportationActivity.class);
-                                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                    startActivity(intent);
+                                    createDatabaseEntry(task.getResult().getUser().getUid(), email);
                                 }
                             }
                         });
@@ -86,5 +88,39 @@ public class SignUpActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         progressBar.setVisibility(View.GONE);
+    }
+
+    private void createDatabaseEntry(String uid, String email) {
+        DatabaseReference database = FirebaseDatabase.getInstance().getReference("users");
+        database.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (!dataSnapshot.hasChild(uid)) {
+                    UserModel user = new UserModel();
+                    user.setEmail(email);
+                    database.child(uid).setValue(user).addOnCompleteListener(task -> {
+                        if (task.isSuccessful())
+                            startHomeActivity(user);
+                    });
+                } else {
+                    UserModel user = dataSnapshot.child(uid).getValue(UserModel.class);
+                    startHomeActivity(user);
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+    }
+
+    private void startHomeActivity(UserModel userModel) {
+        Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        intent.putExtra("user", userModel);
+        startActivity(intent);
     }
 }

@@ -1,24 +1,34 @@
 package com.example.trip_plan_budget.activity.flight;
 
 import android.os.Bundle;
-import android.widget.CheckBox;
-import android.widget.ImageView;
+import android.util.Log;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
 import com.example.trip_plan_budget.R;
+import com.example.trip_plan_budget.model.AirportModel;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class FlightActivity extends AppCompatActivity {
-    TextView fromIATA, fromCity;
-    TextView toIATA, toCity;
-    CardView from, to;
-    ImageView swapIATA;
+    private static final String TAG = "FlightActivity";
+    private TextView fromIATA, fromCity;
+    private TextView toIATA, toCity;
+    private CardView from, to;
+    private TextView adult, child, infant;
 
-    CheckBox roundTrip;
-
-    TextView adult, child, infant;
+    private DatabaseReference database;
+    private List<AirportModel> airports;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,8 +37,27 @@ public class FlightActivity extends AppCompatActivity {
 
         initRoute();
         initOptions();
-        initMisc();
 
+        initDatabase();
+    }
+
+    private void initDatabase() {
+        airports = new ArrayList<>();
+        database = FirebaseDatabase.getInstance().getReference("airports");
+        database.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    airports.add(snapshot.getValue(AirportModel.class));
+                }
+                Log.v(TAG, airports.size() + "");
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
 
@@ -98,11 +127,10 @@ public class FlightActivity extends AppCompatActivity {
                 adult.setText(val + "");
             }
         });
-    }
 
-    private void initMisc() {
         findViewById(R.id.btn_next).setOnClickListener(view -> validate());
     }
+
 
     private void validate() {
 

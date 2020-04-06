@@ -1,4 +1,4 @@
-package com.example.trip_plan_budget.activity;
+package com.example.trip_plan_budget.activity.car;
 
 import android.app.DatePickerDialog;
 import android.content.Context;
@@ -25,7 +25,6 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.trip_plan_budget.R;
-import com.example.trip_plan_budget.activity.car.CarDetailsActivity;
 import com.example.trip_plan_budget.model.GasApiModel;
 import com.example.trip_plan_budget.model.PlaceDetailsModel;
 import com.example.trip_plan_budget.model.WeatherApiModel;

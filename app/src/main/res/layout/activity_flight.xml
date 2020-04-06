@@ -41,19 +41,20 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
                         android:layout_marginTop="25dp"
-                        android:text="DEX"
                         android:textColor="@color/white"
-                        android:textSize="36sp" />
+                        android:textSize="36sp"
+                        tools:text="DEX" />
 
                     <TextView
                         android:id="@+id/from_city"
+                        android:gravity="center"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
                         android:layout_marginTop="5dp"
-                        android:text="Berlin"
                         android:textColor="@color/white"
-                        android:textSize="18sp" />
+                        android:textSize="18sp"
+                        tools:text="Berlin" />
 
                     <ImageView
                         android:layout_width="wrap_content"
@@ -101,17 +102,18 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
                         android:layout_marginTop="25dp"
-                        android:text="DEX"
+                        tools:text="DEX"
                         android:textColor="@color/white"
                         android:textSize="36sp" />
 
                     <TextView
+                        android:gravity="center"
                         android:id="@+id/to_city"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
                         android:layout_marginTop="5dp"
-                        android:text="Berlin"
+                        tools:text="Berlin"
                         android:textColor="@color/white"
                         android:textSize="18sp" />
 

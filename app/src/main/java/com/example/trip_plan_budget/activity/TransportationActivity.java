@@ -11,7 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.trip_plan_budget.R;
 import com.example.trip_plan_budget.activity.auth.LoginActivity;
-import com.example.trip_plan_budget.activity.car.HomeActivity;
+import com.example.trip_plan_budget.activity.car.CarBudgetActivity;
 import com.example.trip_plan_budget.activity.flight.FlightActivity;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -33,7 +33,7 @@ public class TransportationActivity extends AppCompatActivity {
     }
 
     private void openCarActivity() {
-        Intent intent = new Intent(this, HomeActivity.class);
+        Intent intent = new Intent(this, CarBudgetActivity.class);
         startActivity(intent);
     }
 

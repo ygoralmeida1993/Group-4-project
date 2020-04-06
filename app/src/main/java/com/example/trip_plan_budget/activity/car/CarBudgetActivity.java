@@ -13,7 +13,7 @@ import com.example.trip_plan_budget.R;
 import com.example.trip_plan_budget.activity.places.ExplorerActivity;
 
 
-public class HomeActivity extends AppCompatActivity {
+public class CarBudgetActivity extends AppCompatActivity {
     //    Button b1, b2;
     boolean approach;
     EditText budgetText;
@@ -21,7 +21,7 @@ public class HomeActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home);
+        setContentView(R.layout.activity_car_budget);
 //        b1 = this.findViewById(R.id.withBudget);
 //        b2 = this.findViewById(R.id.withoutBudget);
 

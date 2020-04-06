@@ -25,7 +25,6 @@ public class FlightModel implements Parcelable {
     private boolean roundTrip;
     private FlightClass flightClass;
     private Date to, from;
-
     public FlightModel() {
     }
 
