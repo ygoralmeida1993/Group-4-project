@@ -36,6 +36,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
+
 public class LoginActivity extends AppCompatActivity {
     private static final int RC_SIGN_IN = 100;
     private static final String TAG = "LoginActivity";
@@ -120,10 +122,10 @@ public class LoginActivity extends AppCompatActivity {
         firebaseAuth.addAuthStateListener(authStateListener);
     }
 
-    void startActivity(UserModel userModel) {
+    void startActivity() {
         Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        intent.putExtra("user", userModel);
+        mProgress.cancel();
         startActivity(intent);
     }
 
@@ -184,14 +186,15 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.hasChild(firebaseUser.getUid())) {
-                    startActivity(dataSnapshot.child(firebaseUser.getUid()).getValue(UserModel.class));
+                    startActivity();
                 } else {
                     UserModel user = new UserModel();
                     user.setEmail(firebaseUser.getEmail());
+                    user.setPlans(new ArrayList<>());
                     database.child(firebaseUser.getUid()).setValue(user)
                             .addOnCompleteListener(task ->
                             {
-                                if (task.isSuccessful()) startActivity(user);
+                                if (task.isSuccessful()) startActivity();
                             });
                 }
             }

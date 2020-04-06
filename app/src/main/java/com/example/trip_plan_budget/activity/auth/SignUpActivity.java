@@ -25,6 +25,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
+
 public class SignUpActivity extends AppCompatActivity {
     EditText emailId;
     EditText password;
@@ -98,13 +100,13 @@ public class SignUpActivity extends AppCompatActivity {
                 if (!dataSnapshot.hasChild(uid)) {
                     UserModel user = new UserModel();
                     user.setEmail(email);
+                    user.setPlans(new ArrayList<>());
                     database.child(uid).setValue(user).addOnCompleteListener(task -> {
                         if (task.isSuccessful())
-                            startHomeActivity(user);
+                            startHomeActivity();
                     });
                 } else {
-                    UserModel user = dataSnapshot.child(uid).getValue(UserModel.class);
-                    startHomeActivity(user);
+                    startHomeActivity();
                 }
 
             }
@@ -117,10 +119,9 @@ public class SignUpActivity extends AppCompatActivity {
 
     }
 
-    private void startHomeActivity(UserModel userModel) {
+    private void startHomeActivity() {
         Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        intent.putExtra("user", userModel);
         startActivity(intent);
     }
 }

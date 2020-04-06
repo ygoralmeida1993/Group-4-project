@@ -1,7 +1,6 @@
 package com.example.trip_plan_budget.activity.flight;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -17,18 +16,21 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.List;
+
+import ir.mirrajabi.searchdialog.SimpleSearchDialogCompat;
+import ir.mirrajabi.searchdialog.core.SearchResultListener;
 
 
 public class FlightActivity extends AppCompatActivity {
     private static final String TAG = "FlightActivity";
     private TextView fromIATA, fromCity;
     private TextView toIATA, toCity;
-    private CardView from, to;
+    private CardView fromCard, toCard;
     private TextView adult, child, infant;
 
     private DatabaseReference database;
-    private List<AirportModel> airports;
+    private ArrayList<AirportModel> airports;
+    private AirportModel to, from;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,13 +46,14 @@ public class FlightActivity extends AppCompatActivity {
     private void initDatabase() {
         airports = new ArrayList<>();
         database = FirebaseDatabase.getInstance().getReference("airports");
-        database.addValueEventListener(new ValueEventListener() {
+        database.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     airports.add(snapshot.getValue(AirportModel.class));
                 }
-                Log.v(TAG, airports.size() + "");
+                setDeparturePoint(airports.get(0));
+                setLandingPoint(airports.get(1));
             }
 
             @Override
@@ -60,18 +63,51 @@ public class FlightActivity extends AppCompatActivity {
         });
     }
 
+    private void setLandingPoint(AirportModel model) {
+        to = model;
+        toCity.setText(to.getPlaceName());
+        toIATA.setText(to.getPlaceId().split("-")[0]);
+    }
+
+    private void setDeparturePoint(AirportModel model) {
+        from = model;
+        fromCity.setText(from.getPlaceName());
+        fromIATA.setText(from.getPlaceId().split("-")[0]);
+    }
 
     private void initRoute() {
         fromIATA = findViewById(R.id.from_iata);
         fromCity = findViewById(R.id.from_city);
-        from = findViewById(R.id.from_card);
+        fromCard = findViewById(R.id.from_card);
+        fromCard.setOnClickListener(view -> {
+            if (airports != null) {
+                new SimpleSearchDialogCompat(FlightActivity.this, "Search...",
+                        "Select Airport?", null, airports,
+                        (SearchResultListener<AirportModel>) (dialog, item, position) -> {
+                            setDeparturePoint(item);
+                            dialog.dismiss();
+                        }).show();
+            }
+        });
 
         toIATA = findViewById(R.id.to_iata);
         toCity = findViewById(R.id.to_city);
-        to = findViewById(R.id.to_card);
+        toCard = findViewById(R.id.to_card);
+        toCard.setOnClickListener(view -> {
+            if (airports != null) {
+                new SimpleSearchDialogCompat(FlightActivity.this, "Search...",
+                        "Select Airport?", null, airports,
+                        (SearchResultListener<AirportModel>) (dialog, item, position) -> {
+                            setLandingPoint(item);
+                            dialog.dismiss();
+                        }).show();
+            }
+        });
 
         findViewById(R.id.swap_iata).setOnClickListener(v -> {
-
+            AirportModel temp = to;
+            setDeparturePoint(from);
+            setLandingPoint(temp);
         });
     }
 
