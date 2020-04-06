@@ -62,5 +62,12 @@
     <string name="plan_your_budget_label">Plan your Budget</string>
     <string name="add_label">ADD</string>
     <string name="cancel_label">Cancel</string>
+    <string name="round_trip_label">ROUND TRIP</string>
+    <string name="choose_class_label">Choose Class</string>
+    <string name="economy_label">Economy</string>
+    <string name="premium_economy_label">Premium Eco</string>
+    <string name="business_label">Business</string>
+    <string name="first_class_label">First Class</string>
+    <string name="next_label"><![CDATA[Next >]]></string>
 
 </resources>
