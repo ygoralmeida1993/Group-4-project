@@ -4,15 +4,19 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.example.trip_plan_budget.enumeration.FlightClass;
+import com.example.trip_plan_budget.enumeration.PassengerType;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 public class FlightModel implements Parcelable {
-    public static final Parcelable.Creator<FlightModel> CREATOR = new Parcelable.Creator<FlightModel>() {
+
+    private AirportModel departure, landing;
+    public static final Creator<FlightModel> CREATOR = new Creator<FlightModel>() {
         @Override
-        public FlightModel createFromParcel(Parcel source) {
-            return new FlightModel(source);
+        public FlightModel createFromParcel(Parcel in) {
+            return new FlightModel(in);
         }
 
         @Override
@@ -20,32 +24,33 @@ public class FlightModel implements Parcelable {
             return new FlightModel[size];
         }
     };
-    private AirportModel departure, landing;
-    private List<FlightPassengerModel> passengers;
     private boolean roundTrip;
+    private HashMap<PassengerType, List<FlightPassengerModel>> passengers;
     private FlightClass flightClass;
     private Date to, from;
+
     public FlightModel() {
     }
 
-    public FlightModel(AirportModel departure, AirportModel landing, boolean roundTrip, FlightClass flightClass) {
+    private int adults, infants, children;
+
+    public FlightModel(AirportModel departure, AirportModel landing, boolean roundTrip, int adults, int infants, int children, FlightClass flightClass) {
         this.departure = departure;
         this.landing = landing;
         this.roundTrip = roundTrip;
+        this.adults = adults;
+        this.infants = infants;
+        this.children = children;
         this.flightClass = flightClass;
     }
 
     protected FlightModel(Parcel in) {
-        this.departure = in.readParcelable(AirportModel.class.getClassLoader());
-        this.landing = in.readParcelable(AirportModel.class.getClassLoader());
-        this.passengers = in.createTypedArrayList(FlightPassengerModel.CREATOR);
-        this.roundTrip = in.readByte() != 0;
-        int tmpFlightClass = in.readInt();
-        this.flightClass = tmpFlightClass == -1 ? null : FlightClass.values()[tmpFlightClass];
-        long tmpTo = in.readLong();
-        this.to = tmpTo == -1 ? null : new Date(tmpTo);
-        long tmpFrom = in.readLong();
-        this.from = tmpFrom == -1 ? null : new Date(tmpFrom);
+        departure = in.readParcelable(AirportModel.class.getClassLoader());
+        landing = in.readParcelable(AirportModel.class.getClassLoader());
+        roundTrip = in.readByte() != 0;
+        adults = in.readInt();
+        infants = in.readInt();
+        children = in.readInt();
     }
 
     public AirportModel getDeparture() {
@@ -64,11 +69,11 @@ public class FlightModel implements Parcelable {
         this.landing = landing;
     }
 
-    public List<FlightPassengerModel> getPassengers() {
+    public HashMap<PassengerType, List<FlightPassengerModel>> getPassengers() {
         return passengers;
     }
 
-    public void setPassengers(List<FlightPassengerModel> passengers) {
+    public void setPassengers(HashMap<PassengerType, List<FlightPassengerModel>> passengers) {
         this.passengers = passengers;
     }
 
@@ -78,6 +83,30 @@ public class FlightModel implements Parcelable {
 
     public void setRoundTrip(boolean roundTrip) {
         this.roundTrip = roundTrip;
+    }
+
+    public int getAdults() {
+        return adults;
+    }
+
+    public void setAdults(int adults) {
+        this.adults = adults;
+    }
+
+    public int getInfants() {
+        return infants;
+    }
+
+    public void setInfants(int infants) {
+        this.infants = infants;
+    }
+
+    public int getChildren() {
+        return children;
+    }
+
+    public void setChildren(int children) {
+        this.children = children;
     }
 
     public FlightClass getFlightClass() {
@@ -111,12 +140,11 @@ public class FlightModel implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeParcelable(this.departure, flags);
-        dest.writeParcelable(this.landing, flags);
-        dest.writeTypedList(this.passengers);
-        dest.writeByte(this.roundTrip ? (byte) 1 : (byte) 0);
-        dest.writeInt(this.flightClass == null ? -1 : this.flightClass.ordinal());
-        dest.writeLong(this.to != null ? this.to.getTime() : -1);
-        dest.writeLong(this.from != null ? this.from.getTime() : -1);
+        dest.writeParcelable(departure, flags);
+        dest.writeParcelable(landing, flags);
+        dest.writeByte((byte) (roundTrip ? 1 : 0));
+        dest.writeInt(adults);
+        dest.writeInt(infants);
+        dest.writeInt(children);
     }
 }

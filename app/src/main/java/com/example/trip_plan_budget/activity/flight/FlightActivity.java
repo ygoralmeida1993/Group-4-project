@@ -1,6 +1,8 @@
 package com.example.trip_plan_budget.activity.flight;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.widget.CheckBox;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -8,7 +10,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
 import com.example.trip_plan_budget.R;
+import com.example.trip_plan_budget.enumeration.FlightClass;
 import com.example.trip_plan_budget.model.AirportModel;
+import com.example.trip_plan_budget.model.FlightModel;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -27,6 +31,7 @@ public class FlightActivity extends AppCompatActivity {
     private TextView toIATA, toCity;
     private CardView fromCard, toCard;
     private TextView adult, child, infant;
+    private CheckBox roundTrip;
 
     private DatabaseReference database;
     private ArrayList<AirportModel> airports;
@@ -76,6 +81,8 @@ public class FlightActivity extends AppCompatActivity {
     }
 
     private void initRoute() {
+        roundTrip = findViewById(R.id.round_trip);
+
         fromIATA = findViewById(R.id.from_iata);
         fromCity = findViewById(R.id.from_city);
         fromCard = findViewById(R.id.from_card);
@@ -169,6 +176,19 @@ public class FlightActivity extends AppCompatActivity {
 
 
     private void validate() {
-
+        int a = Integer.parseInt(adult.getText().toString()),
+                c = Integer.parseInt(child.getText().toString()),
+                i = Integer.parseInt(infant.getText().toString());
+        if ((from != null && to != null) && (a > 0 || c > 0)) {
+            FlightModel model = new FlightModel(
+                    from,
+                    to,
+                    roundTrip.isChecked(),
+                    a, c, i,
+                    FlightClass.BUSINESS);
+            Intent intent = new Intent(FlightActivity.this, PriceListActivity.class);
+            intent.putExtra("flight", model);
+            startActivity(intent);
+        }
     }
 }
