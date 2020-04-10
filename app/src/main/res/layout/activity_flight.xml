@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:id="@+id/root_flight_activity"
     android:layout_height="wrap_content">
 
 
@@ -257,7 +258,7 @@
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:paddingHorizontal="12dp"
-                android:text="1"
+                android:text="0"
                 android:textSize="32sp" />
 
             <ImageView

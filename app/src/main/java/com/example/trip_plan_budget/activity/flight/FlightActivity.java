@@ -13,6 +13,7 @@ import com.example.trip_plan_budget.R;
 import com.example.trip_plan_budget.enumeration.FlightClass;
 import com.example.trip_plan_budget.model.AirportModel;
 import com.example.trip_plan_budget.model.FlightModel;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -88,7 +89,7 @@ public class FlightActivity extends AppCompatActivity {
         fromCard = findViewById(R.id.from_card);
         fromCard.setOnClickListener(view -> {
             if (airports != null) {
-                new SimpleSearchDialogCompat(FlightActivity.this, "Search...",
+                new SimpleSearchDialogCompat(FlightActivity.this, null,
                         "Select Airport?", null, airports,
                         (SearchResultListener<AirportModel>) (dialog, item, position) -> {
                             setDeparturePoint(item);
@@ -102,7 +103,7 @@ public class FlightActivity extends AppCompatActivity {
         toCard = findViewById(R.id.to_card);
         toCard.setOnClickListener(view -> {
             if (airports != null) {
-                new SimpleSearchDialogCompat(FlightActivity.this, "Search...",
+                new SimpleSearchDialogCompat(FlightActivity.this, null,
                         "Select Airport?", null, airports,
                         (SearchResultListener<AirportModel>) (dialog, item, position) -> {
                             setLandingPoint(item);
@@ -112,8 +113,8 @@ public class FlightActivity extends AppCompatActivity {
         });
 
         findViewById(R.id.swap_iata).setOnClickListener(v -> {
-            AirportModel temp = to;
-            setDeparturePoint(from);
+            AirportModel temp = from;
+            setDeparturePoint(to);
             setLandingPoint(temp);
         });
     }
@@ -179,16 +180,18 @@ public class FlightActivity extends AppCompatActivity {
         int a = Integer.parseInt(adult.getText().toString()),
                 c = Integer.parseInt(child.getText().toString()),
                 i = Integer.parseInt(infant.getText().toString());
-        if ((from != null && to != null) && (a > 0 || c > 0)) {
+        if ((from != null && to != null && to != from) && (a > 0 || c > 0)) {
             FlightModel model = new FlightModel(
                     from,
                     to,
                     roundTrip.isChecked(),
                     a, c, i,
                     FlightClass.BUSINESS);
-            Intent intent = new Intent(FlightActivity.this, PriceListActivity.class);
+            Intent intent = new Intent(FlightActivity.this, FlightDateActivity.class);
             intent.putExtra("flight", model);
             startActivity(intent);
+        } else {
+            Snackbar.make(findViewById(R.id.root_flight_activity), "Please Fill the fields properly.", Snackbar.LENGTH_LONG).show();
         }
     }
 }

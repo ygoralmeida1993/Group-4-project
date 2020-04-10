@@ -20,7 +20,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activity.HomeActivity"></activity>
+        <activity
+            android:name=".activity.flight.FlightDateActivity"
+            android:label="@string/select_dates_label" />
+        <activity android:name=".activity.HomeActivity" />
         <activity android:name=".activity.flight.PriceListActivity" />
         <activity android:name=".activity.car.CarDetailsActivity" />
 
