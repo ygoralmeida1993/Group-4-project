@@ -1,13 +1,21 @@
 package com.example.trip_plan_budget.activity.flight;
 
+import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.trip_plan_budget.R;
+import com.example.trip_plan_budget.adapter.FlightPriceListAdapter;
 import com.example.trip_plan_budget.model.flight.FlightModel;
+import com.example.trip_plan_budget.model.flight.FlightPriceListModel;
+import com.google.gson.Gson;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -22,12 +30,23 @@ public class PriceListActivity extends AppCompatActivity {
     private static final String TAG = "PriceListActivity";
     private FlightModel model;
 
+    private RecyclerView recyclerView;
+    private ProgressDialog mProgress;
+
+    private FlightPriceListModel flightPriceListModel;
+    private TextView emptyList;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_price_list);
-        model = getIntent().getParcelableExtra("flight");
+        showProgressDialog();
 
+        recyclerView = findViewById(R.id.flight_price_recycler);
+        emptyList = findViewById(R.id.flight_price_empty);
+
+        model = getIntent().getParcelableExtra("flight");
+        mProgress = new ProgressDialog(PriceListActivity.this);
         if (model != null) {
             AsyncTask.execute(new Runnable() {
                 @Override
@@ -54,31 +73,20 @@ public class PriceListActivity extends AppCompatActivity {
                             InputStream responseBody = myConnection.getInputStream();
                             String jsonString = convertStreamToString(responseBody);
                             Log.v(TAG, jsonString);
-//                            JSONObject json = null;
-//                            try {
-//                                json = new JSONObject(jsonString);
-//                                Log.d("gasApijsonString", jsonString + "");
-//                                JSONArray array = json.getJSONArray("result");
-//                                for (int m = 0; m < array.length(); m++) {
-//                                    JSONObject place = array.getJSONObject(m);
-//                                    String province = place.getString("name");
-//                                    String currency = place.getString("currency");
-//                                    String gasoline = place.getString("gasoline");
-//                                    GasApiModel response = new GasApiModel(province, gasoline, currency);
-//                                    gasApiModelArrayList.add(response);
-//                                }
-//                                Log.d("gasApiModelArrayList", gasApiModelArrayList + "");
-//                            } catch (JSONException e) {
-//                                e.printStackTrace();
-//                            }
+                            flightPriceListModel = new Gson().fromJson(jsonString, FlightPriceListModel.class);
                             myConnection.disconnect();
                             responseBody.close();
                         } else {
 
                             Log.d("value error", "error");
                         }
-                    } catch (IOException e) {
+                    } catch (Exception e) {
+                        mProgress.cancel();
+                        recyclerView.setVisibility(View.GONE);
+                        emptyList.setVisibility(View.VISIBLE);
                         e.printStackTrace();
+                    } finally {
+                        if (flightPriceListModel != null) generateList();
                     }
                 }
 
@@ -108,5 +116,20 @@ public class PriceListActivity extends AppCompatActivity {
             }
         }
         return sb.toString();
+    }
+
+    private void generateList() {
+        FlightPriceListAdapter adapter = new FlightPriceListAdapter(flightPriceListModel.getPrices());
+        recyclerView.setLayoutManager(new LinearLayoutManager(PriceListActivity.this, LinearLayoutManager.HORIZONTAL, false));
+        recyclerView.setAdapter(adapter);
+
+    }
+
+    private void showProgressDialog() {
+        mProgress.setTitle("Loading...");
+        mProgress.setMessage("Flight Options...");
+        mProgress.setCancelable(false);
+        mProgress.setIndeterminate(true);
+        mProgress.show();
     }
 }

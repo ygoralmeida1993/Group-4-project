@@ -75,5 +75,6 @@
     <string name="select_dates_label">Select Dates</string>
     <string name="done_label">Done</string>
     <string name="url_browse_routes">https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/browseroutes/v1.0/CA/CAD/en-CA/</string>
+    <string name="flight_price_empty">No available tickets</string>
 
 </resources>
