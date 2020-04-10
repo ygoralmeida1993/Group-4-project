@@ -40,13 +40,14 @@ public class PriceListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_price_list);
-        showProgressDialog();
+
 
         recyclerView = findViewById(R.id.flight_price_recycler);
         emptyList = findViewById(R.id.flight_price_empty);
 
         model = getIntent().getParcelableExtra("flight");
         mProgress = new ProgressDialog(PriceListActivity.this);
+        showProgressDialog();
         if (model != null) {
             AsyncTask.execute(new Runnable() {
                 @Override
@@ -80,13 +81,18 @@ public class PriceListActivity extends AppCompatActivity {
 
                             Log.d("value error", "error");
                         }
+                        runOnUiThread(() -> {
+                            if (flightPriceListModel != null) generateList();
+                            else {
+                                mProgress.cancel();
+                                recyclerView.setVisibility(View.GONE);
+                                emptyList.setVisibility(View.VISIBLE);
+                            }
+                        });
+
                     } catch (Exception e) {
-                        mProgress.cancel();
-                        recyclerView.setVisibility(View.GONE);
-                        emptyList.setVisibility(View.VISIBLE);
+
                         e.printStackTrace();
-                    } finally {
-                        if (flightPriceListModel != null) generateList();
                     }
                 }
 
@@ -119,7 +125,7 @@ public class PriceListActivity extends AppCompatActivity {
     }
 
     private void generateList() {
-        FlightPriceListAdapter adapter = new FlightPriceListAdapter(flightPriceListModel.getPrices());
+        FlightPriceListAdapter adapter = new FlightPriceListAdapter(PriceListActivity.this, flightPriceListModel.getPrices());
         recyclerView.setLayoutManager(new LinearLayoutManager(PriceListActivity.this, LinearLayoutManager.HORIZONTAL, false));
         recyclerView.setAdapter(adapter);
 
