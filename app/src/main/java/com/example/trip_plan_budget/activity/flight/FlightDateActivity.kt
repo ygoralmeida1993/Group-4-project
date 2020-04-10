@@ -2,12 +2,13 @@ package com.example.trip_plan_budget.activity.flight
 
 import android.content.Intent
 import android.os.Bundle
+import android.text.format.DateFormat
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import com.andrewjapar.rangedatepicker.CalendarPicker.SelectionMode
 import com.example.trip_plan_budget.R
-import com.example.trip_plan_budget.model.FlightModel
+import com.example.trip_plan_budget.model.flight.FlightModel
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_flight_date.*
 import java.util.*
@@ -49,15 +50,28 @@ class FlightDateActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.menu_flight_dates_done) {
-            if (to != null && from != null) {
-                model.to = to
-                model.from = from
-                val intent = Intent(this, PriceListActivity::class.java)
-                intent.putExtra("flight", model)
-                startActivity(intent)
-                return true
-            } else {
-                Snackbar.make(findViewById(R.id.root_flight_date_activity), "Please Fill the dates.", Snackbar.LENGTH_LONG).show()
+            if (model.isRoundTrip)
+                if (to != null && from != null) {
+                    model.to = DateFormat.format("yyyy-MM-dd", to).toString()
+                    model.from = DateFormat.format("yyyy-MM-dd", from).toString()
+                    val intent = Intent(this, PriceListActivity::class.java)
+                    intent.putExtra("flight", model)
+                    startActivity(intent)
+                    return true
+                } else {
+                    Snackbar.make(findViewById(R.id.root_flight_date_activity), "Please Fill the dates.", Snackbar.LENGTH_LONG).show()
+                }
+            else {
+                if (from != null) {
+
+                    model.from = DateFormat.format("yyyy-MM-dd", from).toString()
+                    val intent = Intent(this, PriceListActivity::class.java)
+                    intent.putExtra("flight", model)
+                    startActivity(intent)
+                    return true
+                } else {
+                    Snackbar.make(findViewById(R.id.root_flight_date_activity), "Please Fill the dates.", Snackbar.LENGTH_LONG).show()
+                }
             }
         }
         return super.onOptionsItemSelected(item)

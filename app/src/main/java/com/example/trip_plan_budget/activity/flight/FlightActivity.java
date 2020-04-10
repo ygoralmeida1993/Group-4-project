@@ -3,6 +3,7 @@ package com.example.trip_plan_budget.activity.flight;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.CheckBox;
+import android.widget.RadioButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -11,8 +12,8 @@ import androidx.cardview.widget.CardView;
 
 import com.example.trip_plan_budget.R;
 import com.example.trip_plan_budget.enumeration.FlightClass;
-import com.example.trip_plan_budget.model.AirportModel;
-import com.example.trip_plan_budget.model.FlightModel;
+import com.example.trip_plan_budget.model.flight.AirportModel;
+import com.example.trip_plan_budget.model.flight.FlightModel;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -37,6 +38,8 @@ public class FlightActivity extends AppCompatActivity {
     private DatabaseReference database;
     private ArrayList<AirportModel> airports;
     private AirportModel to, from;
+
+    private RadioButton[] radio;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -117,6 +120,22 @@ public class FlightActivity extends AppCompatActivity {
             setDeparturePoint(to);
             setLandingPoint(temp);
         });
+
+        radio = new RadioButton[]{
+                findViewById(R.id.class_business),
+                findViewById(R.id.class_premium_eco),
+                findViewById(R.id.class_first),
+                findViewById(R.id.class_economy)};
+        for (int i = 0; i < radio.length; i++) {
+            final int temp = i;
+            radio[i].setOnClickListener(v -> {
+                for (int j = 0; j < radio.length; j++) {
+                    if (temp == j) radio[j].setChecked(true);
+                    else radio[j].setChecked(false);
+                }
+            });
+
+        }
     }
 
     private void initOptions() {
@@ -177,6 +196,26 @@ public class FlightActivity extends AppCompatActivity {
 
 
     private void validate() {
+        FlightClass flightClass = FlightClass.FIRST_CLASS;
+        for (RadioButton button : radio) {
+            if (button.isChecked()) {
+                switch (button.getId()) {
+                    case R.id.class_business:
+                        flightClass = FlightClass.BUSINESS;
+                        break;
+                    case R.id.class_premium_eco:
+                        flightClass = FlightClass.PREMIUM_ECONOMY;
+                        break;
+                    case R.id.class_economy:
+                        flightClass = FlightClass.ECONOMY;
+                        break;
+                    default:
+                        flightClass = FlightClass.FIRST_CLASS;
+                        break;
+                }
+                break;
+            }
+        }
         int a = Integer.parseInt(adult.getText().toString()),
                 c = Integer.parseInt(child.getText().toString()),
                 i = Integer.parseInt(infant.getText().toString());
@@ -186,7 +225,7 @@ public class FlightActivity extends AppCompatActivity {
                     to,
                     roundTrip.isChecked(),
                     a, c, i,
-                    FlightClass.BUSINESS);
+                    flightClass);
             Intent intent = new Intent(FlightActivity.this, FlightDateActivity.class);
             intent.putExtra("flight", model);
             startActivity(intent);

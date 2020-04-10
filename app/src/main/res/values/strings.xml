@@ -74,5 +74,6 @@
     <string name="add_new_plane_action">Press + to add a new Plan</string>
     <string name="select_dates_label">Select Dates</string>
     <string name="done_label">Done</string>
+    <string name="url_browse_routes">https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/browseroutes/v1.0/CA/CAD/en-CA/</string>
 
 </resources>

@@ -1,4 +1,4 @@
-package com.example.trip_plan_budget.model;
+package com.example.trip_plan_budget.model.flight;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -6,17 +6,20 @@ import android.os.Parcelable;
 import com.example.trip_plan_budget.enumeration.FlightClass;
 import com.example.trip_plan_budget.enumeration.PassengerType;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
 public class FlightModel implements Parcelable {
 
     private AirportModel departure, landing;
-    public static final Creator<FlightModel> CREATOR = new Creator<FlightModel>() {
+
+    private boolean roundTrip;
+    private HashMap<PassengerType, List<FlightPassengerModel>> passengers;
+    private FlightClass flightClass;
+    public static final Parcelable.Creator<FlightModel> CREATOR = new Parcelable.Creator<FlightModel>() {
         @Override
-        public FlightModel createFromParcel(Parcel in) {
-            return new FlightModel(in);
+        public FlightModel createFromParcel(Parcel source) {
+            return new FlightModel(source);
         }
 
         @Override
@@ -24,15 +27,10 @@ public class FlightModel implements Parcelable {
             return new FlightModel[size];
         }
     };
-    private boolean roundTrip;
-    private HashMap<PassengerType, List<FlightPassengerModel>> passengers;
-    private FlightClass flightClass;
-    private Date to, from;
+    private String to, from;
 
     public FlightModel() {
     }
-
-    private int adults, infants, children;
 
     public FlightModel(AirportModel departure, AirportModel landing, boolean roundTrip, int adults, int infants, int children, FlightClass flightClass) {
         this.departure = departure;
@@ -44,14 +42,6 @@ public class FlightModel implements Parcelable {
         this.flightClass = flightClass;
     }
 
-    protected FlightModel(Parcel in) {
-        departure = in.readParcelable(AirportModel.class.getClassLoader());
-        landing = in.readParcelable(AirportModel.class.getClassLoader());
-        roundTrip = in.readByte() != 0;
-        adults = in.readInt();
-        infants = in.readInt();
-        children = in.readInt();
-    }
 
     public AirportModel getDeparture() {
         return departure;
@@ -117,34 +107,55 @@ public class FlightModel implements Parcelable {
         this.flightClass = flightClass;
     }
 
-    public Date getTo() {
+    private int adults, infants, children;
+
+    protected FlightModel(Parcel in) {
+        this.departure = in.readParcelable(AirportModel.class.getClassLoader());
+        this.landing = in.readParcelable(AirportModel.class.getClassLoader());
+        this.roundTrip = in.readByte() != 0;
+        this.passengers = (HashMap<PassengerType, List<FlightPassengerModel>>) in.readSerializable();
+        int tmpFlightClass = in.readInt();
+        this.flightClass = tmpFlightClass == -1 ? null : FlightClass.values()[tmpFlightClass];
+        this.to = in.readString();
+        this.from = in.readString();
+        this.adults = in.readInt();
+        this.infants = in.readInt();
+        this.children = in.readInt();
+    }
+
+    public String getTo() {
         return to;
     }
 
-    public void setTo(Date to) {
+    public void setTo(String to) {
         this.to = to;
     }
 
-    public Date getFrom() {
-        return from;
-    }
-
-    public void setFrom(Date from) {
-        this.from = from;
-    }
 
     @Override
     public int describeContents() {
         return 0;
     }
 
+    public String getFrom() {
+        return from;
+    }
+
+    public void setFrom(String from) {
+        this.from = from;
+    }
+
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeParcelable(departure, flags);
-        dest.writeParcelable(landing, flags);
-        dest.writeByte((byte) (roundTrip ? 1 : 0));
-        dest.writeInt(adults);
-        dest.writeInt(infants);
-        dest.writeInt(children);
+        dest.writeParcelable(this.departure, flags);
+        dest.writeParcelable(this.landing, flags);
+        dest.writeByte(this.roundTrip ? (byte) 1 : (byte) 0);
+        dest.writeSerializable(this.passengers);
+        dest.writeInt(this.flightClass == null ? -1 : this.flightClass.ordinal());
+        dest.writeString(this.to);
+        dest.writeString(this.from);
+        dest.writeInt(this.adults);
+        dest.writeInt(this.infants);
+        dest.writeInt(this.children);
     }
 }
