@@ -78,5 +78,7 @@
     <string name="flight_price_empty">No available tickets</string>
     <string name="label_carriers">Carriers</string>
     <string name="label_min_price">Min. Price</string>
+    <string name="label_error_in_retrieval">Error in retrieval</string>
+    <string name="skyscanner_api_key">7373551c59msh43f6546f0df1e85p1b4120jsn0639fc85a529</string>
 
 </resources>

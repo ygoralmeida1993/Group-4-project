@@ -7,21 +7,27 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.trip_plan_budget.R;
+import com.example.trip_plan_budget.interfaces.OnFlightPriceListClickListener;
+import com.example.trip_plan_budget.model.flight.Carrier;
 import com.example.trip_plan_budget.model.flight.PriceModel;
 
 import java.util.List;
 
 public class FlightPriceListAdapter extends RecyclerView.Adapter<FlightPriceListAdapter.FlightAdapterViewHolder> {
-
+    private OnFlightPriceListClickListener listener;
     private List<PriceModel> priceModelList;
     private Context context;
+    private List<Carrier> carriers;
 
-    public FlightPriceListAdapter(Context context, List<PriceModel> priceModelList) {
+    public FlightPriceListAdapter(Context context, List<PriceModel> priceModelList, List<Carrier> carriers, OnFlightPriceListClickListener listener) {
         this.priceModelList = priceModelList;
         this.context = context;
+        this.carriers = carriers;
+        this.listener = listener;
     }
 
     @NonNull
@@ -44,16 +50,17 @@ public class FlightPriceListAdapter extends RecyclerView.Adapter<FlightPriceList
 
     class FlightAdapterViewHolder extends RecyclerView.ViewHolder {
 
-        public FlightAdapterViewHolder(@NonNull View itemView) {
+        FlightAdapterViewHolder(@NonNull View itemView) {
             super(itemView);
         }
 
-        public void bind(PriceModel model) {
+        void bind(PriceModel model) {
+            itemView.setOnClickListener(v -> listener.onCLick(model));
             TextView minPrice = itemView.findViewById(R.id.flight_min_price);
             TextView route = itemView.findViewById(R.id.flight_route);
             RecyclerView recyclerView = itemView.findViewById(R.id.flight_carrier_recycler);
-//            recyclerView.setAdapter();
-
+            recyclerView.setAdapter(new FlightCarrierAdapter(carriers, context));
+            recyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
             minPrice.setText(model.getPrice() + " C$");
             route.setText(model.isDirectRoute() ? "Direct" : "Indirect");
 

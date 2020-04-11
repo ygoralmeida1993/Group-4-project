@@ -1,5 +1,6 @@
 package com.example.trip_plan_budget.activity.flight;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -13,8 +14,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.trip_plan_budget.R;
 import com.example.trip_plan_budget.adapter.FlightPriceListAdapter;
+import com.example.trip_plan_budget.interfaces.OnFlightPriceListClickListener;
 import com.example.trip_plan_budget.model.flight.FlightModel;
 import com.example.trip_plan_budget.model.flight.FlightPriceListModel;
+import com.example.trip_plan_budget.model.flight.PriceModel;
 import com.google.gson.Gson;
 
 import java.io.BufferedReader;
@@ -35,15 +38,25 @@ public class PriceListActivity extends AppCompatActivity {
 
     private FlightPriceListModel flightPriceListModel;
     private TextView emptyList;
+    private TextView errorList;
+    private AlertDialog.Builder dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_price_list);
 
-
         recyclerView = findViewById(R.id.flight_price_recycler);
         emptyList = findViewById(R.id.flight_price_empty);
+        errorList = findViewById(R.id.flight_price_error);
+
+        dialog = new AlertDialog.Builder(PriceListActivity.this);
+        dialog.setTitle("Are your Sure?");
+        dialog.setMessage("Please confirm your selection");
+        dialog.setNegativeButton("Cancel", (d, i) -> {
+            d.cancel();
+        });
+
 
         model = getIntent().getParcelableExtra("flight");
         mProgress = new ProgressDialog(PriceListActivity.this);
@@ -65,29 +78,35 @@ public class PriceListActivity extends AppCompatActivity {
                         myConnection.setRequestProperty("x-rapidapi-host",
                                 "skyscanner-skyscanner-flight-search-v1.p.rapidapi.com");
                         myConnection.setRequestProperty("x-rapidapi-key",
-                                "b516667e8emshc62d0a04217dcf1p1d99d6jsnf232f2210a0d");
+                                getString(R.string.skyscanner_api_key));
                         myConnection.setRequestProperty("content-type",
                                 "application/json");
                         Log.d("getResponseCode", "" + myConnection.getResponseCode());
+                        InputStream responseBody = myConnection.getInputStream();
+                        String jsonString = convertStreamToString(responseBody);
+                        Log.v(TAG, jsonString);
                         if (myConnection.getResponseCode() == 200) {
                             Log.d("getResponseCode", "getResponseCode");
-                            InputStream responseBody = myConnection.getInputStream();
-                            String jsonString = convertStreamToString(responseBody);
-                            Log.v(TAG, jsonString);
                             flightPriceListModel = new Gson().fromJson(jsonString, FlightPriceListModel.class);
-                            myConnection.disconnect();
-                            responseBody.close();
-                        } else {
 
-                            Log.d("value error", "error");
-                        }
-                        runOnUiThread(() -> {
-                            if (flightPriceListModel != null) generateList();
-                            else {
+                        } else {
+                            runOnUiThread(() -> {
                                 mProgress.cancel();
                                 recyclerView.setVisibility(View.GONE);
-                                emptyList.setVisibility(View.VISIBLE);
-                            }
+                                errorList.setVisibility(View.VISIBLE);
+                                Log.d("value error", "error");
+                            });
+                            myConnection.disconnect();
+                            responseBody.close();
+                        }
+                        runOnUiThread(() -> {
+                            if (flightPriceListModel != null)
+                                if (flightPriceListModel.getPrices().size() > 0) generateList();
+                                else {
+                                    mProgress.cancel();
+                                    recyclerView.setVisibility(View.GONE);
+                                    emptyList.setVisibility(View.VISIBLE);
+                                }
                         });
 
                     } catch (Exception e) {
@@ -107,7 +126,7 @@ public class PriceListActivity extends AppCompatActivity {
                 new InputStreamReader(is));
         StringBuilder sb = new StringBuilder();
 
-        String line = null;
+        String line;
         try {
             while ((line = reader.readLine()) != null) {
                 sb.append(line + "\n");
@@ -125,9 +144,18 @@ public class PriceListActivity extends AppCompatActivity {
     }
 
     private void generateList() {
-        FlightPriceListAdapter adapter = new FlightPriceListAdapter(PriceListActivity.this, flightPriceListModel.getPrices());
-        recyclerView.setLayoutManager(new LinearLayoutManager(PriceListActivity.this, LinearLayoutManager.HORIZONTAL, false));
+        FlightPriceListAdapter adapter = new FlightPriceListAdapter(PriceListActivity.this, flightPriceListModel.getPrices(), flightPriceListModel.getCarriers(), new OnFlightPriceListClickListener() {
+            @Override
+            public void onCLick(PriceModel priceModel) {
+                dialog.setPositiveButton("Confirm", (d, i) -> {
+
+                });
+                dialog.show();
+            }
+        });
+        recyclerView.setLayoutManager(new LinearLayoutManager(PriceListActivity.this, LinearLayoutManager.VERTICAL, false));
         recyclerView.setAdapter(adapter);
+        mProgress.cancel();
 
     }
 
@@ -138,4 +166,6 @@ public class PriceListActivity extends AppCompatActivity {
         mProgress.setIndeterminate(true);
         mProgress.show();
     }
+
+
 }
