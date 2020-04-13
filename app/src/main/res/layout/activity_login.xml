@@ -1,0 +1,114 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    android:gravity="center"
+    android:id="@+id/root_login_layout"
+    android:orientation="vertical"
+    android:padding="20dp">
+
+    <ImageButton
+        android:id="@+id/google_signin_button"
+        android:layout_width="265dp"
+        android:layout_height="60dp"
+        android:layout_marginBottom="50dp"
+        android:contentDescription="@string/google_sign_in_button_label"
+        android:elevation="8dp"
+        android:src="@drawable/googleiconcrop" />
+
+    <EditText
+        android:id="@+id/emailid"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:background="@drawable/corner"
+        android:drawableStart="@drawable/ic_person_black_24dp"
+        android:drawablePadding="10dp"
+        android:hint="@string/email_label"
+        android:padding="15dp"
+        android:text="shikhapatel0530@gmail.com"
+        android:textColor="@color/textColor"
+        android:textColorHighlight="@color/textColor"
+        android:textColorHint="@color/textColor" />
+
+    <EditText
+        android:id="@+id/password"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:background="@drawable/corner"
+        android:drawableStart="@drawable/ic_lock_black_24dp"
+        android:drawablePadding="10dp"
+        android:hint="@string/password_label"
+        android:inputType="textPassword"
+        android:padding="15dp"
+        android:text="Shikha"
+        android:textColor="@color/textColor"
+        android:textColorHighlight="@color/textColor"
+        android:textColorHint="@color/textColor" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <CheckBox
+            android:id="@+id/rememberMe"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="0dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="10dp"
+            android:buttonTint="@color/textColor"
+            android:checked="true"
+            android:text="Remember Me"
+            android:textColor="@color/textColor" />
+
+        <TextView
+            android:id="@+id/forgotPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="50dp"
+            android:layout_marginTop="0dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="10dp"
+            android:drawableStart="@drawable/ic_lock_open_black_24dp"
+            android:drawablePadding="6dp"
+            android:padding="4dp"
+            android:text="@string/forgot_password_label"
+            android:textColor="@color/textColor" />
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/LoginIn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/button"
+        android:padding="15dp"
+        android:shadowColor="@android:color/transparent"
+        android:text="@string/log_in_label"
+        android:textColor="@color/white" />
+
+    <Button
+        android:id="@+id/SignUp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="0dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/button"
+        android:onClick="renderSignUp"
+        android:padding="15dp"
+        android:shadowColor="@android:color/transparent"
+        android:text="@string/newUser"
+        android:textColor="@color/white"
+        android:textSize="15sp" />
+
+</LinearLayout>
