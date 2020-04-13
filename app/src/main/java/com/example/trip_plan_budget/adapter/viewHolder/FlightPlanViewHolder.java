@@ -24,9 +24,9 @@ public class FlightPlanViewHolder extends RecyclerView.ViewHolder {
     public void bind(FlightModel model, FlightPlanCLickListener cLickListener) {
         binding.getRoot().setOnClickListener(v -> cLickListener.onClick());
 
-        String boarding = model.getDeparture().getPlaceId().split("-")[0] + "\n" + model.getDeparture().getPlaceName();
+        String boarding = model.getDeparture().getPlaceId().split("-")[0];
         binding.boardingPoint.setText(boarding);
-        String landing = model.getLanding().getPlaceId().split("-")[0] + "\n" + model.getLanding().getPlaceName();
+        String landing = model.getLanding().getPlaceId().split("-")[0];
         binding.landingPoint.setText(landing);
         binding.departureDate.setText(model.getFrom());
         if (model.isRoundTrip()) {

@@ -20,13 +20,15 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".activity.hotel.HotelDetailsActivity" />
         <activity
             android:name=".activity.plan.PlanDetailsActivity"
             android:label="Plan Details"
             android:parentActivityName=".activity.plan.PlanSummaryActivity" />
         <activity android:name=".activity.restaurant.RestaurantPlannerActivity" />
-        <activity android:name=".activity.hotel.HotelPlannerActivity" />
-
+        <activity
+            android:name=".activity.hotel.HotelPlannerActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
             android:name=".activity.places.NearbyPlacesListActivity"
             android:label="Nearby Places"

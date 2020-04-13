@@ -1,0 +1,20 @@
+{
+  "name": "Maderla",
+  "latitude": "12.91283",
+  "longitude": "100.87808",
+  "num_reviews": "3",
+  "photo": {
+    "images": {
+      "large": {
+        "width": "1024",
+        "url": "https://media-cdn.tripadvisor.com/media/photo-w/0e/65/c0/cf/ma-der-la-by-phuthai.jpg",
+        "height": "684"
+      }
+    }
+  },
+  "distance": "0.0022289238083088064",
+  "rating": "3.5",
+  "phone": "+66 91 728 9647",
+  "website": "http://www.facebook.com/MaderlaPhuThaiKaiyang/?fref=ts",
+  "address": "223/10-11 Third Road M.9 Nongprue Banglamung Chonburi, Pattaya 20150 Thailand"
+}
