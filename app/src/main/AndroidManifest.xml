@@ -20,6 +20,18 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".activity.restaurant.RestaurantFinderActivity"></activity>
+        <activity android:name=".activity.hotel.HotelPlannerActivity"></activity>
+        <activity android:name=".activity.bus.BusDetailsActivity" />
+        <activity android:name=".activity.bus.BusPriceListActivity" />
+        <activity
+            android:name=".activity.places.NearbyPlacesListActivity"
+            android:label="Nearby Places"
+            android:parentActivityName=".activity.places.NearbyPlacesActivity" />
+        <activity
+            android:name=".activity.places.NearbyPlacesActivity"
+            android:label="Place Type" />
+        <activity android:name=".activity.PlanDetailsActivity" />
         <activity
             android:name=".activity.flight.FlightDateActivity"
             android:label="@string/select_dates_label" />
@@ -40,10 +52,15 @@
         <activity android:name=".activity.car.FilterActivity" />
         <activity android:name=".activity.WithBudget" />
         <activity android:name=".activity.places.ExplorerActivity" />
-        <activity android:name=".activity.car.CarBudgetActivity" />
+        <activity
+            android:name=".activity.car.CarBudgetPlannerActivity"
+            android:label="Car Budget Planner"
+            android:parentActivityName=".activity.HomeActivity" />
         <activity android:name=".activity.GoogleMapsActivity" />
-        <activity android:name=".activity.flight.FlightActivity" />
-        <activity android:name=".activity.TransportationActivity" />
+        <activity
+            android:name=".activity.flight.FlightPlannerActivity"
+            android:label="Flight Planer"
+            android:parentActivityName=".activity.HomeActivity" />
         <activity
             android:name=".activity.auth.SignUpActivity"
             android:label="@string/title_activity_login" />

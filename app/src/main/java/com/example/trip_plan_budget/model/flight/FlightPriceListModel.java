@@ -5,7 +5,9 @@ import android.os.Parcelable;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class FlightPriceListModel implements Parcelable {
 
@@ -31,6 +33,23 @@ public class FlightPriceListModel implements Parcelable {
     protected FlightPriceListModel(Parcel in) {
         this.prices = in.createTypedArrayList(PriceModel.CREATOR);
         this.carriers = in.createTypedArrayList(Carrier.CREATOR);
+    }
+
+    public List<Carrier> getCarriers(PriceModel model) {
+        List<Carrier> carriers = new ArrayList<>();
+        if (model.getInBoundLeg() != null) {
+            carriers.addAll(getCarriers().stream().filter(carrier ->
+                    model.getInBoundLeg().getCarriers().stream()
+                            .anyMatch(id -> carrier.getId() == id))
+                    .collect(Collectors.toList()));
+        }
+        if (model.getOutBoundLeg() != null) {
+            carriers.addAll(getCarriers().stream().filter(carrier ->
+                    model.getOutBoundLeg().getCarriers().stream()
+                            .anyMatch(id -> carrier.getId() == id))
+                    .collect(Collectors.toList()));
+        }
+        return carriers;
     }
 
     public List<PriceModel> getPrices() {

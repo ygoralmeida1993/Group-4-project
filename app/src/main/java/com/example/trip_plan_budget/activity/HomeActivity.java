@@ -2,65 +2,80 @@ package com.example.trip_plan_budget.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.LinearLayout;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager2.widget.ViewPager2;
 
-import com.example.trip_plan_budget.R;
-import com.example.trip_plan_budget.model.UserModel;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-
-import java.util.Objects;
+import com.example.trip_plan_budget.activity.car.CarBudgetPlannerActivity;
+import com.example.trip_plan_budget.activity.flight.FlightPlannerActivity;
+import com.example.trip_plan_budget.adapter.HomeFragmentPagerAdapter;
+import com.example.trip_plan_budget.adapter.PlanAdapter;
+import com.example.trip_plan_budget.databinding.ActivityHomeBinding;
+import com.example.trip_plan_budget.enumeration.PlanType;
+import com.example.trip_plan_budget.model.main.UserModel;
+import com.google.android.material.tabs.TabLayoutMediator;
 
 public class HomeActivity extends AppCompatActivity {
     private UserModel user;
-    private LinearLayout emptyView;
-    private RecyclerView recyclerView;
-    private boolean load = false;
+
+    private ActivityHomeBinding binding;
+    private HomeFragmentPagerAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home);
+        binding = ActivityHomeBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
-        recyclerView = findViewById(R.id.plans_recyclerview);
-        emptyView = findViewById(R.id.empty_plans_view);
-        findViewById(R.id.fab_add_plan)
-                .setOnClickListener(view ->
-                        startActivity(
-                                new Intent(HomeActivity.this, TransportationActivity.class)));
+        PlanAdapter.getInstance(this);
 
-
-        FirebaseDatabase.getInstance().getReference("users").child(Objects.requireNonNull(FirebaseAuth.getInstance().getUid())).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                user = dataSnapshot.getValue(UserModel.class);
-                if (user != null) {
-                    if (user.getPlans() == null) {
-                        emptyView.setVisibility(View.VISIBLE);
-                        recyclerView.setVisibility(View.INVISIBLE);
-                        load = false;
-                    } else if (user.getPlans().size() == 0) {
-                        emptyView.setVisibility(View.VISIBLE);
-                        recyclerView.setVisibility(View.INVISIBLE);
-                        load = false;
-                    } else {
-                        load = true;
-                    }
-                }
+        adapter = new HomeFragmentPagerAdapter(getSupportFragmentManager(), getLifecycle());
+        binding.pager.setOrientation(ViewPager2.ORIENTATION_HORIZONTAL);
+        binding.pager.setAdapter(adapter);
+        new TabLayoutMediator(binding.tabLayout, binding.pager, (tab, position) -> {
+            String text = "";
+            switch (position) {
+                case 0:
+                    text = PlanType.CAR.getType();
+                    tab.setText(text);
+                    break;
+                case 1:
+                    text = PlanType.FLIGHT.getType();
+                    tab.setText(text);
+                    break;
+                case 2:
+                    text = PlanType.HOTEL.getType();
+                    tab.setText(text);
+                    break;
+                case 3:
+                    text = PlanType.RESTAURANT.getType();
+                    tab.setText(text);
+                    break;
+                default:
+                    text = "Invalid Page";
+                    tab.setText(text);
             }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
+        }).attach();
+
+        binding.addPlan.setOnClickListener(v -> {
+            int pos = binding.pager.getCurrentItem();
+            switch (pos) {
+                case 0:
+                    startActivity(new Intent(HomeActivity.this, CarBudgetPlannerActivity.class));
+                    break;
+                case 1:
+                    startActivity(new Intent(HomeActivity.this, FlightPlannerActivity.class));
+                    break;
+                case 2:
+                    startActivity(new Intent(HomeActivity.this, CarBudgetPlannerActivity.class));
+                    break;
+                case 3:
+                    startActivity(new Intent(HomeActivity.this, CarBudgetPlannerActivity.class));
+                    break;
             }
         });
+
     }
 
 }

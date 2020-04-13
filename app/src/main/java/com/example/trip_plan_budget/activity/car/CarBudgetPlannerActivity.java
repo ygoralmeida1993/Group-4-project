@@ -13,7 +13,7 @@ import com.example.trip_plan_budget.R;
 import com.example.trip_plan_budget.activity.places.ExplorerActivity;
 
 
-public class CarBudgetActivity extends AppCompatActivity {
+public class CarBudgetPlannerActivity extends AppCompatActivity {
     //    Button b1, b2;
     boolean approach;
     EditText budgetText;

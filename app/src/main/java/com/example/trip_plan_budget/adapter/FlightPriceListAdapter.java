@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.trip_plan_budget.R;
-import com.example.trip_plan_budget.interfaces.OnFlightPriceListClickListener;
+import com.example.trip_plan_budget.interfaces.callback.OnFlightPriceListClickListener;
 import com.example.trip_plan_budget.model.flight.Carrier;
 import com.example.trip_plan_budget.model.flight.PriceModel;
 

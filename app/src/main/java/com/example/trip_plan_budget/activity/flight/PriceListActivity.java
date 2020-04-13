@@ -2,22 +2,25 @@ package com.example.trip_plan_budget.activity.flight;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.trip_plan_budget.R;
+import com.example.trip_plan_budget.activity.HomeActivity;
 import com.example.trip_plan_budget.adapter.FlightPriceListAdapter;
-import com.example.trip_plan_budget.interfaces.OnFlightPriceListClickListener;
+import com.example.trip_plan_budget.databinding.ActivityPriceListBinding;
+import com.example.trip_plan_budget.interfaces.callback.OnFlightPriceListClickListener;
 import com.example.trip_plan_budget.model.flight.FlightModel;
 import com.example.trip_plan_budget.model.flight.FlightPriceListModel;
 import com.example.trip_plan_budget.model.flight.PriceModel;
+import com.example.trip_plan_budget.service.DatabaseService;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
 
 import java.io.BufferedReader;
@@ -31,24 +34,18 @@ import javax.net.ssl.HttpsURLConnection;
 
 public class PriceListActivity extends AppCompatActivity {
     private static final String TAG = "PriceListActivity";
+    private ActivityPriceListBinding binding;
     private FlightModel model;
-
-    private RecyclerView recyclerView;
     private ProgressDialog mProgress;
-
     private FlightPriceListModel flightPriceListModel;
-    private TextView emptyList;
-    private TextView errorList;
     private AlertDialog.Builder dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_price_list);
 
-        recyclerView = findViewById(R.id.flight_price_recycler);
-        emptyList = findViewById(R.id.flight_price_empty);
-        errorList = findViewById(R.id.flight_price_error);
+        binding = ActivityPriceListBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
         dialog = new AlertDialog.Builder(PriceListActivity.this);
         dialog.setTitle("Are your Sure?");
@@ -57,65 +54,59 @@ public class PriceListActivity extends AppCompatActivity {
             d.cancel();
         });
 
-
         model = getIntent().getParcelableExtra("flight");
         mProgress = new ProgressDialog(PriceListActivity.this);
         showProgressDialog();
         if (model != null) {
-            AsyncTask.execute(new Runnable() {
-                @Override
-                public void run() {
-                    URL gasApi = null;
-                    try {
-                        gasApi = new URL(getString(R.string.url_browse_routes) + model.getDeparture().getPlaceId() + "/" + model.getLanding().getPlaceId() + "/" + model.getFrom());
-                    } catch (MalformedURLException e) {
-                        e.printStackTrace();
-                    }
-                    try {
-                        HttpsURLConnection myConnection =
-                                (HttpsURLConnection) gasApi.openConnection();
-                        myConnection.setRequestMethod("GET");
-                        myConnection.setRequestProperty("x-rapidapi-host",
-                                "skyscanner-skyscanner-flight-search-v1.p.rapidapi.com");
-                        myConnection.setRequestProperty("x-rapidapi-key",
-                                getString(R.string.skyscanner_api_key));
-                        myConnection.setRequestProperty("content-type",
-                                "application/json");
-                        Log.d("getResponseCode", "" + myConnection.getResponseCode());
-                        InputStream responseBody = myConnection.getInputStream();
-                        String jsonString = convertStreamToString(responseBody);
-                        Log.v(TAG, jsonString);
-                        if (myConnection.getResponseCode() == 200) {
-                            Log.d("getResponseCode", "getResponseCode");
-                            flightPriceListModel = new Gson().fromJson(jsonString, FlightPriceListModel.class);
-
-                        } else {
-                            runOnUiThread(() -> {
-                                mProgress.cancel();
-                                recyclerView.setVisibility(View.GONE);
-                                errorList.setVisibility(View.VISIBLE);
-                                Log.d("value error", "error");
-                            });
-                            myConnection.disconnect();
-                            responseBody.close();
-                        }
-                        runOnUiThread(() -> {
-                            if (flightPriceListModel != null)
-                                if (flightPriceListModel.getPrices().size() > 0) generateList();
-                                else {
-                                    mProgress.cancel();
-                                    recyclerView.setVisibility(View.GONE);
-                                    emptyList.setVisibility(View.VISIBLE);
-                                }
-                        });
-
-                    } catch (Exception e) {
-
-                        e.printStackTrace();
-                    }
+            AsyncTask.execute(() -> {
+                URL gasApi = null;
+                try {
+                    gasApi = new URL(getString(R.string.url_browse_routes) + model.getDeparture().getPlaceId() + "/" + model.getLanding().getPlaceId() + "/" + model.getFrom());
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
                 }
+                try {
+                    HttpsURLConnection myConnection =
+                            (HttpsURLConnection) gasApi.openConnection();
+                    myConnection.setRequestMethod("GET");
+                    myConnection.setRequestProperty("x-rapidapi-host",
+                            "skyscanner-skyscanner-flight-search-v1.p.rapidapi.com");
+                    myConnection.setRequestProperty("x-rapidapi-key",
+                            getString(R.string.skyscanner_api_key));
+                    myConnection.setRequestProperty("content-type",
+                            "application/json");
+                    Log.d("getResponseCode", "" + myConnection.getResponseCode());
+                    InputStream responseBody = myConnection.getInputStream();
+                    String jsonString = convertStreamToString(responseBody);
+                    Log.v(TAG, jsonString);
+                    if (myConnection.getResponseCode() == 200) {
+                        Log.d("getResponseCode", "getResponseCode");
+                        flightPriceListModel = new Gson().fromJson(jsonString, FlightPriceListModel.class);
 
+                    } else {
+                        runOnUiThread(() -> {
+                            mProgress.cancel();
+                            binding.flightPriceRecycler.setVisibility(View.GONE);
+                            binding.flightPriceError.setVisibility(View.VISIBLE);
+                            Log.d("value error", "error");
+                        });
+                        myConnection.disconnect();
+                        responseBody.close();
+                    }
+                    runOnUiThread(() -> {
+                        if (flightPriceListModel != null)
+                            if (flightPriceListModel.getPrices().size() > 0) generateList();
+                            else {
+                                mProgress.cancel();
+                                binding.flightPriceRecycler.setVisibility(View.GONE);
+                                binding.flightPriceEmpty.setVisibility(View.VISIBLE);
+                            }
+                    });
 
+                } catch (Exception e) {
+
+                    e.printStackTrace();
+                }
             });
         }
     }
@@ -148,13 +139,25 @@ public class PriceListActivity extends AppCompatActivity {
             @Override
             public void onCLick(PriceModel priceModel) {
                 dialog.setPositiveButton("Confirm", (d, i) -> {
-
+                    model.setCarriers(flightPriceListModel.getCarriers(priceModel));
+                    model.setPriceModel(priceModel);
+                    DatabaseService.getInstance().addFlightPlan(model, result -> {
+                        Snackbar.make(binding.getRoot(),
+                                result ? "Added new Flight Plan" : "Failed to add Flight Plan",
+                                Snackbar.LENGTH_LONG).show();
+                        if (result) {
+                            Intent intent = new Intent(PriceListActivity.this, HomeActivity.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            startActivity(intent);
+                            finish();
+                        }
+                    });
                 });
                 dialog.show();
             }
         });
-        recyclerView.setLayoutManager(new LinearLayoutManager(PriceListActivity.this, LinearLayoutManager.VERTICAL, false));
-        recyclerView.setAdapter(adapter);
+        binding.flightPriceRecycler.setLayoutManager(new LinearLayoutManager(PriceListActivity.this, LinearLayoutManager.VERTICAL, false));
+        binding.flightPriceRecycler.setAdapter(adapter);
         mProgress.cancel();
 
     }

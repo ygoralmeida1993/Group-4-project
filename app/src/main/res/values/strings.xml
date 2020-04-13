@@ -74,11 +74,17 @@
     <string name="add_new_plane_action">Press + to add a new Plan</string>
     <string name="select_dates_label">Select Dates</string>
     <string name="done_label">Done</string>
-    <string name="url_browse_routes">https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/browseroutes/v1.0/CA/CAD/en-CA/</string>
+
     <string name="flight_price_empty">No available tickets</string>
     <string name="label_carriers">Carriers</string>
     <string name="label_min_price">Min. Price</string>
     <string name="label_error_in_retrieval">Error in retrieval</string>
+
     <string name="skyscanner_api_key">7373551c59msh43f6546f0df1e85p1b4120jsn0639fc85a529</string>
+    <string name="url_browse_routes">https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/browseroutes/v1.0/CA/CAD/en-CA/</string>
+
+    <string name="opentripmap_api_key">5ae2e3f221c38a28845f05b6cf1e0f31ffa8cb3147ccc90ea695e117</string>
+    <string name="url_opentripmap">https://api.opentripmap.com/0.1/en/</string>
+
 
 </resources>

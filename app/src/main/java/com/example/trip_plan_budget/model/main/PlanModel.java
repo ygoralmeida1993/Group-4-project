@@ -1,4 +1,4 @@
-package com.example.trip_plan_budget.model;
+package com.example.trip_plan_budget.model.main;
 
 import android.os.Parcel;
 import android.os.Parcelable;

@@ -23,9 +23,9 @@ import androidx.core.content.ContextCompat;
 
 import com.example.trip_plan_budget.R;
 import com.example.trip_plan_budget.activity.WithBudget;
-import com.example.trip_plan_budget.model.CarMileageModel;
-import com.example.trip_plan_budget.model.PlaceDetailsModel;
-import com.example.trip_plan_budget.model.WeatherApiModel;
+import com.example.trip_plan_budget.model.car.CarMileageModel;
+import com.example.trip_plan_budget.model.car.PlaceDetailsModel;
+import com.example.trip_plan_budget.model.car.WeatherApiModel;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;

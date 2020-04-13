@@ -14,7 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.trip_plan_budget.R;
 import com.example.trip_plan_budget.activity.HomeActivity;
-import com.example.trip_plan_budget.model.UserModel;
+import com.example.trip_plan_budget.model.main.UserModel;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;

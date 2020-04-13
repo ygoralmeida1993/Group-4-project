@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.trip_plan_budget.R;
 import com.example.trip_plan_budget.adapter.PlaceAdapter;
-import com.example.trip_plan_budget.model.PlaceDetailsModel;
+import com.example.trip_plan_budget.model.car.PlaceDetailsModel;
 
 import java.util.ArrayList;
 import java.util.Objects;

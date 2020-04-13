@@ -27,7 +27,7 @@ import ir.mirrajabi.searchdialog.SimpleSearchDialogCompat;
 import ir.mirrajabi.searchdialog.core.SearchResultListener;
 
 
-public class FlightActivity extends AppCompatActivity {
+public class FlightPlannerActivity extends AppCompatActivity {
     private static final String TAG = "FlightActivity";
     private TextView fromIATA, fromCity;
     private TextView toIATA, toCity;
@@ -92,7 +92,7 @@ public class FlightActivity extends AppCompatActivity {
         fromCard = findViewById(R.id.from_card);
         fromCard.setOnClickListener(view -> {
             if (airports != null) {
-                new SimpleSearchDialogCompat(FlightActivity.this, null,
+                new SimpleSearchDialogCompat(FlightPlannerActivity.this, null,
                         "Select Airport?", null, airports,
                         (SearchResultListener<AirportModel>) (dialog, item, position) -> {
                             setDeparturePoint(item);
@@ -106,7 +106,7 @@ public class FlightActivity extends AppCompatActivity {
         toCard = findViewById(R.id.to_card);
         toCard.setOnClickListener(view -> {
             if (airports != null) {
-                new SimpleSearchDialogCompat(FlightActivity.this, null,
+                new SimpleSearchDialogCompat(FlightPlannerActivity.this, null,
                         "Select Airport?", null, airports,
                         (SearchResultListener<AirportModel>) (dialog, item, position) -> {
                             setLandingPoint(item);
@@ -226,7 +226,7 @@ public class FlightActivity extends AppCompatActivity {
                     roundTrip.isChecked(),
                     a, c, i,
                     flightClass);
-            Intent intent = new Intent(FlightActivity.this, FlightDateActivity.class);
+            Intent intent = new Intent(FlightPlannerActivity.this, FlightDateActivity.class);
             intent.putExtra("flight", model);
             startActivity(intent);
         } else {

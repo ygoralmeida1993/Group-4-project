@@ -8,7 +8,7 @@ android {
     buildToolsVersion "29.0.3"
     defaultConfig {
         applicationId "com.example.trip_plan_budget"
-        minSdkVersion 23
+        minSdkVersion 24
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
@@ -23,6 +23,9 @@ android {
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
+    }
+    viewBinding {
+        enabled = true
     }
 }
 
@@ -39,11 +42,15 @@ dependencies {
     // Firebase
     implementation 'com.google.firebase:firebase-database:19.2.1'
     implementation 'com.google.firebase:firebase-auth:19.3.0'
+    implementation 'com.firebaseui:firebase-ui-database:6.2.0'
+    implementation 'android.arch.paging:runtime:1.0.1'
 
     // Networking
     implementation 'com.squareup.picasso:picasso:2.71828'
     implementation 'com.googlecode.json-simple:json-simple:1.1'
     implementation 'com.google.code.gson:gson:2.8.6'
+    implementation 'com.squareup.retrofit2:retrofit:2.4.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.4.0'
 
     // Google services
     implementation 'com.google.android.gms:play-services-maps:17.0.0'
@@ -52,6 +59,9 @@ dependencies {
     // 3rd party
     implementation 'com.github.mirrajabi:search-dialog:1.2.4'
     implementation 'com.andrewjapar.rangedatepicker:rangedatepicker:0.2.3'
+    implementation 'com.thoughtbot:expandablerecyclerview:1.3'
+
+    // Kotlin
     implementation "androidx.core:core-ktx:1.2.0"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 

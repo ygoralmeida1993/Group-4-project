@@ -6,7 +6,7 @@
     android:layout_gravity="center"
     android:background="#FFFFFF"
     android:orientation="vertical"
-    tools:context=".activity.car.CarBudgetActivity">
+    tools:context=".activity.car.CarBudgetPlannerActivity">
 
 
     <androidx.cardview.widget.CardView

@@ -25,9 +25,9 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.trip_plan_budget.R;
-import com.example.trip_plan_budget.model.GasApiModel;
-import com.example.trip_plan_budget.model.PlaceDetailsModel;
-import com.example.trip_plan_budget.model.WeatherApiModel;
+import com.example.trip_plan_budget.model.car.GasApiModel;
+import com.example.trip_plan_budget.model.car.PlaceDetailsModel;
+import com.example.trip_plan_budget.model.car.WeatherApiModel;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
