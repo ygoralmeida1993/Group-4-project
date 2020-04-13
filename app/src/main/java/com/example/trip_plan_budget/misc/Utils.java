@@ -1,4 +1,4 @@
-package com.example.trip_plan_budget.service;
+package com.example.trip_plan_budget.misc;
 
 public class Utils {
     private static String[] cities = new String[]{

@@ -6,8 +6,13 @@ import android.util.Log;
 import com.example.trip_plan_budget.interfaces.callback.GetOTMPlacesCallback;
 import com.example.trip_plan_budget.interfaces.callback.GetOTMPointCallback;
 import com.example.trip_plan_budget.interfaces.endpoint.OTMEndpoint;
+import com.example.trip_plan_budget.interfaces.endpoint.TripAdvisorEndpoint;
+import com.example.trip_plan_budget.misc.TripAdvisorHotelJsonConverter;
+import com.example.trip_plan_budget.model.hotel.HotelModel;
 import com.example.trip_plan_budget.model.places.PlaceModel;
 import com.example.trip_plan_budget.model.places.Point;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -79,6 +84,22 @@ public class NetworkService {
                 callback.onResult(null);
             }
         });
+    }
+
+    public void getHotels(Point point, int adults, int rooms, int nights, double lat, double lon, String checkin) {
+        Gson gson =
+                new GsonBuilder()
+                        .registerTypeAdapter(HotelModel.class, new TripAdvisorHotelJsonConverter<HotelModel>())
+                        .create();
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://tripadvisor1.p.rapidapi.com/")
+                .addConverterFactory(GsonConverterFactory.create(gson))
+                .build();
+
+
+        TripAdvisorEndpoint endpoint = retrofit.create(TripAdvisorEndpoint.class);
+        Call<List<HotelModel>> hotels =
+                endpoint.getHotels(adults, rooms, lat, lon, "CAD", checkin, nights);
     }
 
 }
